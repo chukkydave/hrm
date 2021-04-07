@@ -1,6 +1,5 @@
 <?php
-include_once("_common/menu.php"); // menu list
-include_once("../gen/_common/header.php"); // header contents
+include("_common/header.php");
 ?>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css" rel="stylesheet">
@@ -324,6 +323,36 @@ input:checked+.slider:before {
 
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-6 col-xs-6">
+                                                        <p><strong>Department:</strong></p>
+                                                    </div>
+
+                                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                                        <p id="dept_namey"></p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                                        <p><strong>Head Of Department:</strong></p>
+                                                    </div>
+
+                                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                                        <p id="hod_name"></p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                                        <p><strong>Supervisor:</strong></p>
+                                                    </div>
+
+                                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                                        <p id="supervsor"></p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6 col-xs-6">
                                                         <p><strong>Comment:</strong></p>
                                                     </div>
 
@@ -478,13 +507,15 @@ input:checked+.slider:before {
                                                     <input class="form-check-input radioOption" data-toggle="tooltip"
                                                         title="text goes here" type="radio" name="RadioOptions"
                                                         id="turn" value="chronological">
-                                                    <label class="form-check-label" for="turn">Turn by Turn
+                                                    <label data-toggle="tooltip" title="text goes here"
+                                                        class="form-check-label" for="turn">Turn by Turn
                                                         Approval</label>
                                                     &nbsp;
                                                     <input class="form-check-input radioOption" data-toggle="tooltip"
                                                         title="text goes here" type="radio" name="RadioOptions"
                                                         id="random" value="random">
-                                                    <label class="form-check-label" for="random">Random Approval</label>
+                                                    <label class="form-check-label" data-toggle="tooltip"
+                                                        title="text goes here" for="random">Random Approval</label>
                                                     <div style="margin-top:2em">
                                                         <!-- <label class="switch">
                                                             <input type="checkbox" id="requiredGroup">
@@ -864,5 +895,5 @@ input:checked+.slider:before {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
 <script src="js-files/view_employee_leave_details.js"></script>
 <?php
-include_once("../gen/_common/footer.php");
+include("_common/footer.php");
 ?>

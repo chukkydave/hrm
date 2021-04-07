@@ -177,7 +177,7 @@ $(document).ready(function() {
 			// $('#requiredGroup').prop('checked', true);
 			alert('checked');
 		} else {
-			alert('nothing Selected');
+			alert('Please Select an Approval Type');
 			// $('#requiredGroup').prop('checked', false);
 			// alert('Kindly select an Approval Type');
 			// }
@@ -433,17 +433,21 @@ function fetch_leave_info() {
 				$('#holidays_within').html(response.data.exclude_holidays);
 				$('#hr_approval').html(response.data.hr_approval);
 				$('#emp_id').val(response.data.employee_id);
+				$('#dept_namey').html(response.data.department_name);
+				$('#supervsor').html(response.data.supervisor);
+				$('#hod_name').html(response.data.hod_name);
 				$('#commenter').html(comments);
+				// alert(response.data.department_name);
 
 				if (response.data.approval_order == 'chronological') {
 					$('#turn').attr('checked', 'checked');
 					$('#random').removeAttr('checked');
-					$('#send_for_appv').attr('disabled', true);
+					$('#send_for_appv').hide();
 					// $('#monday').val('yes');
 				} else if (response.data.approval_order == 'random') {
 					$('#random').attr('checked', 'checked');
 					$('#turn').removeAttr('checked');
-					$('#send_for_appv').attr('disabled', true);
+					$('#send_for_appv').hide();
 
 					// $('#monday').val('no');
 				}
@@ -579,6 +583,9 @@ function list_of_forward_leaves_applicant() {
 							strTable +=
 								'<td width="35%" valign="top"><b>' +
 								response['data'][i]['approval_person'] +
+								'(' +
+								response['data'][i]['job_title'] +
+								')' +
 								'</b><br>Date Received: ' +
 								date_sent +
 								'<br>Date Of Action: ' +
@@ -652,6 +659,13 @@ function list_of_forward_leaves_applicant() {
 						k++;
 					});
 					$('#approval_type_div').show();
+					if (!document.querySelector('.radioOption').checked) {
+						// $('#requiredGroup').prop('checked', true);
+						// alert('checked');
+						$('#send_for_appv').show();
+					} else {
+						$('#send_for_appv').hide();
+					}
 				} else {
 					strTable = '<tr><td colspan="5">No record.</td></tr>';
 				}
