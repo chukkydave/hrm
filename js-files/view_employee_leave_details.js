@@ -19,7 +19,7 @@ $(document).ready(function() {
 			let arr = [];
 			sortedIDs.map((v, i) => {
 				let eac = v.split('_');
-				arr.push(eac[1]);
+				arr.push({ id: eac[1], position: i + 1 });
 			});
 			// console.log(arr);
 			addDraggedList(arr);
@@ -82,6 +82,8 @@ $(document).ready(function() {
 			// var pathArray = window.location.pathname.split( '/' );
 			var leave_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
 			var order_type = $('#random').val();
+			$('#random').hide();
+			$('#random_loader').show();
 
 			// alert(order_type);
 			$.ajax({
@@ -99,6 +101,8 @@ $(document).ready(function() {
 
 					if (response.status == '200') {
 						$('#modal_order').modal('show');
+						$('#random_loader').hide();
+						$('#random').show();
 
 						// $('#modal_order').on('hidden.bs.modal', function () {
 						//     // do something…
@@ -112,6 +116,8 @@ $(document).ready(function() {
 				// objAJAXRequest, strError
 				error: function(response) {
 					alert('Connection error');
+					$('#random_loader').hide();
+					$('#random').show();
 					// $('#page_loader').hide();
 					// $('#employee_details_display').hide();
 					// $('#employee_error_display').show();
@@ -126,6 +132,8 @@ $(document).ready(function() {
 			// var pathArray = window.location.pathname.split( '/' );
 			var leave_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
 			var order_type = $('#turn').val();
+			$('#turn').hide();
+			$('#turn_loader').show();
 
 			// alert(order_type);
 			$.ajax({
@@ -143,6 +151,8 @@ $(document).ready(function() {
 
 					if (response.status == '200') {
 						$('#modal_order').modal('show');
+						$('#turn_loader').hide();
+						$('#turn').show();
 
 						// $('#modal_order').on('hidden.bs.modal', function () {
 						//     // do something…
@@ -156,6 +166,8 @@ $(document).ready(function() {
 				// objAJAXRequest, strError
 				error: function(response) {
 					alert('Connection error');
+					$('#turn_loader').hide();
+					$('#turn').show();
 					// $('#page_loader').hide();
 					// $('#employee_details_display').hide();
 					// $('#employee_error_display').show();
@@ -173,9 +185,12 @@ $(document).ready(function() {
 
 	$('#send_for_appv').on('click', () => {
 		// if (document.querySelector('#requiredGroup').checked) {
-		if (document.querySelector('.radioOption').checked) {
+		if ($('#random').is(':checked') || $('#turn').is(':checked')) {
 			// $('#requiredGroup').prop('checked', true);
-			alert('checked');
+			// alert('checked');
+			let type = $('input:checked').val();
+			// alert(vat);
+			sendForApproval(type);
 		} else {
 			alert('Please Select an Approval Type');
 			// $('#requiredGroup').prop('checked', false);
@@ -184,6 +199,50 @@ $(document).ready(function() {
 		}
 	});
 });
+
+function sendForApproval(type) {
+	var company_id = localStorage.getItem('company_id');
+	let employee_id = $('#emp_id').val();
+	var application_id = $.urlParam('id');
+
+	$('#send_for_appv').hide();
+	$('#send_for_appv_loader').show();
+
+	let data = {
+		employee_id: employee_id,
+		company_id: company_id,
+		application_id: application_id,
+		type: type,
+	};
+	$.ajax({
+		type: 'Post',
+		dataType: 'json',
+		url: `${api_path}hrm/send_leave_approval`,
+		data: data,
+		// headers: {
+		// 	Accept: 'application/json',
+		// 	'Content-Type': 'application/json',
+		// 	// Authorization: `Bearer ${authy}`,
+		// },
+		error: function(error) {
+			console.log(error);
+			$('#send_for_appv_loader').hide();
+			$('#send_for_appv').show();
+			alert('error');
+		},
+		success: function(response) {
+			if (response.status == 200 || response.status == 201) {
+				$('#send_for_appv_loader').hide();
+				$('#send_for_appv').show();
+				alert('Success!!');
+				window.location.reload();
+
+				// $('#mod_body').html('Work Shift creation successful');
+				// $('#successModal').modal('show');
+			}
+		},
+	});
+}
 
 function add_leave_approver() {
 	var company_id = localStorage.getItem('company_id');
@@ -420,15 +479,17 @@ function fetch_leave_info() {
 				// str += '<img src="" alt="...">';
 				str += '</div>';
 				let comments = response.data.comment.replace('↵', '').trim();
+				let resume = moment(response.data.resumption_date, 'YYYY-MM-DD').format('LL');
+				let start = moment(response.data.leave_start, 'YYYY-MM-DD').format('LL');
 
 				$('#leave_id').html('LV' + response.data.leave_id);
 				$('#leave_type').html(response.data.leave_type);
 				$('#firstname').html(response.data.firstname);
 				$('#lastname').html(response.data.lastname);
 				$('#middlename').html(response.data.middlename);
-				$('#resumption_date').html(response.data.resumption_date);
+				$('#resumption_date').html(resume);
 				$('#days_used').html(response.data.real_days_used);
-				$('#leave_start').html(response.data.leave_start);
+				$('#leave_start').html(start);
 				$('#working_days').html(response.data.exclude_weekends);
 				$('#holidays_within').html(response.data.exclude_holidays);
 				$('#hr_approval').html(response.data.hr_approval);
@@ -440,12 +501,12 @@ function fetch_leave_info() {
 				// alert(response.data.department_name);
 
 				if (response.data.approval_order == 'chronological') {
-					$('#turn').attr('checked', 'checked');
+					$('#turn').prop('checked', true);
 					$('#random').removeAttr('checked');
 					$('#send_for_appv').hide();
 					// $('#monday').val('yes');
 				} else if (response.data.approval_order == 'random') {
-					$('#random').attr('checked', 'checked');
+					$('#random').prop('checked', true);
 					$('#turn').removeAttr('checked');
 					$('#send_for_appv').hide();
 
@@ -620,7 +681,10 @@ function list_of_forward_leaves_applicant() {
 							strTable += '</td>';
 							strTable += '</tr>';
 						} else {
-							strTable += '<tr id="row_' + response['data'][i]['approval_id'] + '">';
+							strTable +=
+								'<tr class="sortMe" id="row_' +
+								response['data'][i]['approval_id'] +
+								'">';
 
 							strTable +=
 								'<td width="8%" valign="top"><div class="profile_pic"><img src="' +

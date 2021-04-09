@@ -275,8 +275,8 @@ function list_Hods() {
 		})
 		.then(function(response) {
 			// console.log('res', response);
-
-			if (response.data.data.length < 1 || response.data.msg == 'No Record(s)') {
+			console.log('res status', response.data.msg);
+			if (response.data.msg == 'No Record(s)') {
 				$('#hod_list').html('<tr><td colspan="4">No record</td></tr>');
 				$('#hod_list_loader').hide();
 				$('#hodTable').show();

@@ -119,9 +119,9 @@ include_once("../gen/_common/header.php"); // header contents
                                             <th class="column-title">By </th>
                                             <th class="column-title">Leave Type </th>
                                             <!-- <th class="column-title">Branch</th> -->
-                                            <!-- <th class="column-title">Start Date </th> -->
-                                            <!-- <th class="column-title">Resumption Date </th> -->
-                                            <th class="column-title">Days Requested </th>
+                                            <th class="column-title">Start Date </th>
+                                            <th class="column-title">Resumption Date </th>
+                                            <th class="column-title">Days Used </th>
                                             <th class="column-title">Pre-Approvals </th>
                                             <th class="column-title">HR Approve </th>
 
@@ -185,7 +185,7 @@ include_once("../gen/_common/header.php"); // header contents
     </div>
 </div>
 
-<script src="js-files/leaves.js"></script>
+<script src="js-files/leave.js"></script>
 <?php
 include("_common/footer.php");
 ?>

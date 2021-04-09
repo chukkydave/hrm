@@ -44,7 +44,7 @@ include("_common/header.php");
                                     <tr class="headings">
 
                                         <th class="column-title">Leave Type</th>
-                                        <th class="column-title">Allowable Leave Days</th>
+                                        <!-- <th class="column-title">Allowable Leave Days</th> -->
                                         <th class="column-title">Paid/Unpaid</th>
                                         <th class="column-title">Exclude Holidays </th>
                                         <th class="column-title">Exclude Weekends </th>

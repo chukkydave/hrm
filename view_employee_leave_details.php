@@ -505,17 +505,24 @@ input:checked+.slider:before {
 
                                                 <div class="form-row" id="turnbturn" style="display: none">
                                                     <input class="form-check-input radioOption" data-toggle="tooltip"
-                                                        title="text goes here" type="radio" name="RadioOptions"
-                                                        id="turn" value="chronological">
-                                                    <label data-toggle="tooltip" title="text goes here"
+                                                        title="Approvers will receive and act on request following their position on the list"
+                                                        type="radio" name="RadioOptions" id="turn"
+                                                        value="chronological">
+                                                    <i class="fa fa-spinner fa-spin fa-fw fa-1x" style="display: none;"
+                                                        id="turn_loader"></i>
+                                                    <label data-toggle="tooltip"
+                                                        title="Approvers will receive and act on request following their position on the list"
                                                         class="form-check-label" for="turn">Turn by Turn
                                                         Approval</label>
                                                     &nbsp;
                                                     <input class="form-check-input radioOption" data-toggle="tooltip"
-                                                        title="text goes here" type="radio" name="RadioOptions"
-                                                        id="random" value="random">
+                                                        title="Approvers will receive requests at the same time and can act on it"
+                                                        type="radio" name="RadioOptions" id="random" value="random">
+                                                    <i class="fa fa-spinner fa-spin fa-fw fa-1x" style="display: none;"
+                                                        id="random_loader"></i>
                                                     <label class="form-check-label" data-toggle="tooltip"
-                                                        title="text goes here" for="random">Random Approval</label>
+                                                        title="Approvers will receive requests at the same time and can act on it"
+                                                        for="random">Random Approval</label>
                                                     <div style="margin-top:2em">
                                                         <!-- <label class="switch">
                                                             <input type="checkbox" id="requiredGroup">
@@ -524,6 +531,8 @@ input:checked+.slider:before {
                                                         </label> -->
                                                         <button class="btn btn-primary" id="send_for_appv"> Send for
                                                             Approval</button>
+                                                        <i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                            style="display: none;" id="send_for_appv_loader"></i>
                                                         <!-- <i class="fa fa-info-circle" data-toggle="tooltip"
                                                             data-placement="bottom" title="text goes in here"
                                                             style="padding-left: 8px;  color: gray; font-size:15px !important; position:relative; top:4px;"></i> -->

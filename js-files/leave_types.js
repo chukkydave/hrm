@@ -49,7 +49,7 @@ function leave_types(page) {
 						strTable += '<tr id="row_' + response['data'][i]['leave_id'] + '">';
 						strTable += '<td>' + response['data'][i]['leave_type'] + '</td>';
 
-						strTable += '<td>' + response['data'][i]['allowable_days'] + '</td>';
+						// strTable += '<td>' + response['data'][i]['allowable_days'] + '</td>';
 
 						if (response['data'][i]['paid_status'] == 'no') {
 							strTable +=
