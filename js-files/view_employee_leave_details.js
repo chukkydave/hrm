@@ -15,14 +15,26 @@ $(document).ready(function() {
 			// alert('hi');
 
 			var sortedIDs = $('#forwardData').sortable('toArray');
-			console.log('sortedIDs', sortedIDs);
+			// console.log('sortedIDs', sortedIDs);
 			let arr = [];
-			sortedIDs.map((v, i) => {
-				let eac = v.split('_');
-				arr.push({ id: eac[1], position: i + 1 });
+			let arr2 = [];
+			// let items = document.querySelectorAll('.sortMe');
+			// items.map((v, i) => {
+			// 	// let eac = v.split('_');
+			// 	// arr.push({ id: eac[1], position: i + 1 });
+			// 	console.log(v, i);
+			// });
+			const highlightedItems = document.querySelectorAll('.sortAll');
+
+			highlightedItems.forEach(function(userItem) {
+				arr.push(userItem.attributes.id.value);
 			});
-			// console.log(arr);
-			addDraggedList(arr);
+			arr.map((v, i) => {
+				let eac = v.split('_');
+				arr2.push({ id: eac[1], position: i + 1 });
+			});
+			// console.log(arr2);
+			addDraggedList(arr2);
 		},
 	});
 	// });
@@ -632,7 +644,7 @@ function list_of_forward_leaves_applicant() {
 							strTable +=
 								'<tr id="row_' +
 								response['data'][i]['approval_id'] +
-								'" class="sortMe">';
+								'" class="sortMe sortAll">';
 
 							strTable +=
 								'<td width="8%" valign="top"><div class="profile_pic"><img src="' +
@@ -682,7 +694,7 @@ function list_of_forward_leaves_applicant() {
 							strTable += '</tr>';
 						} else {
 							strTable +=
-								'<tr class="sortMe" id="row_' +
+								'<tr class="sortAll" id="row_' +
 								response['data'][i]['approval_id'] +
 								'">';
 

@@ -1387,9 +1387,9 @@ include_once("../gen/_common/header.php"); // header contents
                                         <tr class="headings">
 
 
-                                            <th class="column-title">Leave Title</th>
-                                            <th class="column-title">From</th>
-                                            <th class="column-title">To</th>
+                                            <th class="column-title">Leave Type</th>
+                                            <th class="column-title">Start</th>
+                                            <th class="column-title">Resumption</th>
                                             <th class="column-title">Days Used</th>
 
 
@@ -2079,6 +2079,7 @@ include_once("../gen/_common/header.php"); // header contents
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="edit_additional_info_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2299,6 +2300,7 @@ include_once("../gen/_common/header.php"); // header contents
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="edit_dept_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2796,13 +2798,11 @@ include_once("../gen/_common/header.php"); // header contents
             </div>
         </div>
     </div>
-
-<script type="text/javascript" src="assets/js/hrm.js"></script>
-<script type="text/javascript" src="js-files/employment_info_jsFiles/basic_info.js"></script>
-<script type="text/javascript" src="js-files/employment_info_jsFiles/emp_info.js"></script>
-<script type="text/javascript" src="js-files/employment_info_jsFiles/documents.js"></script>
-<script type="text/javascript" src="js-files/employee_info_general.js"></script>
-<?php
+    <?php
 include_once("../gen/_common/footer.php");
 ?>
-    
+    <script type="text/javascript" src="assets/js/hrm.js"></script>
+    <script type="text/javascript" src="js-files/employment_info_jsFiles/basic_info.js"></script>
+    <script type="text/javascript" src="js-files/employment_info_jsFiles/emp_info.js"></script>
+    <script type="text/javascript" src="js-files/employment_info_jsFiles/documents.js"></script>
+    <script type="text/javascript" src="js-files/employee_info_general.js"></script>
