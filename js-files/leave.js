@@ -159,7 +159,7 @@ function list_of_leaves_applicant(page) {
 						strTable += '<td valign="top">' + leave_start.toDateString() + '</td>';
 						strTable += '<td valign="top">' + resumption_date.toDateString() + '</td>';
 						strTable +=
-							'<td valign="top">' + response['data'][i]['real_days_used'] + '</td>';
+							'<td valign="top">' + response['data'][i]['days_requested'] + '</td>';
 
 						// if(response['data'][i]['total_leave_sent_for_approval'] == response['data'][i]['total_pending_leave_approvals']){
 						strTable +=

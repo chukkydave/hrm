@@ -16,6 +16,7 @@ $(document).ready(function() {
 function add_company_leave() {
 	var employee_id = $('#employee_id').val();
 	var resumption_date = $('#resumption_date').val();
+	let days_req = $('#days_req').val();
 	var leave_type = $('#leave_type').val();
 	var leave_start = $('#leave_start').val();
 	var comment = $('#commentss').val();
@@ -63,6 +64,7 @@ function add_company_leave() {
 			employee_id: employee_id,
 			leave_start: leave_start,
 			comment: comment,
+			days_requested: days_req,
 		},
 
 		success: function(response) {
