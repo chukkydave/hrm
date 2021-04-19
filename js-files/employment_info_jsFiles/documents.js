@@ -85,12 +85,12 @@ function list_employee_documents() {
 			if (employee_document.length > 0) {
 				$(employee_document).map((i, v) => {
 					// let start = moment(v.started, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-					// let end = moment(v.ended, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+					let uploaded = moment(v.date_uploaded, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					docx_list += `<tr class="even pointer" id="docx_row${v.document_id}">`;
 					docx_list += `<td>${v.document_name} </td>`;
 					// docx_list += `<td>${v.nxt_kin_relationship}</td>`;
 					docx_list += `<td>${v.type}</td>`;
-					docx_list += `<td>${v.date_uploaded}</td>`;
+					docx_list += `<td>${uploaded}</td>`;
 
 					docx_list += `<td>
 						<div class="dropdown">

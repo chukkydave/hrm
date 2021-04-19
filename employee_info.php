@@ -1342,8 +1342,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                 <div id="leaves_block" class="tab-pane fade" role="tabpanel" aria-labelledby="leaves-tab">
 
-                    <!-- <br> -->
-                    <div class="row">
+                <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
@@ -1372,7 +1371,7 @@ include_once("../gen/_common/header.php"); // header contents
                                     <div id="no_record" style="display: none;">
                                         <h3><strong>No record available</strong></h3>
                                     </div>
-                                    <div id="leave-history" style="height:300px;"></div>
+                                    <div id="leave-historys" style="height:300px;"></div>
 
                                 </div>
                             </div>
@@ -1380,46 +1379,276 @@ include_once("../gen/_common/header.php"); // header contents
                     </div>
 
                     <div class="row">
+                        <!-- <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>
+                                        Leaves
+                                    </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li data-toggle="tooltip" id="add_leave_days" title="Allot Extra Leave Days">
+                                            <a class=""><i class="fa fa-plus"></i></a>
+                                        </li>
+
+                                    </ul>
+                                    <div id="workShift_display" style="display: none;">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="x_panel">
+
+                                                <div class="x_content">
+                                                    <br />
+                                                    <span id="demo-form2" data-parsley-validate
+                                                        class="form-horizontal form-label-left">
+
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="workShift_name">Work Shift<span>*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <select
+                                                                    class="form-control col-md-7 col-xs-12 add_workShift_fields"
+                                                                    id="workShift_name">
+                                                                    <option value="">-- Select WorkShift --</option>
+
+                                                                </select>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="workShift_from">From<span>*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text" id="workShift_from"
+                                                                    required="required"
+                                                                    class="form-control col-md-7 col-xs-12 required add_workShift_fields">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="workShift_to">To<span>*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text" id="workShift_to" required="required"
+                                                                    class="form-control col-md-7 col-xs-12 required ">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+
+                                                                <button type="button" class="btn btn-success"
+                                                                    id="add_workShift_btn">Add</button>
+                                                                <i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                                    style="display: none;"
+                                                                    id="add_workShift_loader"></i>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="x_content">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                            id="list_workShift_loader"></i>
+                                        <div class="table-responsive" id="list_workShift_table">
+                                            <table class="table table-striped jambo_table bulk_action">
+                                                <thead>
+                                                    <tr class="headings">
+
+                                                        <th class="column-title">Work Shift</th>
+                                                        <th class="column-title">From</th>
+                                                        <th class="column-title">To</th>
+                                                        <th class="column-title" width="10%"></th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="list_workShift_body">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="table-responsive">
-                                <table class="table table-striped jambo_table bulk_action">
-                                    <thead>
-                                        <tr class="headings">
+                            <div class="x_panel">
+                                <div class="x_title" style="border:none;">
+                                    <h2>
+                                        Extra Alloted Days Record
+                                    </h2>
+                                    <ul class="nav navbar-right panel_toolbox">
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        </li>
+
+                                        <li data-toggle="tooltip" id="add_leave_days" title="Allot Extra Leave Days">
+                                            <a class=""><i class="fa fa-plus"></i></a>
+                                        </li>
+
+                                    </ul>
+                                    <div id="leave_days_display" style="display: none;">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="">
+
+                                                <div class="x_content">
+                                                    <br />
+                                                    <span id="demo-form2" data-parsley-validate
+                                                        class="form-horizontal form-label-left">
+
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="allot_no">Number of Days<span>*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="number" id="allot_no"
+                                                                    class="form-control col-md-7 col-xs-12 add_allot_fields">
+
+                                                            </div>
+                                                        </div>
+                                                        <!-- <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="allot_date">Date<span>*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <input type="text" id="allot_date"
+                                                                    class="form-control col-md-7 col-xs-12 required">
+                                                                
+                                                            </div>
+                                                        </div> -->
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                                for="allot_reason">Reason<span>*</span>
+                                                            </label>
+                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                <textarea id="allot_reason"
+                                                                    class="form-control col-md-7 col-xs-12 add_allot_fields"></textarea>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+
+                                                                <button type="button" class="btn btn-success"
+                                                                    id="add_allot_btn">Add</button>
+                                                                <i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                                    style="display: none;" id="add_allot_loader"></i>
+                                                            </div>
+                                                        </div>
 
 
-                                            <th class="column-title">Leave Type</th>
-                                            <th class="column-title">Start</th>
-                                            <th class="column-title">Resumption</th>
-                                            <th class="column-title">Days Used</th>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                        id="list_allot_loader"></i>
+                                    <div class="table-responsive" id="list_allot_table">
+
+                                        <table class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr>
+
+                                                    <th width="20%" class="column-title">Number Of Days </th>
+                                                    <th width="30%" class="column-title">Date</th>
+                                                    <th width="50%" class="column-title">Reason</th>
 
 
 
-                                            <th class="bulk-actions" colspan="4">
-                                                <a class="antoo" style="color:#fff; font-weight:500;">Bulk
-                                                    Actions ( <span class="action-cnt"> </span> ) <i
-                                                        class="fa fa-chevron-down"></i></a>
-                                            </th>
+                                                </tr>
+                                            </thead>
+
+
+                                            <tbody id="list_allot_body">
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- <br> -->
+                    
+
+                    <div class="row">
+                        
+
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x-panel">
+                                <div class="x_title">
+                                    <h2>Leave History</h2>
+                                    
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped jambo_table bulk_action">
+                                        <thead>
+                                            <tr class="headings">
+
+
+                                                <th class="column-title">Leave Type</th>
+                                                <th class="column-title">Start</th>
+                                                <th class="column-title">Resumption</th>
+                                                <th class="column-title">Days Used</th>
+
+
+
+                                                <th class="bulk-actions" colspan="4">
+                                                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk
+                                                        Actions ( <span class="action-cnt"> </span> ) <i
+                                                            class="fa fa-chevron-down"></i></a>
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tr id="loading">
+                                            <td colspan="3"><i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                    style="display: none;"></i></td>
                                         </tr>
-                                    </thead>
 
-                                    <tr id="loading">
-                                        <td colspan="3"><i class="fa fa-spinner fa-spin fa-fw fa-3x"
-                                                style="display: none;"></i></td>
-                                    </tr>
-
-                                    <tbody id="summaryData">
+                                        <tbody id="summaryData">
 
 
 
-                                    </tbody>
+                                        </tbody>
 
 
-                                </table>
+                                    </table>
 
 
 
 
 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2805,4 +3034,5 @@ include_once("../gen/_common/footer.php");
     <script type="text/javascript" src="js-files/employment_info_jsFiles/basic_info.js"></script>
     <script type="text/javascript" src="js-files/employment_info_jsFiles/emp_info.js"></script>
     <script type="text/javascript" src="js-files/employment_info_jsFiles/documents.js"></script>
+    <script type="text/javascript" src="js-files/employment_info_jsFiles/leave_days.js"></script>
     <script type="text/javascript" src="js-files/employee_info_general.js"></script>

@@ -448,11 +448,13 @@ function listWorkExp() {
 
 			if (employee_cv_work_history.length > 0) {
 				$(employee_cv_work_history).map((i, v) => {
+					let start = moment(v.from_year, 'YYYY-MM-DD HH:mm:ss').format('LL');
+					let end = moment(v.to_year, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					workExp_list += `<tr class="even pointer" id="workExp_row${v.id}">`;
 					workExp_list += `<td>${v.company_name}</td>`;
 					workExp_list += `<td>${v.position}</td>`;
-					workExp_list += `<td>${v.from_year}</td>`;
-					workExp_list += `<td>${v.to_year}</td>`;
+					workExp_list += `<td>${start}</td>`;
+					workExp_list += `<td>${end}</td>`;
 					workExp_list += `<td>
 						<div class="dropdown">
 							<button

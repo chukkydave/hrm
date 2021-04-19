@@ -288,13 +288,13 @@ function list_Hods() {
 					if (v.end_date === '0000-00-00 00:00:00') {
 						end = '';
 					} else {
-						end = moment(v.end_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+						end = moment(v.end_date, 'YYYY-MM-DD HH:mm:ss').format('DD-MM-YYYY');
 					}
 
 					if (v.start_date === '0000-00-00 00:00:00') {
 						start = '';
 					} else {
-						start = moment(v.start_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+						start = moment(v.start_date, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					}
 					hodTable += `<tr id="HOD_row${v.dept_hod_id}">`;
 					hodTable += `<td>${v.employee_name} <span class="greent_${i}_trial"></span></td>`;

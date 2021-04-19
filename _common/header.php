@@ -2444,7 +2444,7 @@
                                     <ul class="nav child_menu">
                                         <li><a href="company_positions">Job Titles</a></li>
                                         <li><a href="departments">Departments</a></li>
-                                        <li><a href="set_work_days">Set Work Days</a></li>
+                                        <!-- <li><a href="set_work_days">Set Work Days</a></li> -->
                                         <li><a href="leave_types">Leave Types</a></li>
                                         <li><a href="branches">Company Branches</a></li>
                                         <li><a href="employement_type">Employment Types</a></li>

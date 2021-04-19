@@ -21,7 +21,9 @@ $(document).ready(function() {
 
 		if ($('#leaves-tab').hasClass('no')) {
 			list_employee_leave_history();
-			init_echartsleave();
+			// init_echartsleave();
+			listLeaveGraph();
+			listAllotDays();
 			$('#leaves-tab').removeClass('no');
 		}
 	});
@@ -833,90 +835,7 @@ function fetch_employee_view_details_leave_history() {
 	});
 }
 
-function list_employee_leave_history() {
-	var company_id = localStorage.getItem('company_id');
-	// var pathArray = window.location.pathname.split( '/' );
-	var employee_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
 
-	var page = 1;
-	var limit = 10;
-
-	$('#loading').show();
-	$('#summaryData').html('');
-
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: api_path + 'hrm/list_company_employee_leaves_history',
-		data: { company_id: company_id, employee_id: employee_id, page: page, limit: limit },
-		timeout: 60000,
-
-		success: function(response) {
-			console.log(response);
-			$('#loading').hide();
-			var strTable = '';
-
-			if (response.status == '200') {
-				if (response.data.length > 0) {
-					var k = 1;
-					$.each(response['data'], function(i, v) {
-						strTable += '<tr>';
-
-						strTable += '<td>' + response['data'][i]['leave_name'] + '</td>';
-
-						strTable += '<td>' + response['data'][i]['leave_start_date'] + '</td>';
-
-						strTable += '<td>' + response['data'][i]['resumption_date'] + '</td>';
-						strTable += '<td>' + response['data'][i]['real_days_used'] + '</td>';
-
-						strTable += '</tr>';
-
-						k++;
-					});
-				} else {
-					strTable = '<tr><td colspan="4">No record.</td></tr>';
-				}
-
-				$('#summaryData').html(strTable);
-				$('#summaryData').show();
-			} else if (response.status == '400') {
-				$('#loading').hide();
-				strTable += '<tr>';
-				strTable += '<td colspan="4">' + response.msg + '</td>';
-				strTable += '</tr>';
-
-				$('#summaryData').html(strTable);
-				$('#summaryData').show();
-			} else if (response.status == '401') {
-				//missing parameters
-				var strTable = '';
-				$('#loading').hide();
-				strTable += '<tr>';
-				strTable += '<td colspan="4">Technical Error</td>';
-				strTable += '</tr>';
-
-				$('#summaryData').html(strTable);
-				$('#summaryData').show();
-			}
-
-			$('#loading').hide();
-		},
-
-		error: function(response) {
-			var strTable = '';
-			$('#loading').hide();
-			// alert(response.msg);
-			strTable += '<tr>';
-			strTable +=
-				'<td colspan="4"><strong class="text-danger">Connection error</strong></td>';
-			strTable += '</tr>';
-
-			$('#summaryData').html(strTable);
-			$('#summaryData').show();
-			$('#loading').hide();
-		},
-	});
-}
 
 function init_echartsleave() {
 	if (typeof echarts === 'undefined') {

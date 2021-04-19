@@ -44,13 +44,38 @@ include("_common/header.php");
                             </div>
 
                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="eligibility">Leave
+                                    Eligibility<span>*</span>
+                                </label>
+                                <div class="col-md-2 col-sm-2 col-xs-4">
+                                    <input type="number" id="eligibility" required="required"
+                                        class="form-control col-md-7 col-xs-12 required">
+                                </div>
+                                <div class="col-md-2 col-sm-2 col-xs-4">
+                                    <input type="text" required="required"
+                                        class="form-control col-md-7 col-xs-12 required" disabled value="Months">
+                                </div>
+                                <span style="vertical-align:sub;">From Date Of Joining</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="alloted_days">Allotted
+                                    Leave Days<span>*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="number" id="alloted_days" required="required"
+                                        class="form-control col-md-7 col-xs-12 required">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Description
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <textarea cols="3" class="form-control col-md-7 col-xs-12"
                                         id="position_description">
 
-                          </textarea>
+                                    </textarea>
                                 </div>
                             </div>
 
@@ -142,6 +167,8 @@ function fetch_employee_position() {
 
                     $('#position_name').val(response['data'][i]['position_name']);
                     $('#position_description').val(response['data'][i]['position_description']);
+                    $('#eligibility').val(v.leave_is_eligible)
+                    $('#alloted_days').val(v.alloted_leave_days)
 
                 });
 
@@ -163,6 +190,8 @@ function fetch_employee_position() {
 function edit_company_position() {
     var position_name = $('#position_name').val();
     var position_description = $('#position_description').val();
+    let alloted = $('#alloted_days').val()
+    let eligibility = $('#eligibility').val()
     var company_id = localStorage.getItem('company_id');
     // var pathArray = window.location.pathname.split( '/' );
     var position_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
@@ -215,7 +244,9 @@ function edit_company_position() {
             "position_name": position_name,
             "position_description": position_description,
             "company_id": company_id,
-            "position_id": position_id
+            "position_id": position_id,
+            leave_eligible: eligibility,
+            alloted_leave: alloted,
         },
 
         success: function(response) {

@@ -436,12 +436,14 @@ function fetch_employee_details() {
 			var str2 = '';
 			var str3 = '';
 
+
 			if (response.status == '200') {
+				let dobs = moment(response.data.employee_data.dob, 'YYYY-MM-DD').format('LL');
 				$('#firstname').html(response.data.employee_data.firstname);
 				$('#lastname').html(response.data.employee_data.lastname);
 				$('#gender').html(response.data.employee_data.gender);
 				$('#middlename').html(response.data.employee_data.middlename);
-				$('#dob').html(response.data.employee_data.dob);
+				$('#dob').html(dobs);
 				$('#marital_status').html(response.data.employee_data.marital_status);
 				$('#phone').html(response.data.employee_data.phone);
 				$('#residential_address').html(response.data.employee_data.residential_address);

@@ -203,13 +203,13 @@ function listDepartment() {
 					if (v.ended === '0000-00-00 00:00:00') {
 						end = '';
 					} else {
-						end = moment(v.ended, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+						end = moment(v.ended, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					}
 
 					if (v.started === '0000-00-00 00:00:00') {
 						start = '';
 					} else {
-						start = moment(v.started, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+						start = moment(v.started, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					}
 					dept_list += `<tr class="even pointer" id="dept_row${v.id}">`;
 					dept_list += `<td>${v.department_name}  <span class="greent_${i}_trial"></span></td>`;
@@ -515,13 +515,13 @@ function listWorkShift() {
 					if (v.ended === '0000-00-00 00:00:00') {
 						end = '';
 					} else {
-						end = moment(v.ended, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+						end = moment(v.ended, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					}
 
 					if (v.started === '0000-00-00 00:00:00') {
 						start = '';
 					} else {
-						start = moment(v.started, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+						start = moment(v.started, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					}
 					workShift_list += `<tr class="even pointer" id="workShift_row${v.id}">`;
 					workShift_list += `<td>${v.workshift_name}  <span class="greent_${i}_trial"></span></td>`;
@@ -835,9 +835,10 @@ function showEmployeeDataInfo() {
 				if (supervisor_name !== 'N/A') {
 					sup_name = `${supervisor_name.lastname} ${supervisor_name.firstname} ${supervisor_name.middlename}`;
 				}
+				let empee = moment(date_of_employ, 'YYYY-MM-DD').format('LL');
 				$('#branch').html(branch_name);
 				$('#employment_type').html(employment_type_name);
-				$('#date_of_employment').html(date_of_employ);
+				$('#date_of_employment').html(empee);
 				$('#supervisor').html(sup_name);
 				// $('#list_workShift_loader').hide();
 				// $('#list_workShift_table').show();
@@ -1001,13 +1002,13 @@ function listJobTitle() {
 						if (v.to_date === '0000-00-00') {
 							end = '';
 						} else {
-							end = moment(v.to_date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+							end = moment(v.to_date, 'YYYY-MM-DD').format('LL');
 						}
 
 						if (v.from_date === '0000-00-00') {
 							start = '';
 						} else {
-							start = moment(v.from_date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+							start = moment(v.from_date, 'YYYY-MM-DD').format('LL');
 						}
 						jobTitle_list += `<tr class="even pointer" id="jobTitle_row${v.id}">`;
 						jobTitle_list += `<td>${v.position_name}  <span class="greent_${i}_trial"></span></td>`;
