@@ -7,6 +7,31 @@ $(document).ready(() => {
 			addAllotDays();
 		}
 	});
+	$('#inc-btn').on('click', ()=>{
+		let oldVal = parseInt($('#extra-allot-inp').val())
+		let newVal = oldVal + 1
+		$('#extra-allot-inp').val(newVal)
+		$('#allot-btns').fadeIn()
+	})
+	$('#dec-btn').on('click', ()=>{
+		let oldVal = parseInt($('#extra-allot-inp').val())
+		let newVal
+		if (oldVal > 0) {
+			newVal = oldVal - 1;
+		  } else {
+			newVal = 0;
+		  }
+		$('#extra-allot-inp').val(newVal)
+		$('#allot-btns').fadeIn()
+	})
+
+	$('#cancel_allot_btn').on('click', ()=>{
+		$('#allot-btns').fadeOut()
+	})
+
+	$('#extra-allot-inp').on('change',()=>{
+		$('#allot-btns').fadeIn()
+	})
 });
 
 function addAllotDays() {

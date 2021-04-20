@@ -2434,7 +2434,18 @@
 
                                 <li><a href="grievances"><i class="fa fa-edit"></i> Grievances </a></li>
 
-                                <li><a href="attendance"><i class="fa fa-bell-o"></i>Attendance</a></li>
+                                <!-- <li><a href="attendance"><i class="fa fa-bell-o"></i>Attendance</a></li> -->
+
+                                <li><a><i class="fa fa-user"></i> Attendance<span class="fa fa-chevron-down"></span></a>
+
+                                    <ul class="nav child_menu">
+                                        <li><a href="attendance">Daily Attendance</a></li>
+                                        <li><a href="attendance_report">Attendance Report</a></li>
+                                        
+                                    </ul>
+
+                                </li>
+
 
                                 <!-- <li><a href="hrm/payroll"><i class="fa fa-edit"></i> Payroll </a></li> -->
 

@@ -2,6 +2,17 @@
 include_once("_common/menu.php"); // menu list
 include_once("../gen/_common/header.php"); // header contents
 ?>
+<style>
+    .inc{
+        border:none;
+        margin-left:3px;
+    }
+    .inc-input{
+        border:none;
+        max-width:40px;
+        background-color:#F7F7F7;
+    }
+</style>
 <div id="page_loader" style="display: ;">
     <div class="right_col" role="main">
         <div class="">
@@ -1379,133 +1390,25 @@ include_once("../gen/_common/header.php"); // header contents
                     </div>
 
                     <div class="row">
-                        <!-- <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>
-                                        Leaves
-                                    </h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li>
-                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                        </li>
-
-                                        <li data-toggle="tooltip" id="add_leave_days" title="Allot Extra Leave Days">
-                                            <a class=""><i class="fa fa-plus"></i></a>
-                                        </li>
-
-                                    </ul>
-                                    <div id="workShift_display" style="display: none;">
-                                        <div class="col-md-12 col-sm-12 col-xs-12">
-                                            <div class="x_panel">
-
-                                                <div class="x_content">
-                                                    <br />
-                                                    <span id="demo-form2" data-parsley-validate
-                                                        class="form-horizontal form-label-left">
-
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                for="workShift_name">Work Shift<span>*</span>
-                                                            </label>
-                                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <select
-                                                                    class="form-control col-md-7 col-xs-12 add_workShift_fields"
-                                                                    id="workShift_name">
-                                                                    <option value="">-- Select WorkShift --</option>
-
-                                                                </select>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                for="workShift_from">From<span>*</span>
-                                                            </label>
-                                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="workShift_from"
-                                                                    required="required"
-                                                                    class="form-control col-md-7 col-xs-12 required add_workShift_fields">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                for="workShift_to">To<span>*</span>
-                                                            </label>
-                                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="workShift_to" required="required"
-                                                                    class="form-control col-md-7 col-xs-12 required ">
-                                                            </div>
-                                                        </div>
-
-
-                                                        <div class="form-group">
-                                                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-
-                                                                <button type="button" class="btn btn-success"
-                                                                    id="add_workShift_btn">Add</button>
-                                                                <i class="fa fa-spinner fa-spin fa-fw fa-3x"
-                                                                    style="display: none;"
-                                                                    id="add_workShift_loader"></i>
-                                                            </div>
-                                                        </div>
-
-
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                                <div class="x_content">
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
-                                            id="list_workShift_loader"></i>
-                                        <div class="table-responsive" id="list_workShift_table">
-                                            <table class="table table-striped jambo_table bulk_action">
-                                                <thead>
-                                                    <tr class="headings">
-
-                                                        <th class="column-title">Work Shift</th>
-                                                        <th class="column-title">From</th>
-                                                        <th class="column-title">To</th>
-                                                        <th class="column-title" width="10%"></th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="list_workShift_body">
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
+                        
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title" style="border:none;">
                                     <h2>
-                                        Extra Alloted Days Record
+                                        Leave Days
                                     </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li>
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="tooltip" id="add_leave_days" title="Allot Extra Leave Days">
+                                        <!-- <li data-toggle="tooltip" id="add_leave_days" title="Allot Extra Leave Days">
                                             <a class=""><i class="fa fa-plus"></i></a>
-                                        </li>
+                                        </li> -->
 
                                     </ul>
-                                    <div id="leave_days_display" style="display: none;">
+                                    <!-- <div id="leave_days_display" style="display: none;">
                                         <div class="col-md-12 col-sm-12 col-xs-12">
                                             <div class="">
 
@@ -1524,16 +1427,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                                                             </div>
                                                         </div>
-                                                        <!-- <div class="form-group">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                for="allot_date">Date<span>*</span>
-                                                            </label>
-                                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="allot_date"
-                                                                    class="form-control col-md-7 col-xs-12 required">
-                                                                
-                                                            </div>
-                                                        </div> -->
+                                                        
                                                         <div class="form-group">
                                                             <label class="control-label col-md-3 col-sm-3 col-xs-12"
                                                                 for="allot_reason">Reason<span>*</span>
@@ -1560,13 +1454,13 @@ include_once("../gen/_common/header.php"); // header contents
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
                                     <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                         id="list_allot_loader"></i>
-                                    <div class="table-responsive" id="list_allot_table">
+                                    <!-- <div class="table-responsive" id="list_allot_table">
 
                                         <table class="table table-striped jambo_table bulk_action">
                                             <thead>
@@ -1587,7 +1481,46 @@ include_once("../gen/_common/header.php"); // header contents
                                             </tbody>
                                         </table>
 
+                                    </div> -->
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 col-xs-6">
+                                            <p><strong>Annual Allowance:</strong></p>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <p id="firstnamer"></p>
+                                        </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 col-xs-6">
+                                            <p><strong>Allotted Days</strong></p>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <input class="inc-input" type="text" name="turtle-doves" id="extra-allot-inp" value="2"><button id="inc-btn" class="inc">+</button><button id="dec-btn" style="border:none;" class="">-</button>
+                                        </div>
+                                    </div>
+                                    <div style="display:none;" id="allot-btns">
+                                        <button type="button" class="btn btn-sm btn-success"
+                                            id="save_allot_btn">Save</button>
+                                            <button type="button" class="btn btn-sm btn-danger"
+                                            id="cancel_allot_btn">Cancel</button>
+                                        <i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                            style="display: none;" id="save_allot_loader"></i>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-4 col-xs-6">
+                                            <p><strong>Total Leave Days:</strong></p>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <p id="firstnamer"></p>
+                                        </div>
+                                    </div>
+                                    
+
                                 </div>
 
 

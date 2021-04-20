@@ -346,8 +346,20 @@ function viewHOD(id, employee_id) {
 			$('#edit_HOD_btn').show();
 
 			let { employee_id, employee_name, start_date, end_date } = response.data.data;
-			let start = moment(start_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-			let end = moment(end_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+			let start
+			let end
+			if(start_date == "0000-00-00 00:00:00"){
+				start = ''
+			}else{
+			start = moment(start_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+			}
+
+			if(end_date == "0000-00-00 00:00:00"){
+				end = ''
+			}else{
+				end = moment(end_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+			}
+			
 			$('#edit_HOD_name').val(employee_name);
 			$('#edit_HOD_name').attr('data', employee_id);
 			$('#edit_HOD_from').val(start);

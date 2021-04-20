@@ -293,7 +293,7 @@ input:checked+.slider:before {
 
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-6 col-xs-6">
-                                                        <p><strong>Days Used:</strong></p>
+                                                        <p><strong>Days Requested:</strong></p>
                                                     </div>
 
                                                     <div class="col-md-6 col-sm-6 col-xs-6">
