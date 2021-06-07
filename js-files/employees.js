@@ -159,6 +159,7 @@ function list_of_companies_employees(page, serial, order_by) {
 							'<td  valign="top"><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="' +
 							window.location.origin +
 							'/files/images/employee_images/' +
+							'mid_' +
 							v.profile_picture +
 							'" alt="..." width="50" class="pfl_ctna"></div></td>';
 						// strTable +=

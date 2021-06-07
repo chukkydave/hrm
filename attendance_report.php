@@ -10,6 +10,16 @@ include("_common/header.php");
     padding: 5px;
     margin-bottom: 2em;
 }
+
+.column-title {
+    border-right: 1px solid rgba(115, 135, 156, 0.4);
+    text-align: center;
+}
+
+.td-title {
+    border-right: 1px solid rgba(115, 135, 156, 0.4);
+    text-align: center;
+}
 </style>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -26,12 +36,6 @@ include("_common/header.php");
                         <button type="button" class="btn btn-primary" data-toggle="collapse"
                             data-target="#collapseExample" aria-expanded="false"
                             aria-controls="collapseExample">Filter</button>
-
-                        <!-- <button type="button" class="btn btn-success" id="add_attendence">Add</button>
-
-                        <button type="button" class="btn btn-success" id="upload_attendence">Upload</button> -->
-
-
                     </div>
                 </div>
             </div>
@@ -121,7 +125,7 @@ include("_common/header.php");
                                         <span>*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" id="date" required="required"
+                                        <input type="text" id="dater" required="required"
                                             class="form-control col-md-7 col-xs-12 required">
                                     </div>
                                 </div>
@@ -193,14 +197,38 @@ include("_common/header.php");
 
                                 <div class="col-sm-4 col-xs-4">
                                     <select class="form-control col-sm-7 col-xs-12" id="employee_department">
-                                        <option value="">-- Select Department --</option>
+                                        <option value="">-- All Employees --</option>
 
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-4 col-xs-4">
+                                    <!-- <input type="" date="year" class="form-control" id=""> -->
+                                    <select class="form-control" name="month" id="month_filter">
+                                        <option value="0">January</option>
+                                        <option value="1">Febuary</option>
+                                        <option value="2">March</option>
+                                        <option value="3">April</option>
+                                        <option value="4">May</option>
+                                        <option value="5">June</option>
+                                        <option value="6">July</option>
+                                        <option value="7">August</option>
+                                        <option value="8">September</option>
+                                        <option value="9">October</option>
+                                        <option value="10">November</option>
+                                        <option value="11">December</option>
                                     </select>
                                 </div>
 
 
                                 <div class="col-sm-4 col-xs-4">
-                                    <input type="month" class="form-control" id="">
+                                    <!-- <input type="" date="year" class="form-control" id=""> -->
+                                    <select class="form-control" name="startyear" id="year_filter">
+                                        <?php
+                                        for ($year = (int)date('Y'); 1900 <= $year; $year--): ?>
+                                        <option value="<?=$year;?>"><?=$year;?></option>
+                                        <?php endfor; ?>
+                                    </select>
                                 </div>
                                 <!-- <div class="col-sm-4 col-xs-4">
                                     <input type="year" class="form-control" id="yearPicker">
@@ -209,8 +237,9 @@ include("_common/header.php");
 
 
                             </div>
+
                             <div class="form-row">
-                                <div class="col-sm-2 col-xs-4">
+                                <div class="col-sm-2 col-xs-4" style="margin-top:10px;">
                                     <button type="button" class="btn btn-success" id="filter">Search</button>
 
                                 </div>
@@ -243,16 +272,17 @@ include("_common/header.php");
 
                         <div class="table-responsive">
                             <select class="form-select no-border" id="order_by" aria-label="Default select example">
-                                <option value="most_recent">Order by Latest</option>
-                                <option value="alphabet">Order from A-Z </option>
+                                <option value="latest">Order by Latest</option>
+                                <option value="alphabetical">Order from A-Z </option>
                             </select>
                             <table class="table table-striped jambo_table bulk_action">
                                 <thead>
-                                    <tr class="headings">
+                                    <tr class="headings" id="headins">
 
-                                        <th class="column-title">Employee Name</th>
+                                        <th class="column-title">Employee</th>
+                                        <th class="column-title">Shift</th>
                                         <th class="column-title">Summary</th>
-                                        <th class="column-title">&nbsp;</th>
+                                        <!-- <th class="column-title">&nbsp;</th> -->
 
                                         <!-- <th class="column-title">Over Time/Late By</th> -->
 
@@ -265,10 +295,10 @@ include("_common/header.php");
                                     </tr>
                                 </thead>
 
-                                <!-- <tr id="loading">
+                                <tr id="loading">
                                     <td colspan="6"><i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display:;"></i>
                                     </td>
-                                </tr> -->
+                                </tr>
                                 <tbody id="attendanceData">
 
 
@@ -277,6 +307,11 @@ include("_common/header.php");
                           </tr> -->
                                 </tbody>
                             </table>
+                            <div class="container">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination" id="pagination"></ul>
+                                </nav>
+                            </div>
                         </div>
 
 
@@ -310,7 +345,7 @@ include("_common/header.php");
         </div>
     </div>
 </div>
-
+<script src="https://kit.fontawesome.com/bcb3edd6a7.js" crossorigin="anonymous"></script>
 <script src="js-files/attendance_report.js"></script>
 
 <?php

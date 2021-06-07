@@ -1,6 +1,7 @@
 <?php
 include("_common/header.php");
 ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 .no-border {
     border: none;
@@ -27,7 +28,7 @@ include("_common/header.php");
 
                         <button type="button" class="btn btn-success" id="add_attendence">Add</button>
 
-                        <button type="button" class="btn btn-success" id="upload_attendence">Upload</button>
+                        <!-- <button type="button" class="btn btn-success" id="upload_attendence">Upload</button> -->
 
 
                     </div>
@@ -111,6 +112,9 @@ include("_common/header.php");
                                             <option value="">-- Select --</option>
 
                                         </select>
+                                        <!-- <select class="form-control js-example-basic-single" id="employee_id"
+                                            name="employee_id" multiple="multiple"
+                                            style="width:100% !important;max-width:800px !important; border-radius:30px !important; "></select> -->
                                     </div>
                                 </div>
 
@@ -142,6 +146,39 @@ include("_common/header.php");
                                         <input type="text" id="clock_out" class="form-control col-md-7 col-xs-12">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">Status
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select class="form-control col-sm-2 col-xs-4 required" id="status">
+                                            <option value="">-- Select status --</option>
+                                            <option value="Present">Present</option>
+                                            <option value="Leave">Leave</option>
+                                            <option value="Absent">Absent</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shift">Shift
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select class="form-control col-sm-2 col-xs-4 required" id="shift">
+                                            <option value="">-- Select status --</option>
+
+                                        </select>
+                                    </div>
+                                </div> -->
+
+                                <!-- <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                        for="attendance_type">Attendance Type
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input class="form-control col-sm-2 col-xs-4 required" id="attendance_type" />
+
+                                    </div>
+                                </div> -->
 
 
                                 <div class="form-group">
@@ -191,7 +228,7 @@ include("_common/header.php");
 
                                 <div class="col-sm-4 col-xs-4">
                                     <select class="form-control col-sm-7 col-xs-12" id="employee_department">
-                                        <option value="">-- Select Department --</option>
+                                        <option value="">-- All Employees --</option>
 
                                     </select>
                                 </div>
@@ -238,8 +275,8 @@ include("_common/header.php");
 
                         <div class="table-responsive">
                             <select class="form-select no-border" id="order_by" aria-label="Default select example">
-                                <option value="most_recent">Order by Latest</option>
-                                <option value="alphabet">Order from A-Z </option>
+                                <option value="latest">Order by Latest</option>
+                                <option value="alphabetical">Order from A-Z </option>
                             </select>
                             <table class="table table-striped jambo_table bulk_action">
                                 <thead>
@@ -249,7 +286,9 @@ include("_common/header.php");
                                         <th class="column-title">Employee</th>
                                         <th class="column-title">Clock In Time</th>
                                         <th class="column-title">Clock Out Time</th>
-                                        <th class="column-title">Work Hours</th>
+                                        <!-- <th class="column-title">Work Hours</th> -->
+                                        <th class="column-title">Shift</th>
+                                        <th class="column-title">Status</th>
                                         <!-- <th class="column-title">Over Time/Late By</th> -->
 
                                         <th class="column-title no-link last"><span class="nobr">Actions</span>
@@ -273,6 +312,11 @@ include("_common/header.php");
                           </tr> -->
                                 </tbody>
                             </table>
+                            <div class="container">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination" id="pagination"></ul>
+                                </nav>
+                            </div>
                         </div>
 
 
@@ -306,7 +350,7 @@ include("_common/header.php");
         </div>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="js-files/attendance.js"></script>
 
 <?php

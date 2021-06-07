@@ -2,16 +2,25 @@
 include_once("_common/menu.php"); // menu list
 include_once("../gen/_common/header.php"); // header contents
 ?>
+<link type="text/css" rel="stylesheet" href="assets/css/style.css" />
+<link href="assets/admin_template/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <style>
-    .inc{
-        border:none;
-        margin-left:3px;
+.inc {
+    border: none;
+    margin-left: 3px;
+}
+
+.inc-input {
+    border: none;
+    max-width: 40px;
+    background-color: #F7F7F7;
+
+    .table-condensed thead tr:nth-child(2),
+    .table-condensed tbody {
+        display: none
     }
-    .inc-input{
-        border:none;
-        max-width:40px;
-        background-color:#F7F7F7;
-    }
+}
 </style>
 <div id="page_loader" style="display: ;">
     <div class="right_col" role="main">
@@ -271,8 +280,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                                 <input type="text" id="QC_institute_name"
-                                                                    required="required"
-                                                                    class="form-control col-md-7 col-xs-12 required add_qc_fields">
+                                                                    class="form-control col-md-7 col-xs-12 add_qc_fields">
 
                                                             </div>
 
@@ -283,8 +291,8 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="QC_degree">Degree Acquired<span>*</span>
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="QC_degree" required="required"
-                                                                    class="form-control col-md-7 col-xs-12 required add_qc_fields">
+                                                                <input type="text" id="QC_degree"
+                                                                    class="form-control col-md-7 col-xs-12 add_qc_fields">
                                                             </div>
                                                         </div>
 
@@ -294,8 +302,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                                 <input type="text" id="QC_year_concluded"
-                                                                    required="required"
-                                                                    class="form-control col-md-7 col-xs-12 required add_qc_fields">
+                                                                    class="form-control col-md-7 col-xs-12  add_qc_fields">
                                                             </div>
                                                         </div>
 
@@ -413,7 +420,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                                                         <div class="form-group">
                                                             <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                for="workExp_end">End<span>*</span>
+                                                                for="workExp_end">End
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                                 <input type="text" id="workExp_end" required="required"
@@ -740,7 +747,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                                                         <div class="form-group">
                                                             <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                for="jobTitle_to">To<span>*</span>
+                                                                for="jobTitle_to">To
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                                 <input type="text" id="jobTitle_to" required="required"
@@ -852,7 +859,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                                                         <div class="form-group">
                                                             <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                for="dept_to">To<span>*</span>
+                                                                for="dept_to">To
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                                 <input type="text" id="dept_to" required="required"
@@ -965,7 +972,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                                                         <div class="form-group">
                                                             <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                for="workShift_to">To<span>*</span>
+                                                                for="workShift_to">To
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
                                                                 <input type="text" id="workShift_to" required="required"
@@ -1141,120 +1148,356 @@ include_once("../gen/_common/header.php"); // header contents
                 <div id="salary_info_block" class="tab-pane fade" role="tabpanel" aria-labelledby="salary-tab">
 
                     <!-- <br> -->
-
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Net Payment</h2>
+                                    <h2>
+                                        Bank Details
+                                        <!-- <small>Activity report</small> -->
+                                    </h2>
                                     <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        <li>
+                                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                                aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a>
-                                                </li>
-                                                <li><a href="#">Settings 2</a>
-                                                </li>
-                                            </ul>
+
+                                        <li data-toggle="modal" id="edit_bank_details"
+                                            data-target="#edit_bank_details_modal" title="Edit Bank Details">
+                                            <a class=""><i class="fa fa-pencil"></i></a>
                                         </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
+
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
+
                                 <div class="x_content">
-                                    <div id="no_record3" style="display: none;">
-                                        <p><strong>No record available</strong></p>
-                                    </div>
-                                    <div id="net_pay" style="height:50px;">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <p><strong>Bank Name:</strong></p>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <p id="banker_name">...</p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <p><strong>Account Name:</strong></p>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <p id="accounter_name">...</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <p><strong>Account Number:</strong></p>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <p id="accounter_no">...</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <p><strong>Sort Code:</strong></p>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <p id="sorter_code">...</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="acctDetails_error">
+
+                                            </div>
+                                        </div>
+
 
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
 
 
-
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2 id="ttd_title_1">Gross Payment</h2>
+                                    <h2>Salary Details</h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                                aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a>
-                                                </li>
-                                                <li><a href="#">Settings 2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
+
+
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="x_content">
+                                <!-- <div class="x_content" style="margin-bottom: 30px;">
 
-                                    <!-- <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ;" id="ddsh_loading_1" ></i> -->
-                                    <div id="no_record" style="display: none;">
-                                        <p><strong>No record available</strong></p>
+                                    <span id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Salary
+                                            </label>
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                
+                                                <div style="display:flex;">
+                                                    <input type="text" id="salary_amt"
+                                                        class="form-control col-md-3 col-xs-6 add_salaryDetails_fields"
+                                                        style="margin-right:10px;">
+                                                    <div style=" display: grid; justify-content: center; align-items: center;
+                                                        font-weight: bold; margin-right: 10px;">Per</div>
+                                                    <Select
+                                                        class="form-control col-md-3 col-xs-6 add_salaryDetails_fields"
+                                                        id="salary_type">
+                                                        <option>Select</option>
+                                                        <option value="Hour">Hour</option>
+                                                        <option value="Week">Week</option>
+                                                        <option value="Month">Month</option>
+                                                        <option value="Year">Year</option>
+                                                    </select>
+                                                    <div style="margin-left:20px;">
+                                                        <button type="button" class="btn btn-sm btn-success"
+                                                            id="add_salaryDetails_btn">Update</button>
+                                                        <i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                            style="display: none;" id="add_salaryDetails_loader"></i>
+                                                    </div>
+                                                    <div class="text-danger" id="salaryDetails_error">
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </span>
+                                </div> -->
+                                <div class="" style="">
+
+                                    <div class="x_content">
+                                        <div style="display:flex;">
+                                            <div class="x_panel" style="margin-right:10px;">
+                                                <div class="x_title">
+                                                    <h2>Credit</h2>
+                                                    <ul class="nav navbar-right panel_toolbox">
+
+
+                                                        <li data-toggle="tooltip" id="add_credit" title="Add Credit">
+                                                            <a class=""><i class="fa fa-plus"></i></a>
+                                                        </li>
+
+                                                    </ul>
+
+                                                    <div id="credit_display" style="display: none;">
+                                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="x_panel">
+
+                                                                <div class="x_content">
+                                                                    <!-- <br /> -->
+                                                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                                        style="display: none;" id="credit_loader"></i>
+                                                                    <div class="col-md-12 col-sm-12 col-xs-12 ">
+                                                                        <div id="credit_body"></div>
+
+                                                                        <br>
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                                                <button type="button"
+                                                                                    class="btn btn-success"
+                                                                                    id="add_creditComponent_btn">Add</button>
+                                                                                <i class="fa fa-spinner fa-spin fa-fw fa-2x"
+                                                                                    style="display: none;"
+                                                                                    id="add_creditComponent_loader"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="x_content">
+                                                    <div class="table-responsive"
+                                                        style="max-height:50%;overflow-y:auto;">
+                                                        <table class="table table-striped jambo_table bulk_action">
+                                                            <!-- <thead>
+                                                                <tr class="headings">
+
+                                                                    <th class="column-title">Name</th>
+                                                                    <th class="column-title">Amount</th>
+                                                                    <th class="column-title" width="10%"></th>
+
+                                                                </tr>
+                                                            </thead> -->
+                                                            <tbody id="credit_table">
+                                                                <tr>
+                                                                    <td colspan="3">No Salary Component Found</td>
+
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="form-group" style="display:flex;">
+                                                            <label class="control-label" for="total_credit"
+                                                                style="margin-right:10px;">Total:
+                                                            </label>
+                                                            <!-- <div class="col-md-6 col-sm-6 col-xs-12"> -->
+                                                            <!-- <input type="text" id="total_credit" required="required"
+                                                                class="form-control" style="width:30%; height:25px;"> -->
+                                                            <input type="text" id="total_credit" name="total_credit"
+                                                                class="form-control"
+                                                                pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"
+                                                                style="width:30%; height:25px;" data-type="currency"
+                                                                disabled>
+                                                            <!-- </div> -->
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="x_panel">
+                                                <div class="x_title">
+                                                    <h2>Debit</h2>
+                                                    <ul class="nav navbar-right panel_toolbox">
+
+
+                                                        <li data-toggle="tooltip" id="add_debit" title="Add Debit">
+                                                            <a class=""><i class="fa fa-plus"></i></a>
+                                                        </li>
+
+                                                    </ul>
+                                                    <div id="debit_display" style="display: none;">
+                                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="x_panel">
+
+                                                                <div class="x_content">
+                                                                    <!-- <br /> -->
+                                                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                                        style="display: none;" id="debit_loader"></i>
+                                                                    <div class="col-md-12 col-sm-12 col-xs-12 ">
+                                                                        <div id="debit_body"></div>
+                                                                        <br>
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                                                <button type="button"
+                                                                                    class="btn btn-success"
+                                                                                    id="add_debitComponent_btn">Add</button>
+                                                                                <i class="fa fa-spinner fa-spin fa-fw fa-2x"
+                                                                                    style="display: none;"
+                                                                                    id="add_debitComponent_loader"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="x_content">
+                                                    <div class="table-responsive"
+                                                        style="max-height:50%;overflow-y:auto;">
+                                                        <table class="table table-striped jambo_table bulk_action">
+                                                            <!-- <thead>
+                                                                <tr class="headings">
+
+                                                                    <th class="column-title">Name</th>
+                                                                    <th class="column-title">Amount</th>
+                                                                    <th class="column-title" width="10%"></th>
+
+                                                                </tr>
+                                                            </thead> -->
+                                                            <tbody id="debit_table">
+                                                                <tr>
+                                                                    <td colspan="3">No Salary Component Found</td>
+
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                                    <div class="form-group" style="display:flex;">
+                                                        <label class="control-label" for="total_debit"
+                                                            style="margin-right:10px;">Total:
+                                                        </label>
+                                                        <!-- <div class="col-md-6 col-sm-6 col-xs-12"> -->
+                                                        <!-- <input type="text" id="total_credit" required="required"
+                                                                class="form-control" style="width:30%; height:25px;"> -->
+                                                        <input type="text" id="total_debit" name="total_debit"
+                                                            class="form-control" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"
+                                                            style="width:30%; height:25px;" data-type="currency"
+                                                            disabled>
+                                                        <!-- </div> -->
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div style="display:grid;place-content:center;">
+                                            <div class="form-group" style="display:flex;">
+                                                <label class="control-label" for="net_payment"
+                                                    style="margin-right:10px;">Net Payment:
+                                                </label>
+                                                
+                                                <input type="text" id="net_payment" name="net_payment"
+                                                    class="form-control" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"
+                                                    style="width:50%; height:25px;" data-type="currency" disabled>
+                                            </div>
+                                            <div style="display:flex;">
+                                                <button class="btn btn-sm btn-primary">Save</button>
+                                                <button id="generate_netPay"
+                                                    class="btn btn-sm btn-default">Generate</button>
+                                            </div>
+                                        </div> -->
+
+                                        <div style="display:flex; flex-direction:row;align-items:center;">
+                                            <div class="" style="font-size:1.5em;"><b>Gross
+                                                    Payment:
+                                                    <span id="salary_amt">0</span></b></div>
+                                            <!-- <div style=" display: grid; justify-content: center; align-items: center;
+                                                        font-weight: bold; margin-right: 10px;">Per</div> -->
+                                            <div style="margin-left:1.5em">
+                                                <Select class="form-control" style="border:none;" id="salary_type">
+                                                    <option>Select</option>
+                                                    <option value="Hour">Hourly</option>
+                                                    <option value="Week">Weekly</option>
+                                                    <option value="Month">Monthly</option>
+                                                    <option value="Year">Yearly</option>
+                                                </select>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div style="font-size:1.5em; color: #26B99A;"><b>Net Payment:
+                                                <span id="net_payment">0</span></b></div>
+                                        <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                            id="save_pay_loader"></i>
+                                        <button style="margin-top:2em; display:none;" class="btn btn-sm btn-primary"
+                                            id="save_pay">Save</button>
+
                                     </div>
-                                    <div id="yearly_sales_report" style="height:350px;">
-
-                                    </div>
-
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2 id="ttd_title">Total Deductions</h2>
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                        </li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                                aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a>
-                                                </li>
-                                                <li><a href="#">Settings 2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
-
-                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ;"
-                                        id="ddsh_loading"></i>
-                                    <div id="no_record2" style="display: none;">
-                                        <p><strong>No record available</strong></p>
-                                    </div>
-                                    <div id="echart_pie2" style="height:350px;">
 
 
-                                    </div>
-
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -1269,91 +1512,85 @@ include_once("../gen/_common/header.php"); // header contents
                                 <div class="x_title">
                                     <h2>Salary Payment History</h2>
                                     <ul class="nav navbar-right panel_toolbox">
-                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                        </li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                                aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a>
-                                                </li>
-                                                <li><a href="#">Settings 2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
+
+                                        <li><button type="button" class="btn btn-sm btn-primary" data-toggle="collapse"
+                                                data-target="#collapseExample" aria-expanded="false"
+                                                aria-controls="collapseExample">Filter</button></li>
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ;"
-                                        id="graph_loader"></i>
-                                    <div id="no_recordpay" style="display: none;">
-                                        <h3><strong>No record available</strong></h3>
-                                    </div>
-                                    <div id="mainb" style="height:350px;"></div>
+                                    <div class="collapse" id="collapseExample" style="margin-bottom:2em;">
 
+
+
+                                        <div class="form-row">
+
+                                            <div class="col-sm-4 col-xs-4">
+                                                <input class="form-control col-sm-7 col-xs-12" type="text"
+                                                    placeholder="Pay Period" id="payperiod_filter">
+
+                                            </div>
+
+                                            <button type="button" class="btn btn-success"
+                                                id="slip_filter">Search</button>
+
+
+                                        </div>
+
+                                    </div>
+                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                        id="list_slip_loader"></i>
+                                    <div class="table-responsive" id="list_slip_table">
+                                        <table class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+
+                                                    <th class="column-title">Name</th>
+                                                    <th class="column-title">Pay Period</th>
+                                                    <th class="column-title"></th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody id="list_slip_body">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="table-responsive">
+                            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                id="list_slip_loader"></i>
+                            <div class="table-responsive" id="list_slip_table">
                                 <table class="table table-striped jambo_table bulk_action">
                                     <thead>
                                         <tr class="headings">
 
+                                            <th class="column-title">Name</th>
+                                            <th class="column-title">Pay Period</th>
+                                            <th class="column-title"></th>
 
-                                            <th class="column-title">Code</th>
-                                            <th class="column-title">Payment Date</th>
-                                            <th class="column-title">Payment Types</th>
-                                            <th class="column-title">Credit or Debit</th>
-
-
-                                            <th class="column-title no-link last"><span class="nobr">Amount</span>
-                                            </th>
-                                            <th class="bulk-actions" colspan="5">
-                                                <a class="antoo" style="color:#fff; font-weight:500;">Bulk
-                                                    Actions ( <span class="action-cnt"> </span> ) <i
-                                                        class="fa fa-chevron-down"></i></a>
-                                            </th>
                                         </tr>
                                     </thead>
-
-                                    <tr id="loading">
-                                        <td colspan="4"><i class="fa fa-spinner fa-spin fa-fw fa-3x"
-                                                style="display: ;"></i>
-                                        </td>
-                                    </tr>
-
-                                    <tbody id="salaryHistoryData">
-
-
+                                    <tbody id="list_slip_body">
 
                                     </tbody>
-
-
                                 </table>
-
-
-                                <div class="container">
-                                    <nav aria-label="Page navigation">
-                                        <ul class="pagination" id="pagination"></ul>
-                                    </nav>
-                                </div>
-
-
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
 
                 <div id="leaves_block" class="tab-pane fade" role="tabpanel" aria-labelledby="leaves-tab">
 
-                <div class="row">
+                    <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
@@ -1390,7 +1627,7 @@ include_once("../gen/_common/header.php"); // header contents
                     </div>
 
                     <div class="row">
-                        
+
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
@@ -1488,26 +1725,29 @@ include_once("../gen/_common/header.php"); // header contents
                                         </div>
 
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <p id="firstnamer"></p>
+                                            <p id="annual_allowance"></p>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-md-4 col-sm-4 col-xs-6">
-                                            <p><strong>Allotted Days</strong></p>
+                                            <p><strong>Extra Allotted Days:</strong></p>
                                         </div>
 
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                        <input class="inc-input" type="text" name="turtle-doves" id="extra-allot-inp" value="2"><button id="inc-btn" class="inc">+</button><button id="dec-btn" style="border:none;" class="">-</button>
+                                            <input class="inc-input" type="text" name="turtle-doves"
+                                                id="extra-allot-inp" value="0"><button id="inc-btn"
+                                                class="inc">+</button><button id="dec-btn" style="border:none;"
+                                                class="">-</button>
                                         </div>
                                     </div>
                                     <div style="display:none;" id="allot-btns">
                                         <button type="button" class="btn btn-sm btn-success"
                                             id="save_allot_btn">Save</button>
-                                            <button type="button" class="btn btn-sm btn-danger"
+                                        <button type="button" class="btn btn-sm btn-danger"
                                             id="cancel_allot_btn">Cancel</button>
-                                        <i class="fa fa-spinner fa-spin fa-fw fa-3x"
-                                            style="display: none;" id="save_allot_loader"></i>
+                                        <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                            id="save_allot_loader"></i>
                                     </div>
 
                                     <div class="row">
@@ -1516,10 +1756,10 @@ include_once("../gen/_common/header.php"); // header contents
                                         </div>
 
                                         <div class="col-md-6 col-sm-6 col-xs-6">
-                                            <p id="firstnamer"></p>
+                                            <p id="total_leave_daysi"></p>
                                         </div>
                                     </div>
-                                    
+
 
                                 </div>
 
@@ -1530,19 +1770,59 @@ include_once("../gen/_common/header.php"); // header contents
 
                     </div>
                     <!-- <br> -->
-                    
+
 
                     <div class="row">
-                        
+
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x-panel">
                                 <div class="x_title">
                                     <h2>Leave History</h2>
-                                    
+
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="table-responsive">
+                                <div class="x_content">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="table-responsive">
+                                            <table class="table table-striped jambo_table bulk_action">
+                                                <thead>
+                                                    <tr class="headings">
+
+
+                                                        <th class="column-title">Leave Type</th>
+                                                        <th class="column-title">Start</th>
+                                                        <th class="column-title">Resumption</th>
+                                                        <th class="column-title">Days Used</th>
+
+
+
+                                                        <th class="bulk-actions" colspan="4">
+                                                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk
+                                                                Actions ( <span class="action-cnt"> </span> ) <i
+                                                                    class="fa fa-chevron-down"></i></a>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tr id="loading">
+                                                    <td colspan="3"><i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                            style="display: none;"></i></td>
+                                                </tr>
+
+                                                <tbody id="summaryData">
+
+
+
+                                                </tbody>
+
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="table-responsive">
                                     <table class="table table-striped jambo_table bulk_action">
                                         <thead>
                                             <tr class="headings">
@@ -1581,7 +1861,7 @@ include_once("../gen/_common/header.php"); // header contents
 
 
 
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -2242,6 +2522,89 @@ include_once("../gen/_common/header.php"); // header contents
     </div>
 </div>
 
+<div class="modal fade" id="edit_bank_details_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Bank Details
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h3>
+
+            </div>
+            <div class="modal-body">
+                <div style="margin-top:2em">
+                    <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
+                    <span id="" class="form-horizontal form-label-left">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="bank_name">Bank Name
+                                <span>*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="bank_name" required="required"
+                                    class="form-control col-md-7 col-xs-12 add_acctDetails_fields">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="acct_name">Account Name
+                                <span>*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="acct_name" required="required"
+                                    class="form-control col-md-7 col-xs-12 add_acctDetails_fields">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="acct_no">Account Number
+                                <span>*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="acct_no" required="required"
+                                    class="form-control col-md-7 col-xs-12 add_acctDetails_fields">
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sort_code">Sort Code
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="sort_code" required="required"
+                                    class="form-control col-md-7 col-xs-12">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="edit_acctDetails_error">
+
+                            </div>
+                        </div>
+
+                        <!-- <div class="ln_solid"></div> -->
+
+
+
+                    </span>
+                    <!-- </div> -->
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="add_acctDetails_btn">Save</button>
+                <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;" id="add_acctDetails_loader"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="edit_additional_info_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2683,7 +3046,7 @@ include_once("../gen/_common/header.php"); // header contents
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header ">
-                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Department History
+                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Work Shift
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -2755,7 +3118,7 @@ include_once("../gen/_common/header.php"); // header contents
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header ">
-                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Department History
+                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Job Title
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -2767,8 +3130,8 @@ include_once("../gen/_common/header.php"); // header contents
                     <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
                     <span id="" class="form-horizontal form-label-left">
                         <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_jobTitle_prevCom">Work
-                                Shift
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_jobTitle_prevCom">Job
+                                Title
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <select class="form-control col-md-7 col-xs-12" disabled id="edit_jobTitle_name">
@@ -2915,6 +3278,132 @@ include_once("../gen/_common/header.php"); // header contents
     </div>
 </div>
 
+<div class="modal fade" id="view_payslip_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">View Payslip
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h3>
+
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12" style="margin-top:2em;">
+                    <!-- <div class="card"> -->
+                    <!-- <div class="card-body"> -->
+                    <h3 class="payslip-title title_center" id="com_name">NaHere Limited</h3>
+                    <!-- <h5 class="subtitle">8/10 Ilupeju Byepass, Lagos State, Nigeria</h5> -->
+
+                    <div class="row" style="background:#17a2b8;color:white;">
+                        <div class="col-sm-6 m-b-20">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <h3 class="text-uppercase" id="emy_name"><strong>John Doe</strong></h3>
+                                </li>
+                                <li><span id="depy_name">IT </span> - <span id="joby_name">Computer Programming</span>
+                                </li>
+                                <li>Bank Name: <span id="banky_name">First Bank</span></li>
+                                <li>Account Number: <span id="banky_no">1234567890</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 m-b-20">
+                            <!-- <div class="invoice-details"> -->
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    <h3 class="text-uppercase">Payslip #49029</h3>
+                                </li>
+                                <li>Pay Period: <span id="pay_period_datey">March 15th 2019 - March 28th 2019</span>
+                                </li>
+                                <li>Payment Date: <span id="pay_datey">March 15th 2019</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div>
+                                <h4 class="m-b-10"><strong>Earnings</strong></h4>
+                                <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                    id="credit_loader2"></i>
+                                <table class="table table-bordered" id="credit_body2">
+                                    <tbody id="credit_table2">
+                                        <!-- <tr>
+                                                <td><strong>Basic Salary</strong> <span class="float-right">$6500</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>House Rent Allowance (H.R.A.)</strong> <span
+                                                        class="float-right">$55</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Conveyance</strong> <span class="float-right">$55</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Other Allowance</strong> <span
+                                                        class="float-right">$55</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total Earnings</strong> <span
+                                                        class="float-right"><strong>$55</strong></span></td>
+                                            </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div>
+                                <h4 class="m-b-10"><strong>Deductions</strong></h4>
+                                <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                    id="debit_loader2"></i>
+                                <table class="table table-bordered" id="debit_body2">
+                                    <tbody id="debit_table2">
+                                        <!-- <tr>
+                                                <td><strong>Tax Deducted at Source (T.D.S.)</strong> <span
+                                                        class="float-right">$0</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Provident Fund</strong> <span class="float-right">$0</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>ESI</strong> <span class="float-right">$0</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Loan</strong> <span class="float-right">$300</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Total Deductions</strong> <span
+                                                        class="float-right"><strong>$59698</strong></span></td>
+                                            </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <p><strong>Gross Pay: <span id="gpay">$59698</span></strong></p>
+                            <p><strong>Net Salary: <span id="npay">$59698</span></strong></p>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-success" id="edit_nok_btn">Save</button>
+                <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;" id="edit_nok_loader"></i> -->
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -2963,9 +3452,16 @@ include_once("../gen/_common/header.php"); // header contents
     <?php
 include_once("../gen/_common/footer.php");
 ?>
+    <script src="assets/admin_template/vendors/iCheck/icheck.min.js" type="926516436afdfb096acc9ace-text/javascript">
+    </script>
+
     <script type="text/javascript" src="assets/js/hrm.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript" src="js-files/employment_info_jsFiles/basic_info.js"></script>
     <script type="text/javascript" src="js-files/employment_info_jsFiles/emp_info.js"></script>
     <script type="text/javascript" src="js-files/employment_info_jsFiles/documents.js"></script>
     <script type="text/javascript" src="js-files/employment_info_jsFiles/leave_days.js"></script>
+    <script type="text/javascript" src="js-files/employment_info_jsFiles/salary_info.js"></script>
+    <script type="text/javascript" src="js-files/employment_info_jsFiles/payslip.js"></script>
     <script type="text/javascript" src="js-files/employee_info_general.js"></script>

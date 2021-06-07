@@ -138,11 +138,11 @@ function list_of_leaves_applicant(page) {
 						strTable +=
 							'<td valign="top">' + response['data'][i]['leave_code'] + '</td>';
 						strTable +=
-							'<td width="8%" valign="top"><div class="profile_pic"><img src="' +
+							'<td valign="top"><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="' +
 							window.location.origin +
 							'/files/images/employee_images/sml_' +
 							response['data'][i]['profile_picture'] +
-							'" alt="..." width="50"></div></td>';
+							'" alt="..." width="50" class="pfl_ctna"></div></td>';
 						strTable +=
 							'<td width="20%" valign="top"><b>' +
 							response['data'][i]['lastname'] +

@@ -369,6 +369,7 @@ function hr_approve() {
 
 	$('#approve').hide();
 	$('#approve_loader').show();
+	sendLeaveDates();
 
 	$.ajax({
 		type: 'POST',
@@ -404,6 +405,75 @@ function hr_approve() {
 			$('#approve_loader').hide();
 		},
 	});
+}
+
+function sendLeaveDates() {
+	var company_id = localStorage.getItem('company_id');
+	let employee_id = $('#emp_id').val();
+	let status = 'Leave';
+	let user_id = localStorage.getItem('user_id');
+	// var pathArray = window.location.pathname.split( '/' );
+	// var leave_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
+	// var approval_status = 'yes';
+	let starter = $('#leave_starty').html();
+	let ender = $('#leave_endy').html();
+	// var startDate = new Date('2017-10-01'); //YYYY-MM-DD
+	// var endDate = new Date('2017-10-07'); //YYYY-MM-DD
+	// var dateArr = getDateArray(startDate, endDate);
+
+	let data = {
+		company_id: company_id,
+		employee_id: employee_id,
+		status: status,
+		start_leave_date: starter,
+		resumption_date: ender,
+		user_id: user_id,
+	};
+
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: api_path + 'hrm/add_leaves_to_attendance',
+		data: data,
+		timeout: 60000, // sets timeout to one minute
+		// objAJAXRequest, strError
+
+		error: function(response) {
+			alert('Send Dates Error');
+			// $('#approve').show();
+			// $('#approve_loader').hide();
+			// alert('connection error');
+		},
+
+		success: function(response) {
+			// console.log(response);
+
+			if (response.status == '200') {
+				// $('#row_'+user_id).hide();
+				// $('#modal_approve').modal('show');
+				// $('#approve_decline_buttons').hide();
+				// $('#approve_msg').show();
+				// $('#modal_approve').on('hidden.bs.modal', function() {
+				// 	// do something…
+				// 	window.location.reload();
+				// 	//window.location.href = base_url+"/erp/hrm/employees";
+				// });
+			} else if (response.status == '401') {
+			}
+			// $('#approve').show();
+			// $('#approve_loader').hide();
+		},
+	});
+}
+
+function getDateArray(start, end) {
+	var arr = new Array();
+	var dt = new Date(start);
+	while (dt <= end) {
+		arr.push(new Date(dt));
+		dt.setDate(dt.getDate() + 1);
+	}
+	return arr;
 }
 
 function hr_decline() {
@@ -500,8 +570,10 @@ function fetch_leave_info() {
 				$('#lastname').html(response.data.lastname);
 				$('#middlename').html(response.data.middlename);
 				$('#resumption_date').html(resume);
-				$('#days_used').html(response.data.real_days_used);
+				$('#days_used').html(response.data.days_requested);
 				$('#leave_start').html(start);
+				$('#leave_starty').html(response.data.leave_start);
+				$('#leave_endy').html(response.data.resumption_date);
 				$('#working_days').html(response.data.exclude_weekends);
 				$('#holidays_within').html(response.data.exclude_holidays);
 				$('#hr_approval').html(response.data.hr_approval);
@@ -672,6 +744,9 @@ function list_of_forward_leaves_applicant() {
 							} else if (response['data'][i]['approval_status'] == 'yes') {
 								strTable +=
 									'<td><i class="fa fa-check-circle"  data-toggle="tooltip" data-placement="top" style="color: green; font-size: 30px;" title="Forward Leave Applicant"></i></td>';
+							} else if (response['data'][i]['approval_status'] == 'declined') {
+								strTable +=
+									'<td><i class="fa fa-times-circle"  data-toggle="tooltip" data-placement="top" style="color: red; font-size: 30px;" title="Forward Leave Applicant"></i></td>';
 							}
 
 							// strTable +=
@@ -694,9 +769,7 @@ function list_of_forward_leaves_applicant() {
 							strTable += '</tr>';
 						} else {
 							strTable +=
-								'<tr class="sortAll" id="row_' +
-								response['data'][i]['approval_id'] +
-								'">';
+								'<tr class="" id="row_' + response['data'][i]['approval_id'] + '">';
 
 							strTable +=
 								'<td width="8%" valign="top"><div class="profile_pic"><img src="' +
@@ -720,6 +793,9 @@ function list_of_forward_leaves_applicant() {
 							} else if (response['data'][i]['approval_status'] == 'yes') {
 								strTable +=
 									'<td><i class="fa fa-check-circle"  data-toggle="tooltip" data-placement="top" style="color: green; font-size: 30px;" title="Forward Leave Applicant"></i></td>';
+							} else if (response['data'][i]['approval_status'] == 'declined') {
+								strTable +=
+									'<td><i class="fa fa-times-circle"  data-toggle="tooltip" data-placement="top" style="color: red; font-size: 30px;" title="Forward Leave Applicant"></i></td>';
 							}
 
 							// strTable +=

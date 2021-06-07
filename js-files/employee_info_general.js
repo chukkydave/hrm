@@ -3,8 +3,7 @@ $(document).ready(function() {
 
 	$('#payslip-tab').on('click', () => {
 		if ($('#payslip-tab').hasClass('no')) {
-			list_of_salary_history('');
-			init_echarts();
+			listPayslip(1);
 			$('#payslip-tab').removeClass('no');
 		}
 
@@ -13,6 +12,9 @@ $(document).ready(function() {
 	$('#salary-tab').on('click', () => {
 		if ($('#salary-tab').hasClass('no')) {
 			fetch_employee_view_details_salary_info();
+			list_employment_payment_type();
+			showBankDetails();
+			showSalaryDetails();
 			$('#salary-tab').removeClass('no');
 		}
 	});
@@ -834,8 +836,6 @@ function fetch_employee_view_details_leave_history() {
 		},
 	});
 }
-
-
 
 function init_echartsleave() {
 	if (typeof echarts === 'undefined') {

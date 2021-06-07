@@ -165,7 +165,7 @@ include_once("../gen/_common/header.php"); // header contents
 
 
 
-            <div class="col-md-7 col-sm-7 col-xs-12">
+            <!-- <div class="col-md-7 col-sm-7 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>Total Number of Employees</h2>
@@ -192,7 +192,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                     </div>
                 </div>
-            </div>
+            </div> -->
 
 
             <div class="col-md-5 col-sm-5 col-xs-12">

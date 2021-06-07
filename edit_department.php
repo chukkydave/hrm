@@ -117,21 +117,24 @@ include("_common/header.php");
 
 
                                             <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hod_name">HOD
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                    for="hod_name">HOD
                                                     Name<span>*</span>
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                                     <input type="text" id="hod_name" required="required"
                                                         class="form-control col-md-7 col-xs-12 required_hod">
-                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="emp_list">
-                                                          
-                                                        </ul>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
+                                                        id="emp_list">
+
+                                                    </ul>
                                                 </div>
-                                                
+
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hod_from">From<span>*</span>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                    for="hod_from">From<span>*</span>
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                                     <input type="text" id="hod_from" required="required"
@@ -140,7 +143,8 @@ include("_common/header.php");
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hod_to">To<span>*</span>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                                    for="hod_to">To<span>*</span>
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                                     <input type="text" id="hod_to" required="required"
@@ -153,9 +157,10 @@ include("_common/header.php");
                                             <div class="form-group">
                                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 
-                                                  <button type="button" class="btn btn-success" id="add_hode_btn">Add</button>
-                                                  <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
-                                                  id="add_hode_loader"></i>
+                                                    <button type="button" class="btn btn-success"
+                                                        id="add_hode_btn">Add</button>
+                                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                                        id="add_hode_loader"></i>
                                                 </div>
                                             </div>
 
@@ -222,7 +227,8 @@ include("_common/header.php");
     </div>
 </div>
 
-<div class="modal fade" id="edit_HOD_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="edit_HOD_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header ">
@@ -236,54 +242,51 @@ include("_common/header.php");
             <div class="modal-body">
                 <div style="margin-top:2em">
                     <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
-                        <span id="" class="form-horizontal form-label-left">
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                    for="edit_HOD_name">HOD
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="edit_HOD_name" required="required"
+                    <span id="" class="form-horizontal form-label-left">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_HOD_name">HOD
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="edit_HOD_name" required="required"
                                     class="form-control col-md-7 col-xs-12" disabled>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="emp_list2">
-                                        
-                                    </ul>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="emp_list2">
 
-                                </div>
+                                </ul>
+
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                    for="edit_HOD_start">From
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="edit_HOD_from" required="required"                                      style="margin-bottom:5px;"
-                                        class="form-control col-md-7 col-xs-12 required" disabled>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_HOD_start">From
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="edit_HOD_from" required="required" style="margin-bottom:5px;"
+                                    class="form-control col-md-7 col-xs-12" disabled>
 
-                                </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                    for="edit_HOD_end">To
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="text" id="edit_HOD_to" required="required"                                      style="margin-bottom:5px;"
-                                        class="form-control col-md-7 col-xs-12 required">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_HOD_end">To
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="edit_HOD_to" required="required" style="margin-bottom:5px;"
+                                    class="form-control col-md-7 col-xs-12">
 
-                                </div>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="edit_HOD_error">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="edit_HOD_error">
 
-                                </div>
                             </div>
+                        </div>
 
-                            
 
-                        </span>
+
+                    </span>
                     <!-- </div> -->
                 </div>
 

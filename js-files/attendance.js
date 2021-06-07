@@ -1,30 +1,34 @@
 $(document).ready(function() {
+	var socket = io.connect('https://api.empl-dev.site', { forceNew: true });
 	load_employee();
-	attendance();
+	attendance('');
 	load_department();
+	fetch_list();
 	// list_of_positions();
 	$('#add_attendence').on('click', show_add);
 	$('#filter_attendence').on('click', show_filter);
 	$('#upload_attendence').on('click', show_upload);
 
 	$('#clock_in').datetimepicker({
-		format: 'HH:mm:ss'
+		format: 'HH:mm:ss',
 	});
 
 	$('#clock_out').datetimepicker({
-		format: 'HH:mm:ss'
+		format: 'HH:mm:ss',
 	});
 
 	$('input#date').datepicker({
-		dateFormat: 'yy-mm-dd'
+		dateFormat: 'yy-mm-dd',
 	});
 
-	$('input#date_range').daterangepicker({
-		autoUpdateInput: false
-	});
+	// $('input#date_range').daterangepicker({
+	// 	autoUpdateInput: false
+	// });
 
 	$('input#date_range').on('apply.daterangepicker', function(ev, picker) {
-		$(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+		$(this).val(
+			picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'),
+		);
 	});
 
 	// $('input#date_end').datepicker({
@@ -32,12 +36,26 @@ $(document).ready(function() {
 	// });
 
 	$('#add').on('click', add_company_attendance);
-	$('#filter').on('click', attendance);
+	$('#filter').on('click', () => {
+		attendance('');
+	});
 
 	$(document).on('click', '.delete_attendance', function() {
 		var attendance_id = $(this).attr('id').replace(/att_/, ''); // table row ID
 		delete_attendance(attendance_id);
 	});
+
+	$('#order_by').on('change', () => {
+		let arr = [];
+		const highlightedItems = document.querySelectorAll('.sortAll');
+
+		highlightedItems.forEach(function(userItem) {
+			arr.push(userItem.attributes.id.value);
+		});
+		console.log(arr);
+		attendance('');
+	});
+	$('.js-example-basic-single').select2();
 });
 
 function add_company_attendance() {
@@ -47,6 +65,9 @@ function add_company_attendance() {
 	var date = $('#date').val();
 	var clock_in = $('#clock_in').val();
 	var clock_out = $('#clock_out').val();
+	// let shift = $('#shift').val();
+	let status = $('#status').val();
+	// let attendance_type = $('#attendance_type').val();
 
 	var blank;
 
@@ -96,7 +117,10 @@ function add_company_attendance() {
 			user_id: user_id,
 			date: date,
 			clock_in: clock_in,
-			clock_out: clock_out
+			clock_out: clock_out,
+			// workshift: shift,
+			status: status,
+			// attendance_type: attendance_type
 		},
 
 		success: function(response) {
@@ -129,7 +153,7 @@ function add_company_attendance() {
 			$('#add').show();
 			$('#attendance_loader').hide();
 			$('#error_att').html('Connection Error.');
-		}
+		},
 	});
 }
 
@@ -149,32 +173,42 @@ function load_employee() {
 
 			var options = '';
 
-			$.each(response['data'], function(i, v) {
-				options +=
-					'<option value="' +
-					response['data'][i]['employee_id'] +
-					'">' +
-					response['data'][i]['firstname'] +
-					' ' +
-					response['data'][i]['lastname'] +
-					'</option>';
+			$(response.data).each((i, v) => {
+				options += `<option value="${v.employee_id}">${v.firstname} ${v.lastname} (${v.position})</option>`;
 			});
+
 			$('#employee_id').append(options);
 			$('#employee_name').append(options);
 		},
 		// jqXHR, textStatus, errorThrown
 		error(response) {
 			// alert('Connection error');
-		}
+		},
 	});
 }
 
-function attendance() {
+function attendance(page) {
 	var company_id = localStorage.getItem('company_id');
-	var employee_id = $('#employee_name').val();
-	var date_range = $('#date_range').val();
+	var employee_dept = $('#employee_department').val();
+	var date_range;
+	var order = $('#order_by').val();
+	var today = new Date();
+	var dd = String(today.getDate()).padStart(2, '0');
+	var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+	var yyyy = today.getFullYear();
 
-	var page = 1;
+	today = yyyy + '-' + mm + '-' + dd;
+
+	if ($('#date_range').val() == '') {
+		date_range = today;
+	} else {
+		date_range = $('#date_range').val();
+	}
+
+	// var page = 1;
+	if (page == '') {
+		var page = 1;
+	}
 	var limit = 10;
 
 	$('#loading').show();
@@ -184,7 +218,14 @@ function attendance() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_employees_attendance',
-		data: { company_id: company_id, page: page, limit: limit, date_range: date_range, employee_id: employee_id },
+		data: {
+			company_id: company_id,
+			page: page,
+			limit: limit,
+			date_range: date_range,
+			department: employee_dept,
+			order: order,
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -198,12 +239,16 @@ function attendance() {
 					var k = 1;
 					$.each(response['data'], function(i, v) {
 						strTable += '<tr id="row_' + response['data'][i]['attendance_id'] + '">';
+						let date = moment(response['data'][i]['date'], 'YYYY-MM-DD').format('LL');
 
-						strTable += '<td>' + response['data'][i]['date'] + '</td>';
-						strTable += '<td>' + response['data'][i]['employee_name'] + '</td>';
+						strTable += `<td>${date}</td>`;
+						strTable += `<td class="sortAll" id="${v.employee_id}">${v.employee_name}</td>`;
 						strTable += '<td>' + response['data'][i]['clock_in'] + '</td>';
 						strTable += '<td>' + response['data'][i]['clock_out'] + '</td>';
-						strTable += '<td>' + response['data'][i]['work_hours'] + '</td>';
+						// strTable += '<td>' + response['data'][i]['work_hours'] + '</td>';
+						strTable += '<td>' + response['data'][i]['workshift'] + '</td>';
+						// strTable += '<td>' + response['data'][i]['attendance_type'] + '</td>';
+						strTable += '<td>' + response['data'][i]['status'] + '</td>';
 
 						strTable +=
 							'<td valign="top"><a href="' +
@@ -217,8 +262,11 @@ function attendance() {
 						strTable += '</tr>';
 
 						strTable +=
-							'<tr style="display: none;" id="loader_row_' + response['data'][i]['attendance_id'] + '">';
-						strTable += '<td colspan="7"><i class="fa fa-spinner fa-spin fa-fw fa-2x"  id="loading"></i>';
+							'<tr style="display: none;" id="loader_row_' +
+							response['data'][i]['attendance_id'] +
+							'">';
+						strTable +=
+							'<td colspan="7"><i class="fa fa-spinner fa-spin fa-fw fa-2x"  id="loading"></i>';
 						strTable += '</td>';
 						strTable += '</tr>';
 
@@ -241,6 +289,14 @@ function attendance() {
 				$('#attendanceData').html(strTable);
 				$('#attendanceData').show();
 			}
+
+			$('#pagination').twbsPagination({
+				totalPages: Math.ceil(response.total_rows / limit),
+				visiblePages: 10,
+				onPageClick: function(event, page) {
+					attendance(page);
+				},
+			});
 		},
 
 		error: function(response) {
@@ -249,12 +305,13 @@ function attendance() {
 			$('#loading').hide();
 			// alert(response.msg);
 			strTable += '<tr>';
-			strTable += '<td colspan="7"><strong class="text-danger">Connection error!</strong></td>';
+			strTable +=
+				'<td colspan="7"><strong class="text-danger">Connection error!</strong></td>';
 			strTable += '</tr>';
 
 			$('#attendanceData').html(strTable);
 			$('#attendanceData').show();
-		}
+		},
 	});
 }
 
@@ -294,7 +351,7 @@ function delete_attendance(attendance_id) {
 			}
 
 			$('#loader_row_' + attendance_id).hide();
-		}
+		},
 	});
 }
 
@@ -378,6 +435,49 @@ function load_department() {
 		error(response) {
 			// $('#employee_details_display').hide();
 			// $('#employee_error_display').show();
-		}
+		},
+	});
+}
+
+function fetch_list() {
+	var company_id = localStorage.getItem('company_id');
+
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		cache: false,
+		url: api_path + 'workshifts/list_shifts',
+		data: { company_id: company_id },
+
+		success: function(response) {
+			console.log(response);
+
+			if (response.status == '200') {
+				var the_list = '';
+				$(response.data).each(function(index, value) {
+					the_list += `<option value='${value.id}'>${value.name}</option>`;
+				});
+
+				$('#shift').append(the_list);
+			} else if (response.status == '400') {
+				// coder error message
+
+				the_list += `<option>No record</option>`;
+				$('#shift').append(the_list);
+			} else if (response.status == '401') {
+				//user error message
+
+				$('#shift').append(`<option>Error</option>`);
+			}
+
+			// $('#loading_td').hide();
+		},
+
+		error: function(response) {
+			console.log(response);
+			// $('#add_dept').show();
+			// $('#dept_loading').hide();
+			$('#shift').append(`<option>Error</option>`);
+		},
 	});
 }

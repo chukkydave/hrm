@@ -835,7 +835,12 @@ function showEmployeeDataInfo() {
 				if (supervisor_name !== 'N/A') {
 					sup_name = `${supervisor_name.lastname} ${supervisor_name.firstname} ${supervisor_name.middlename}`;
 				}
-				let empee = moment(date_of_employ, 'YYYY-MM-DD').format('LL');
+				let empee;
+				if (date_of_employ === '0000-00-00 00:00:00' || date_of_employ === '0000-00-00') {
+					empee = '';
+				} else {
+					empee = moment(date_of_employ, 'YYYY-MM-DD').format('LL');
+				}
 				$('#branch').html(branch_name);
 				$('#employment_type').html(employment_type_name);
 				$('#date_of_employment').html(empee);
@@ -867,8 +872,8 @@ function showEmployeeDataInfo() {
 function viewEmpInfo() {
 	let company_id = localStorage.getItem('company_id');
 	let employee_id = window.location.search.split('=')[1];
-	// $('#list_workShift_table').hide();
-	// $('#list_workShift_loader').show();
+	$('#edit_emp_btn').hide();
+	$('#edit_emp_loader').show();
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
@@ -879,7 +884,7 @@ function viewEmpInfo() {
 		.then(function(response) {
 			const { employee_data } = response.data.data;
 
-			if (employee_data) {
+			if (employee_data || response.data.status == 200) {
 				const {
 					branch_name,
 					branch,
@@ -891,27 +896,33 @@ function viewEmpInfo() {
 				} = response.data.data.employee_data;
 
 				$('#edit_emp_supervisor').attr('data', supervisor);
-				$('#edit_emp_supervisor').val(
-					`${supervisor_name.lastname} ${supervisor_name.firstname} ${supervisor_name.middlename}`,
-				);
+				if (supervisor_name == 'N/A') {
+					$('#edit_emp_supervisor').val('');
+				} else {
+					$('#edit_emp_supervisor').val(
+						`${supervisor_name.lastname} ${supervisor_name.firstname} ${supervisor_name.middlename}`,
+					);
+				}
+
 				$('#edit_emp_supervisor').attr('data', supervisor);
 				$('#edit_emp_date').val(date_of_employ);
 				$('#edit_emp_type').val(employment_type);
 				$('#edit_emp_branch').val(branch);
 
-				// $('#list_workShift_loader').hide();
-				// $('#list_workShift_table').show();
+				$('#edit_emp_loader').hide();
+				$('#edit_emp_btn').show();
 			} else {
-				// $('#list_workShift_body').html(`<tr><td colspan="4">No record</td></tr>`);
-				// $('#list_workShift_loader').hide();
-				// $('#list_workShift_table').show();
+				$('#edit_emp_error').html(response.data.msg);
+				$('#edit_emp_loader').hide();
+				$('#edit_emp_btn').show();
 			}
 		})
 		.catch(function(error) {
 			console.log(error);
 
-			// $('#list_workShift_loader').hide();
-			// $('#list_workShift_table').show();
+			$('#edit_emp_loader').hide();
+			$('#edit_emp_btn').show();
+			$('#edit_emp_error').html(response.data.msg);
 			// $('#list_workShift_body').html(
 			// 	`<tr><td colspan="4" style="color:red;">Error</td></tr>`,
 			// );
@@ -1156,12 +1167,16 @@ function editJobTitle() {
 			if (response.status == 200 || response.status == 201) {
 				$('#edit_jobTitle_loader').hide();
 				$('#edit_jobTitle_btn').show();
-
+				$('#edit_jobTitle_error').html('');
 				$('#edit_jobTitle_modal').modal('hide');
 
 				$('#mod_body').html('Job Title Edit Successful');
 				$('#successModal').modal('show');
 				listJobTitle();
+			} else {
+				$('#edit_jobTitle_loader').hide();
+				$('#edit_jobTitle_btn').show();
+				$('#edit_jobTitle_error').html(response.msg);
 			}
 		},
 	});
