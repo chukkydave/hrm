@@ -60,57 +60,6 @@ $('#edit_workExp_end').datepicker({
 	dateFormat: 'yy-mm-dd',
 });
 
-// function addQC() {
-// 	let company_id = localStorage.getItem('company_id');
-// 	let employee_id = window.location.search.split('=')[1];
-
-// 	$('#add_QC_btn').hide();
-// 	$('#add_QC_loader').show();
-
-// 	let institution = $('#QC_institute_name').val();
-// 	let degree = $('#QC_degree').val();
-// 	let year_concluded = $('#QC_year_concluded').val();
-
-// 	axios({
-// 		method: 'post',
-// 		url: `${api_path}hrm/update_cv_eduhistory`,
-// 		// params: {},
-// 		data: {
-// 			school_name: institution,
-// 			qualification: degree,
-// 			year_concluded: year_concluded,
-// 			type: 'new',
-// 			company_id: company_id,
-// 			employee_id: employee_id,
-// 			from_year: '0000-00-00',
-// 			to_year: '0000-00-00',
-// 			grade: '',
-// 		},
-// 		headers: {
-// 			'Content-Type': 'application/x-www-form-urlencoded',
-// 			'Accept-Encoding': 'gzip, deflate, br',
-// 			Connection: 'keep-alive',
-// 			'Cache-Control': 'no-cache',
-// 		},
-// 	})
-// 		.then(function(response) {
-// 			if (response.data.data.status == 200 || response.data.data.status == 201) {
-// 				$('#add_QC_loader').hide();
-// 				$('#add_QC_btn').show();
-
-// 				$('#mod_body').html('Q&C creation successful');
-// 				$('#successModal').modal('show');
-// 				listQC();
-// 			}
-// 		})
-// 		.catch(function(error) {
-// 			console.log(error);
-// 			$('#add_QC_loader').hide();
-// 			$('#add_QC_btn').show();
-// 			alert('error');
-// 		});
-// }
-
 //QC starts
 function addQC() {
 	let company_id = localStorage.getItem('company_id');
@@ -128,7 +77,7 @@ function addQC() {
 		qualification: degree,
 		year_concluded: year_concluded,
 		type: 'new',
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		from_year: '0000-00-00',
 		to_year: '0000-00-00',
@@ -139,6 +88,9 @@ function addQC() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_cv_eduhistory`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -148,20 +100,28 @@ function addQC() {
 			console.log(res);
 			$('#add_QC_loader').hide();
 			$('#add_QC_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${res.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_QC_loader').hide();
 				$('#add_QC_btn').show();
-
-				$('#mod_body').html('Q&C creation successful');
-				$('#successModal').modal('show');
 				$('#QC_institute_name').val('');
 				$('#QC_degree').val('');
 				$('#QC_year_concluded').val('');
 				$('#QC_display').toggle();
-				listQC();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listQC(),
+				});
 			}
 		},
 	});
@@ -175,8 +135,11 @@ function listQC() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -253,6 +216,9 @@ function viewQC(id) {
 				empl_edu_id: id,
 				employee_id: employee_id,
 			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 		})
 		.then(function(response) {
 			console.log(response.data);
@@ -296,7 +262,7 @@ function editQC() {
 		qualification: degree,
 		year_concluded: year_concluded,
 		type: 'edit',
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 	};
 
@@ -305,6 +271,9 @@ function editQC() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_cv_eduhistory`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -314,7 +283,7 @@ function editQC() {
 			console.log(res);
 			$('#edit_QC_loader').hide();
 			$('#edit_QC_btn').show();
-			$('#edit_QC_error').html(res);
+			$('#edit_QC_error').html(res.statusText);
 			// alert('error');
 		},
 		success: function(response) {
@@ -322,15 +291,17 @@ function editQC() {
 				$('#edit_QC_loader').hide();
 				$('#edit_QC_btn').show();
 
-				$('#edit_QC_modal').modal('hide');
-
-				$('#mod_body').html('Q&C Edit Successful');
-				$('#successModal').modal('show');
-				listQC();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listQC(),
+				});
 			} else {
 				$('#edit_QC_loader').hide();
 				$('#edit_QC_btn').show();
-				$('#edit_QC_error').html(response);
+				$('#edit_QC_error').html(response.statusText);
 			}
 		},
 	});
@@ -354,18 +325,32 @@ function deleteQC(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_cv_eduhistory`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#qc_loader${id}`).hide();
 				$(`#qc_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#qc_row${id}`).remove();
 					$(`#qc_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 				}
 			},
 		});
@@ -389,7 +374,7 @@ function addWorkExp() {
 	let data = {
 		company_name: prevCom,
 		position: jobTitle,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		from_year: start,
 		to_year: end,
@@ -401,6 +386,9 @@ function addWorkExp() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_cv_workhistory`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -410,21 +398,31 @@ function addWorkExp() {
 			console.log(error);
 			$('#add_workExp_loader').hide();
 			$('#add_workExp_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_workExp_loader').hide();
 				$('#add_workExp_btn').show();
 
-				$('#mod_body').html('Work Experience creation successful');
-				$('#successModal').modal('show');
 				$('#workExp_prevCom').val('');
 				$('#workExp_jobTitle').val('');
 				$('#workExp_start').val('');
 				$('#workExp_end').val('');
 				$('#work-exp_display').toggle();
-				listWorkExp();
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listWorkExp(),
+				});
 			}
 		},
 	});
@@ -438,8 +436,11 @@ function listWorkExp() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -519,6 +520,9 @@ function viewWorkExp(id) {
 				wrkhisid: id,
 				employee_id: employee_id,
 			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 		})
 		.then(function(response) {
 			console.log(response.data);
@@ -561,7 +565,7 @@ function editWorkExp() {
 	let data = {
 		company_name: prevCom,
 		position: jobTitle,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		from_year: start,
 		to_year: end,
@@ -574,6 +578,9 @@ function editWorkExp() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_cv_workhistory`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -583,7 +590,12 @@ function editWorkExp() {
 			console.log(res);
 			$('#edit_workExp_loader').hide();
 			$('#edit_workExp_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${res.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
@@ -592,9 +604,13 @@ function editWorkExp() {
 
 				$('#edit_workExp_modal').modal('hide');
 
-				$('#mod_body').html('Work Experience Edit Successful');
-				$('#successModal').modal('show');
-				listWorkExp();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listWorkExp(),
+				});
 			}
 		},
 	});
@@ -618,18 +634,32 @@ function deleteWorkExp(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_cv_workhistory`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#workExp_loader${id}`).hide();
 				$(`#workExp_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#workExp_row${id}`).remove();
 					$(`#workExp_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 				}
 			},
 		});
@@ -654,7 +684,7 @@ function addNOK() {
 	let data = {
 		nxt_kin_relationship: relationship,
 		nxt_kin_fullname: name,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		nxt_kin_address: address,
 		nxt_kin_phone: phone,
@@ -666,6 +696,9 @@ function addNOK() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_employee_kin`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -675,22 +708,32 @@ function addNOK() {
 			console.log(error);
 			$('#add_nok_loader').hide();
 			$('#add_nok_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_nok_loader').hide();
 				$('#add_nok_btn').show();
 
-				$('#mod_body').html('Next Of Kin creation successful');
-				$('#successModal').modal('show');
 				$('#nok_name').val('');
 				$('#nok_address').val('');
 				$('#nok_email').val('');
 				$('#nok_phone').val('');
 				$('#nok_relationship').val('');
 				$('#NOK_display').toggle();
-				listNOK();
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listNOK(),
+				});
 			}
 		},
 	});
@@ -704,8 +747,11 @@ function listNOK() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -783,7 +829,10 @@ function viewNOK(id) {
 			params: {
 				kin_id: id,
 				employee_id: employee_id,
-				company_id: company_id,
+				// company_id: company_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -835,7 +884,7 @@ function editNOK() {
 	let data = {
 		nxt_kin_relationship: relationship,
 		nxt_kin_fullname: name,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		nxt_kin_address: address,
 		nxt_kin_phone: phone,
@@ -848,6 +897,10 @@ function editNOK() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_employee_kin`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
+
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -857,7 +910,12 @@ function editNOK() {
 			console.log(res);
 			$('#edit_nok_loader').hide();
 			$('#edit_nok_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${res.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
@@ -866,9 +924,13 @@ function editNOK() {
 
 				$('#edit_nok_modal').modal('hide');
 
-				$('#mod_body').html('Next Of Kin Edit Successful');
-				$('#successModal').modal('show');
-				listNOK();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listNOK(),
+				});
 			}
 		},
 	});
@@ -885,7 +947,7 @@ function deleteNOK(id) {
 		let data = {
 			kin_id: id,
 			employee_id: employee_id,
-			company_id: company_id,
+			// company_id: company_id,
 		};
 
 		$.ajax({
@@ -893,18 +955,32 @@ function deleteNOK(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_employee_kin`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#nok_loader${id}`).hide();
 				$(`#nok_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#nok_row${id}`).remove();
 					$(`#nok_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 				}
 			},
 		});

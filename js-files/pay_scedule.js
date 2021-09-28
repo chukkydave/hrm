@@ -37,7 +37,6 @@ function list_of_companies_employees(page, serial, order_by) {
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_employees',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
 			// email: email,
@@ -49,6 +48,9 @@ function list_of_companies_employees(page, serial, order_by) {
 			order: order_by,
 			employee_department: employee_department,
 			employee_code: employee_code,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -208,7 +210,10 @@ function load_position() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_positions',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -240,7 +245,10 @@ function load_department() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_departments',
 		type: 'POST',
-		data: { company_id: company_id, page: 1, limit: 100 },
+		data: { page: 1, limit: 100 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -303,9 +311,11 @@ function load_employee() {
 		url: api_path + 'hrm/list_of_company_employees',
 		type: 'POST',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		dataType: 'json',
 
@@ -341,8 +351,9 @@ function listPaySchedules() {
 	$('#list_sche_loader').show();
 	axios
 		.get(`${api_path}hrm/get_payment_schedule`, {
-			params: {
-				company_id: company_id,
+			params: {},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -370,11 +381,11 @@ function listPaySchedules() {
 
                                                                 <p id="schedule_name" class="ml1">${v.schedule_name}</p>
                                                         </div>
-                                                        <div class="row flex">
+                                                        <!--<div class="row flex">
                                                                 <p><strong>Payment Type:</strong></p>
 
                                                                 <p id="pay_type" class="ml1">${v.pay_calender_name}</p>
-                                                        </div>
+                                                        </div>-->
                                                         <div class="row flex">
                                                                 <p><strong>No. of Employees:</strong></p>
 
@@ -463,7 +474,6 @@ function deletePaySchedule(id) {
 
 		let data = {
 			pay_schedule_id: id,
-			company_id: company_id,
 		};
 
 		$.ajax({
@@ -471,17 +481,31 @@ function deletePaySchedule(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_payment_schedule`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#pay_loader${id}`).hide();
 				$(`#pay_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#pay_div${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 					// $(`#pay_loader${id}`).remove();
 				}
 			},
@@ -498,7 +522,6 @@ function startPayRun(id) {
 
 		let data = {
 			pay_schedule_id: id,
-			company_id: company_id,
 			set_to_active: 'active',
 		};
 
@@ -506,6 +529,9 @@ function startPayRun(id) {
 			type: 'Put',
 			dataType: 'json',
 			url: `${api_path}hrm/start_pay_run`,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 			data: data,
 
 			error: function(res) {
@@ -513,12 +539,23 @@ function startPayRun(id) {
 				$(`#start_loader${id}`).hide();
 				$(`#start_btn${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#start_btn${id}`).show();
 					$(`#start_loader${id}`).hide();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 					$(`#start_btn${id}`).removeClass('btn-success');
 					$(`#start_btn${id}`).hide();
 					$(`#not_btn${id}`).show();

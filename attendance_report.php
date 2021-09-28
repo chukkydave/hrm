@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 <style>
 .no-border {
@@ -273,7 +274,7 @@ include("_common/header.php");
                         <div class="table-responsive">
                             <select class="form-select no-border" id="order_by" aria-label="Default select example">
                                 <option value="latest">Order by Latest</option>
-                                <option value="alphabetical">Order from A-Z </option>
+                                <!-- <option value="alphabetical">Order from A-Z </option> -->
                             </select>
                             <table class="table table-striped jambo_table bulk_action">
                                 <thead>
@@ -349,5 +350,5 @@ include("_common/header.php");
 <script src="js-files/attendance_report.js"></script>
 
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

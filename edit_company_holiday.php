@@ -1,261 +1,266 @@
 <?php
-include("_common/header.php");
-?> 
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
+?>
 
-        <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
                 <h3>Edit Company Holiday</h3>
-              </div>
+            </div>
 
-              <div class="title_right" style="text-align: right">
+            <div class="title_right" style="text-align: right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                  <div class="input-group" style="float: right">
-                    
-                    <a href="company_holidays"><button type="button" class="btn btn-success" id="add_employee">Back</button></a>
-                    
-                    
-                  </div>
-                </div>
-              </div>
+                    <div class="input-group" style="float: right">
 
+                        <a href="company_holidays"><button type="button" class="btn btn-danger"
+                                id="add_employee">Back</button></a>
+
+
+                    </div>
+                </div>
             </div>
-            <div class="clearfix"></div>
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
+
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
-                  
-                  <div class="x_content">
-                    <br />
-                    <span id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
-                        
+                    <div class="x_content">
+                        <br />
+                        <span id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="holiday_name">Holiday Name<span>*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="holiday_name" required="required" class="form-control col-md-7 col-xs-12 required">
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="holiday_name">Holiday
+                                    Name<span>*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="holiday_name" required="required"
+                                        class="form-control col-md-7 col-xs-12 required">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                    for="branch_description">Date<span>*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input type="text" id="holiday_date" required="required"
+                                        class="form-control col-md-7 col-xs-12 required">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="error_com_holiday">
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button type="submit" class="btn btn-success" id="edit_holiday">Update</button>
+                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                        id="edit_holiday_loader"></i>
+                                    <!-- <div id="add_user_loading" style="display:  none">Loading...</div> -->
+                                </div>
+                            </div>
+
+                        </span>
+                    </div>
+
+                    <div class="x_content">
+                        <div class="title_right" style="text-align: right">
+                            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                                <div class="input-group" style="float: right">
+                                    <!--span class="input-group-btn"-->
+                                    <button type="button" class="btn btn-primary" id="filter_employee"
+                                        data-toggle="collapse" data-target="#collapseExample4" aria-expanded="false"
+                                        aria-controls="collapseExample">Filter</button>
+
+                                    <!-- </span> -->
+
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                        <div class="collapse" id="collapseExample4">
+                            <!-- <div class="row"> -->
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
 
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="branch_description">Date<span>*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="holiday_date" required="required" class="form-control col-md-7 col-xs-12 required">
+                                    <div class="x_content">
+                                        <br />
+
+
+                                        <div class="form-row">
+
+                                            <div class="col-sm-2 col-xs-4">
+                                                <input type="text" class="form-control" placeholder="Firstname"
+                                                    id="firstname">
+                                            </div>
+
+
+                                            <div class="col-sm-2 col-xs-4">
+                                                <input type="text" class="form-control" placeholder="Lastname"
+                                                    id="lastname">
+                                            </div>
+
+                                            <div class="col-sm-2 col-xs-4">
+                                                <select class="form-control col-sm-2 col-xs-2" id="gender">
+                                                    <option value="">-- Select gender --
+                                                    </option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="col-sm-2 col-xs-4">
+                                                <select class="form-control col-sm-2 col-xs-2" id="position">
+                                                    <option value="">-- Select Job title --
+                                                    </option>
+
+                                                </select>
+                                            </div>
+
+
+
+
+                                            <div class="col-sm-2 col-xs-4">
+                                                <select class="form-control col-sm-2 col-xs-2" id="employee_department">
+                                                    <option value="">-- Select Department --
+                                                    </option>
+
+                                                </select>
+                                            </div>
+
+
+                                        </div>
+                                        <br><br><br>
+
+
+
+
+                                        <div class="form-row">
+
+
+
+
+
+
+                                            <div class="col-sm-2 col-xs-4">
+                                                <button type="button" class="btn btn-success"
+                                                    id="filter">Search</button>
+                                                <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                                    id="filter_loader"></i>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- </div> -->
                         </div>
-                      </div>
 
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="error_com_holiday">
-                         
-                      
-                          </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="x_panel">
+
+                                <div class="x_content">
+                                    <br />
+                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                        id="list_workShift_loader"></i>
+                                    <div class="table-responsive" id="list_workShift_table">
+                                        <table class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
+
+                                                    <th>
+                                                        <input type="checkbox" id="check-all" class="flat"
+                                                            onclick="checkAll(this)">
+                                                    </th>
+                                                    <th class="column-title"></th>
+                                                    <th class="column-title">Names</th>
+                                                    <th class="column-title">Department</th>
+                                                    <th class="column-title">Employment Type</th>
+                                                    <th class="column-title">Job Title</th>
+
+
+
+                                                    <th class="bulk-actions" colspan="6">
+                                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk
+                                                            Actions (
+                                                            <span class="action-cnt"> </span> ) <i
+                                                                class="fa fa-chevron-down"></i></a>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="employeeData">
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="container">
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination" id="pagination"></ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                      
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button type="submit" class="btn btn-success" id="edit_holiday">Update</button>
-                          <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;" id="edit_holiday_loader"></i>
-                          <!-- <div id="add_user_loading" style="display:  none">Loading...</div> -->
+                        <div class="input-group" style="float: right">
+                            <a href="company_holidays"><button type="button" class="btn btn-success"
+                                    id="done_holiday">Done</button></a>
+                            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                id="done_holiday_loader"></i>
                         </div>
-                      </div>
-
-                    </span>
-                  </div>
+                    </div>
                 </div>
-              </div>
             </div>
-
-          </div>
         </div>
-        <!-- /page content -->
 
-        <!-- modal -->
-        <div class="modal fade" id="modal_edit_holiday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header ">
+    </div>
+</div>
+<!-- /page content -->
+
+<!-- modal -->
+<div class="modal fade" id="modal_edit_holiday" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header ">
                 <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Success
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </h3>
-                
-              </div>
-              <div class="modal-body">
-                <h4>Company Holiday Edited Successfully!</h4>
-              </div>
-              <!-- <div class="modal-footer"> -->
-                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-              <!-- </div> -->
+
             </div>
-          </div>
+            <div class="modal-body">
+                <h4>Company Holiday Edited Successfully!</h4>
+            </div>
+            <!-- <div class="modal-footer"> -->
+            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            <!-- </div> -->
         </div>
+    </div>
+</div>
 
-        <script type="text/javascript">
-          $(document).ready(function(){
-            fetch_holiday_details();
-
-            $('input#holiday_date').datepicker({
-              dateFormat: "yy-mm-dd"
-            });
-
-            $('#edit_holiday').on('click', edit_company_holiday);
-          })
-
-          function edit_company_holiday(){
-            var holiday_name = $('#holiday_name').val();
-            var holiday_date = $('#holiday_date').val();
-            var company_id = localStorage.getItem('company_id');
-            // var pathArray = window.location.pathname.split( '/' );
-            var holiday_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
-
-            var blank;
-
-            
-
-
-            $(".required").each(function(){
-
-              var the_val = $.trim($(this).val());
-
-              if(the_val == "" || the_val == "0"){
-
-                $(this).addClass('has-error');
-
-                blank = "yes";
-
-              }else{
-
-                $(this).removeClass("has-error");
-
-              }
-
-            });
-
-            if(blank == "yes"){
-    
-              $('#error_comp_holiday').html("You have a blank field");
-
-              return; 
-
-            }
-
-                        
-          
-          $('#edit_holiday').hide();
-          $('#edit_holiday_loader').show();
-
-
-
-          $.ajax({
-
-            type: "POST",
-            dataType: "json",
-            cache: false,
-            url: api_path+"hrm/edit_company_holiday",
-            data: { "holiday_name" : holiday_name, "holiday_date" : holiday_date, "company_id" : company_id, "holiday_id" : holiday_id},
-
-            success: function(response) {
-
-              console.log(response);
-
-              if (response.status == '200') {
-
-
-                $('#modal_edit_holiday').modal('show');
-
-                $('#modal_edit_branch').on('hidden.bs.modal', function () {
-                    $('#holiday_name').val();
-                    $('#holiday_date').val();
-                    // window.location.reload();
-                    window.location.href = base_url+"company_holidays";
-                })
-                
-                
-              }else if(response.status == '400'){ // coder error message
-
-                
-                $('#error_comp_holiday').html('Technical Error. Please try again later.');
-
-              }else if(response.status == '401'){ //user error message
-
-                
-                $('#error_comp_holiday').html(response.msg);
-
-              }
-
-               
-
-          $('#edit_holiday').show();
-          $('#edit_holiday_loader').hide();
-
-
-            },
-
-            error: function(response){
-                $('#edit_holiday').show();
-                $('#edit_holiday_loader').hide();
-                $('#error_comp_holiday').html("Connection Error.");
-
-            }
-
-          });
-
-          }
-
-           function fetch_holiday_details(){
-            // var pathArray = window.location.pathname.split( '/' );
-            var holiday_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
-            var company_id = localStorage.getItem('company_id');
-
-
-          $.ajax({
-
-            type: "POST",
-            dataType: "json",
-            cache: false,
-            url: api_path+"hrm/fetch_company_holiday_byID",
-            data: { "holiday_id" : holiday_id, "company_id" : company_id},
-
-            success: function(response) {
-
-              console.log(response);
-
-              if (response.status == '200') {
-
-                $.each(response['data'], function (i, v) {
-
-                    $('#holiday_name').val(response['data'][i]['holiday_name']);
-                    $('#holiday_date').val(response['data'][i]['holiday_date']);
-                                 
-                });
-    
-                                   
-              }
-
-
-            },
-
-            error: function(response){
-
-              alert("Connection Error.");
-
-            }
-
-            });
-          }
-        </script>
+<script src="js-files/edit_company_holiday.js"></script>
 <?php
-include("_common/footer.php");
-?> 
-
+include_once("../gen/_common/footer.php");
+?>

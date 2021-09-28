@@ -32,7 +32,6 @@ function addPayrollType() {
 	let desc = $('#payroll_desc').val();
 
 	let data = {
-		company_id: company_id,
 		payroll_name: name,
 		payroll_desc: desc,
 	};
@@ -41,6 +40,9 @@ function addPayrollType() {
 		dataType: 'json',
 		url: `${api_path}hrm/create_payroll_settings`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -75,8 +77,9 @@ function listPayrollType() {
 	$('#list_payroll_loader').show();
 	axios
 		.get(`${api_path}hrm/get_payroll_settings`, {
-			params: {
-				company_id: company_id,
+			params: {},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -143,7 +146,9 @@ function viewPayrollType(id) {
 		.get(`${api_path}hrm/get_single_payroll_setting`, {
 			params: {
 				payroll_setting_id: id,
-				company_id: company_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -183,7 +188,6 @@ function editPayrollType() {
 	let data = {
 		payroll_name: name,
 		payroll_desc: desc,
-		company_id: company_id,
 		payroll_setting_id: id,
 	};
 	$.ajax({
@@ -191,6 +195,9 @@ function editPayrollType() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_single_payroll_setting`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -226,7 +233,6 @@ function deletePayrollType(id) {
 
 		let data = {
 			payroll_setting_id: id,
-			company_id: company_id,
 		};
 
 		$.ajax({
@@ -234,6 +240,9 @@ function deletePayrollType(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_single_payroll_setting`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
@@ -263,7 +272,6 @@ function addPaymentType() {
 	let name = $('#payment_name').val();
 
 	let data = {
-		company_id: company_id,
 		payment_type: name,
 	};
 	$.ajax({
@@ -271,6 +279,9 @@ function addPaymentType() {
 		dataType: 'json',
 		url: `${api_path}hrm/create_payroll_payment_type`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -304,8 +315,9 @@ function listPaymentType() {
 	$('#list_payment_loader').show();
 	axios
 		.get(`${api_path}hrm/get_company_payroll_payment_type`, {
-			params: {
-				company_id: company_id,
+			params: {},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -372,7 +384,9 @@ function viewPaymentType(id) {
 		.get(`${api_path}hrm/get_single_payroll_payment_type`, {
 			params: {
 				pay_type_id: id,
-				company_id: company_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -409,7 +423,6 @@ function editPaymentType() {
 
 	let data = {
 		payment_type: name,
-		company_id: company_id,
 		pay_type_id: id,
 	};
 	$.ajax({
@@ -417,6 +430,9 @@ function editPaymentType() {
 		dataType: 'json',
 		url: `${api_path}hrm/edit_payroll_payment_type`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -452,7 +468,6 @@ function deletePaymentType(id) {
 
 		let data = {
 			pay_type_id: id,
-			company_id: company_id,
 		};
 
 		$.ajax({
@@ -460,6 +475,9 @@ function deletePaymentType(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_company_payroll_payment_type`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);

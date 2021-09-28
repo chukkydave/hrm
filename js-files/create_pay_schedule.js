@@ -44,6 +44,7 @@ $(document).ready(() => {
 		}
 	});
 	$('#refresh_schedule_btn').on('click', refresh);
+	// load_employmentType();
 });
 
 function list_of_companies_employees(page, serial, order_by) {
@@ -52,7 +53,7 @@ function list_of_companies_employees(page, serial, order_by) {
 		var page = 1;
 	}
 
-	var limit = 10;
+	var limit = 1000000;
 
 	// alert(page);
 
@@ -60,7 +61,7 @@ function list_of_companies_employees(page, serial, order_by) {
 	var lastname = $('#lastname').val();
 	var gender = $('#gender').val();
 	var position = $('#position').val();
-	var status = $('#status').val();
+	// var status = $('#status').val();
 	// var phone = $('#phone').val();
 	var employee_department = $('#employee_department').val();
 	// var email = $('#email').val();
@@ -74,18 +75,20 @@ function list_of_companies_employees(page, serial, order_by) {
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_employees',
 		data: {
-			company_id: company_id,
 			page: page,
-			limit: limit,
+			limit: 1000000,
 			// email: email,
 			firstname: firstname,
 			lastname: lastname,
 			gender: gender,
 			position: position,
-			status: status,
+			// status: status,
 			order: order_by,
 			employee_department: employee_department,
 			employee_code: employee_code,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -245,7 +248,10 @@ function load_position() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_positions',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -277,7 +283,10 @@ function load_department() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_departments',
 		type: 'POST',
-		data: { company_id: company_id, page: 1, limit: 100 },
+		data: { page: 1, limit: 100 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -300,6 +309,42 @@ function load_department() {
 		error(response) {
 			// $('#employee_details_display').hide();
 			// $('#employee_error_display').show();
+		},
+	});
+}
+function load_employmentType() {
+	var company_id = localStorage.getItem('company_id');
+
+	$.ajax({
+		url: api_path + 'hrm/list_of_company_employment_types',
+		type: 'POST',
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
+		dataType: 'json',
+
+		success: function(response) {
+			// console.log(response);
+			// $('#employee_details_display').show();
+
+			var options = '';
+
+			$.each(response['data'], function(i, v) {
+				options +=
+					'<option value="' +
+					response['data'][i]['type_id'] +
+					'">' +
+					response['data'][i]['type_name'] +
+					'</option>';
+			});
+			$('#employmentType').append(options);
+		},
+		// jqXHR, textStatus, errorThrown
+		error(response) {
+			// $('#employee_details_display').hide();
+			// $('#employee_error_display').show();
+			$('#employmentType').append('<option style="color:red;">Error</option>');
 		},
 	});
 }
@@ -419,9 +464,11 @@ function load_employee() {
 		url: api_path + 'hrm/list_of_company_employees',
 		type: 'POST',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		dataType: 'json',
 
@@ -481,7 +528,6 @@ function addPaySchedule() {
 	let payrollType = $('#list_payroll_option').val();
 
 	let data = {
-		company_id: company_id,
 		employees: employee,
 		pay_calender_type: 0,
 		schedule_name: name,
@@ -497,6 +543,9 @@ function addPaySchedule() {
 		dataType: 'json',
 		url: `${api_path}hrm/create_payment_schedule`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -527,8 +576,9 @@ function listPayrollType() {
 	$('#list_payroll_loader').show();
 	axios
 		.get(`${api_path}hrm/get_payroll_settings`, {
-			params: {
-				company_id: company_id,
+			params: {},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -542,8 +592,10 @@ function listPayrollType() {
 				$('#list_payroll_option').show();
 			} else {
 				$('#list_payroll_option').append(`<option>No record found</option>`);
+
 				$('#list_payroll_loader').hide();
 				$('#list_payroll_option').show();
+				addDefaultPayrollType();
 			}
 		})
 		.catch(function(error) {
@@ -564,8 +616,9 @@ function listPaymentType() {
 	$('#list_payment_loader').show();
 	axios
 		.get(`${api_path}hrm/get_company_payroll_payment_type`, {
-			params: {
-				company_id: company_id,
+			params: {},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -623,4 +676,52 @@ function isEmptyInput(first) {
 	} else {
 		return true;
 	}
+}
+
+function addDefaultPayrollType() {
+	let company_id = localStorage.getItem('company_id');
+
+	$('#list_payroll_option').hide();
+	$('#list_payroll_loader').show();
+
+	let name = 'Salary';
+	let desc = 'Salary';
+
+	let data = {
+		payroll_name: name,
+		payroll_desc: desc,
+	};
+	$.ajax({
+		type: 'Post',
+		dataType: 'json',
+		url: `${api_path}hrm/create_payroll_settings`,
+		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
+		// headers: {
+		// 	Accept: 'application/json',
+		// 	'Content-Type': 'application/json',
+		// 	// Authorization: `Bearer ${authy}`,
+		// },
+		error: function(error) {
+			console.log(error);
+			$('#list_payroll_loader').hide();
+			$('#list_payroll_option').show();
+			alert('error');
+		},
+		success: function(response) {
+			if (response.status == 200 || response.status == 201) {
+				$('#list_payroll_loader').hide();
+				$('#list_payroll_option').show();
+				// $('#mod_body').html('Payroll Type creation successful');
+				// $('#successModal').modal('show');
+				// $('#payroll_name').val('');
+				// $('#payroll_desc').val('');
+
+				// $('#collapseExample3').removeClass('in');
+				listPayrollType();
+			}
+		},
+	});
 }

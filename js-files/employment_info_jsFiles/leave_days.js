@@ -51,33 +51,45 @@ function addAllotDays() {
 	let allot_no = $('#extra-allot-inp').val();
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
-		allotted_days: allot_no
+		allotted_days: allot_no,
 	};
 	$.ajax({
 		type: 'Post',
 		dataType: 'json',
 		url: `${api_path}hrm/save_allotted_days`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		error: function(res) {
 			console.log(res);
 			$('#save_allot_loader').hide();
 			$('#save_allot_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${res.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#save_allot_loader').hide();
 				$('#save_allot_btn').show();
-
-				$('#mod_body').html('Extra days alloted successfully');
-				$('#successModal').modal('show');
 				$('#allot-btns').fadeOut();
-				listAllotDays();
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listAllotDays(),
+				});
 			}
-		}
+		},
 	});
 }
 
@@ -90,9 +102,12 @@ function listAllotDays() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
-				employee_id: employee_id
-			}
+				// company_id: company_id,
+				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 		})
 		.then(function(response) {
 			console.log(response.data);
@@ -137,8 +152,8 @@ function listLeaveGraph() {
 	$('#list_graph_loader').show();
 
 	let data = {
-		company_id: company_id,
-		employee_id: employee_id
+		// company_id: company_id,
+		employee_id: employee_id,
 	};
 
 	$.ajax({
@@ -146,6 +161,9 @@ function listLeaveGraph() {
 		dataType: 'json',
 		url: `${api_path}hrm/employeeUsedStatPie`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		error: function(res) {
 			console.log(res);
@@ -162,14 +180,14 @@ function listLeaveGraph() {
 					title: {
 						text: 'Leave Graph',
 						// subtext: '纯属虚构',
-						left: 'center'
+						left: 'center',
 					},
 					tooltip: {
-						trigger: 'item'
+						trigger: 'item',
 					},
 					legend: {
 						orient: 'vertical',
-						left: 'left'
+						left: 'left',
 					},
 
 					series: [
@@ -182,17 +200,17 @@ function listLeaveGraph() {
 								// 	name: 'Total Leaves',
 								// },
 								{ value: res.data.used_leaves, name: 'Used Leaves' },
-								{ value: res.data.remaining_leaves, name: 'Remaining Leaves' }
+								{ value: res.data.remaining_leaves, name: 'Remaining Leaves' },
 							],
 							emphasis: {
 								itemStyle: {
 									shadowBlur: 10,
 									shadowOffsetX: 0,
-									shadowColor: 'rgba(0, 0, 0, 0.5)'
-								}
-							}
-						}
-					]
+									shadowColor: 'rgba(0, 0, 0, 0.5)',
+								},
+							},
+						},
+					],
 				};
 				option && myChart.setOption(option);
 				$('#graph_loading').hide();
@@ -205,7 +223,7 @@ function listLeaveGraph() {
 				// $('#leave_days_display').toggle();
 				// listAllotDays();
 			}
-		}
+		},
 	});
 }
 
@@ -223,8 +241,11 @@ function list_employee_leave_history() {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: `${api_path}hrm/new_employee_info?company_id=${company_id}&employee_id=${employee_id}`,
+		url: `${api_path}hrm/new_employee_info?employee_id=${employee_id}`,
 		// data: { company_id: company_id, employee_id: employee_id, page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -286,12 +307,13 @@ function list_employee_leave_history() {
 			$('#loading').hide();
 			// alert(response.msg);
 			strTable += '<tr>';
-			strTable += '<td colspan="4"><strong class="text-danger">Connection error</strong></td>';
+			strTable +=
+				'<td colspan="4"><strong class="text-danger">Connection error</strong></td>';
 			strTable += '</tr>';
 
 			$('#summaryData').html(strTable);
 			$('#summaryData').show();
 			$('#loading').hide();
-		}
+		},
 	});
 }

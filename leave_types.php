@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -85,5 +86,5 @@ include("_common/header.php");
 
 <script src="js-files/leave_types.js"></script>
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

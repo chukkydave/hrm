@@ -114,7 +114,15 @@ function closeNav() {
 
         <!-- <script src="assets/js/action.js"></script> -->
         <script src="assets/js/hrm.js?v=13"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/attempt-to-update-packagist/pnotify.min.js"
+            integrity="sha512-983oc74ODyMuWXo39bH4kvq7hcVZX4O19EgEq3vbK4BRmMY7nxP3CFvjjbW4lu2tWfR7HMSHyKVQ44atgjl5qA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pnotify/attempt-to-update-packagist/pnotify.mobile.min.js"
+            integrity="sha512-F2mFtANqEdzazsE1y3MRPBJOfVNvzAXavZvRS982xz2jYh0yGCn7IwKfm9cNQ3JHnzbwE5uFhT5+FewmJGlg+w=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
 
 

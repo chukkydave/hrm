@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -35,7 +36,7 @@ include("_common/header.php");
             </div>
         </div>
 
-        <div id="" style="">
+        <!-- <div id="" style="">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
@@ -70,7 +71,6 @@ include("_common/header.php");
                                 </div>
 
 
-                                <!-- <div class="ln_solid"></div> -->
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 
@@ -85,7 +85,7 @@ include("_common/header.php");
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <div id="shift_display" style="display: none;">
@@ -241,7 +241,7 @@ include("_common/header.php");
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Success
+                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Alert!!!
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -262,5 +262,5 @@ include("_common/header.php");
 
 <script src="js-files/work_shift.js"></script>
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

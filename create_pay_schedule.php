@@ -276,7 +276,7 @@ include_once("../gen/_common/header.php"); // header contents
                                     <div class="form-row">
                                         <div class="col-sm-2 col-xs-4">
                                             <select class="form-control col-sm-2 col-xs-2 filters" id="position">
-                                                <option value="">-- Position --</option>
+                                                <option value="">-- Job Title --</option>
 
                                             </select>
                                         </div>
@@ -294,15 +294,12 @@ include_once("../gen/_common/header.php"); // header contents
                                             </select>
                                         </div>
 
-                                        <div class="col-sm-2 col-xs-4">
-                                            <select class="form-control col-sm-2 col-xs-4 filters" id="status">
-                                                <option value="">-- Status --</option>
-                                                <option value="active">Active</option>
-                                                <option value="suspended">Suspended</option>
-                                                <option value="terminated">Terminated</option>
+                                        <!-- <div class="col-sm-2 col-xs-4">
+                                            <select class="form-control col-sm-2 col-xs-4 filters" id="employmentType">
+                                                <option value="">-- Employment Type --</option>
 
                                             </select>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <br><br><br>
 

@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -24,7 +25,7 @@ include("_common/header.php");
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                     <div class="input-group" style="float: right">
 
-                        <button type="button" class="btn btn-success" id="add_position">Add Position</button>
+                        <button type="button" class="btn btn-success" id="add_position">Add Job Title</button>
 
 
                     </div>
@@ -228,9 +229,10 @@ include("_common/header.php");
         </div>
     </div>
 </div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script type="text/javascript" src="js-files/company_positions.js"></script>
 
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

@@ -20,7 +20,10 @@ function fetch_employee_details_for_edit() {
 		type: 'GET',
 		dataType: 'json',
 		url: api_path + 'hrm/new_employee_info',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -175,7 +178,10 @@ function fetch_employee_details_for_edit_employee() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_profile',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -384,7 +390,6 @@ function edit_employee() {
 			lastname: lastname,
 			middlename: middlename,
 			email: email,
-			company_id: company_id,
 			employee_id: employee_id,
 			gender: gender,
 			religion: religion,
@@ -395,6 +400,9 @@ function edit_employee() {
 			dob: dob,
 			status: status,
 			user_id: user_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {

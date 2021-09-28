@@ -112,9 +112,16 @@ $(document).ready(function() {
 					console.log(response);
 
 					if (response.status == '200') {
-						$('#modal_order').modal('show');
+						// $('#modal_order').modal('show');
 						$('#random_loader').hide();
 						$('#random').show();
+						Swal.fire({
+							title: 'Success',
+							text: 'Success',
+							icon: 'success',
+							confirmButtonText: 'Okay',
+							// onClose: leave_types(''),
+						});
 
 						// $('#modal_order').on('hidden.bs.modal', function () {
 						//     // do something…
@@ -127,9 +134,15 @@ $(document).ready(function() {
 				},
 				// objAJAXRequest, strError
 				error: function(response) {
-					alert('Connection error');
+					// alert('Connection error');
 					$('#random_loader').hide();
 					$('#random').show();
+					Swal.fire({
+						title: 'Error!',
+						text: `${response.msg}`,
+						icon: 'error',
+						confirmButtonText: 'Close',
+					});
 					// $('#page_loader').hide();
 					// $('#employee_details_display').hide();
 					// $('#employee_error_display').show();
@@ -162,7 +175,13 @@ $(document).ready(function() {
 					console.log(response);
 
 					if (response.status == '200') {
-						$('#modal_order').modal('show');
+						Swal.fire({
+							title: 'Success',
+							text: 'Success',
+							icon: 'success',
+							confirmButtonText: 'Okay',
+							// onClose: leave_types(''),
+						});
 						$('#turn_loader').hide();
 						$('#turn').show();
 
@@ -177,7 +196,12 @@ $(document).ready(function() {
 				},
 				// objAJAXRequest, strError
 				error: function(response) {
-					alert('Connection error');
+					Swal.fire({
+						title: 'Error!',
+						text: `${response.msg}`,
+						icon: 'error',
+						confirmButtonText: 'Close',
+					});
 					$('#turn_loader').hide();
 					$('#turn').show();
 					// $('#page_loader').hide();
@@ -204,7 +228,12 @@ $(document).ready(function() {
 			// alert(vat);
 			sendForApproval(type);
 		} else {
-			alert('Please Select an Approval Type');
+			Swal.fire({
+				title: 'Error!',
+				text: `Please select an Approval Type`,
+				icon: 'warning',
+				confirmButtonText: 'Close',
+			});
 			// $('#requiredGroup').prop('checked', false);
 			// alert('Kindly select an Approval Type');
 			// }
@@ -222,7 +251,7 @@ function sendForApproval(type) {
 
 	let data = {
 		employee_id: employee_id,
-		company_id: company_id,
+		// company_id: company_id,
 		application_id: application_id,
 		type: type,
 	};
@@ -231,6 +260,9 @@ function sendForApproval(type) {
 		dataType: 'json',
 		url: `${api_path}hrm/send_leave_approval`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -240,14 +272,24 @@ function sendForApproval(type) {
 			console.log(error);
 			$('#send_for_appv_loader').hide();
 			$('#send_for_appv').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#send_for_appv_loader').hide();
 				$('#send_for_appv').show();
-				alert('Success!!');
-				window.location.reload();
+				Swal.fire({
+					title: 'Success',
+					text: 'Success',
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
+				});
 
 				// $('#mod_body').html('Work Shift creation successful');
 				// $('#successModal').modal('show');
@@ -309,12 +351,15 @@ function add_leave_approver() {
 		cache: false,
 		url: api_path + 'hrm/forward_approval',
 		data: {
-			company_id: company_id,
+			// company_id: company_id,
 			user_id: user_id,
 			application_id: application_id,
 			request_from: request_from,
 			request_to: request_to,
 			application_type: application_type,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
@@ -326,8 +371,13 @@ function add_leave_approver() {
 				$('#appv_display').toggle();
 				$('#edit_form').hide();
 				$('#edit_msg').show();
-				$('#modal_emp_approval').modal('show');
-				list_of_forward_leaves_applicant();
+				Swal.fire({
+					title: 'Success',
+					text: 'Success',
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: list_of_forward_leaves_applicant(),
+				});
 
 				// $('#modal_emp_approval').on('hidden.bs.modal', function() {
 				// 	window.location.reload();
@@ -375,7 +425,10 @@ function hr_approve() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/hr_decline_accept_leave',
-		data: { company_id: company_id, leave_id: leave_id, approval_status: approval_status },
+		data: { leave_id: leave_id, approval_status: approval_status },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 
@@ -383,6 +436,12 @@ function hr_approve() {
 			$('#approve').show();
 			$('#approve_loader').hide();
 			// alert('connection error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 
 		success: function(response) {
@@ -390,16 +449,24 @@ function hr_approve() {
 
 			if (response.status == '200') {
 				// $('#row_'+user_id).hide();
-				$('#modal_approve').modal('show');
+				// $('#modal_approve').modal('show');
 				$('#approve_decline_buttons').hide();
 				$('#approve_msg').show();
 
-				$('#modal_approve').on('hidden.bs.modal', function() {
-					// do something…
-					window.location.reload();
-					//window.location.href = base_url+"/erp/hrm/employees";
+				Swal.fire({
+					title: 'Success',
+					text: 'Success',
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
 				});
 			} else if (response.status == '401') {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 			$('#approve').show();
 			$('#approve_loader').hide();
@@ -422,7 +489,7 @@ function sendLeaveDates() {
 	// var dateArr = getDateArray(startDate, endDate);
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		status: status,
 		start_leave_date: starter,
@@ -435,11 +502,20 @@ function sendLeaveDates() {
 		dataType: 'json',
 		url: api_path + 'hrm/add_leaves_to_attendance',
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 
 		error: function(response) {
-			alert('Send Dates Error');
+			// alert('Send Dates Error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 			// $('#approve').show();
 			// $('#approve_loader').hide();
 			// alert('connection error');
@@ -449,6 +525,13 @@ function sendLeaveDates() {
 			// console.log(response);
 
 			if (response.status == '200') {
+				Swal.fire({
+					title: 'Success',
+					text: 'Success',
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
+				});
 				// $('#row_'+user_id).hide();
 				// $('#modal_approve').modal('show');
 				// $('#approve_decline_buttons').hide();
@@ -459,6 +542,12 @@ function sendLeaveDates() {
 				// 	//window.location.href = base_url+"/erp/hrm/employees";
 				// });
 			} else if (response.status == '401') {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 			// $('#approve').show();
 			// $('#approve_loader').hide();
@@ -496,13 +585,22 @@ function hr_decline() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/hr_decline_accept_leave',
-		data: { company_id: company_id, leave_id: leave_id, approval_status: approval_status },
+		data: { leave_id: leave_id, approval_status: approval_status },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 
 		error: function(response) {
 			$('#decline').show();
 			$('#decline_loader').hide();
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 			// alert('connection error');
 		},
 
@@ -510,21 +608,32 @@ function hr_decline() {
 			console.log(response);
 			if (response.status == '200') {
 				// $('#row_'+user_id).hide();
-				$('#modal_decline').modal('show');
+				// $('#modal_decline').modal('show');
 				$('#approve_decline_buttons').hide();
 				$('#decline_msg').show();
 
-				$('#modal_decline').on('hidden.bs.modal', function() {
-					// do something…
-					window.location.reload();
-					//window.location.href = base_url+"/erp/hrm/employees";
+				Swal.fire({
+					title: 'Success',
+					text: 'Success',
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
 				});
 			} else if (response.status == '401') {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 			$('#decline').show();
 			$('#decline_loader').hide();
 		},
 	});
+}
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function fetch_leave_info() {
@@ -537,7 +646,10 @@ function fetch_leave_info() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_employee_leave_details',
-		data: { company_id: company_id, leave_id: leave_id },
+		data: { leave_id: leave_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -574,8 +686,8 @@ function fetch_leave_info() {
 				$('#leave_start').html(start);
 				$('#leave_starty').html(response.data.leave_start);
 				$('#leave_endy').html(response.data.resumption_date);
-				$('#working_days').html(response.data.exclude_weekends);
-				$('#holidays_within').html(response.data.exclude_holidays);
+				$('#working_days').html(capitalizeFirstLetter(response.data.exclude_weekends));
+				$('#holidays_within').html(capitalizeFirstLetter(response.data.exclude_holidays));
 				$('#hr_approval').html(response.data.hr_approval);
 				$('#emp_id').val(response.data.employee_id);
 				$('#dept_namey').html(response.data.department_name);
@@ -584,12 +696,12 @@ function fetch_leave_info() {
 				$('#commenter').html(comments);
 				// alert(response.data.department_name);
 
-				if (response.data.approval_order == 'chronological') {
+				if (response.data.approval_order === 'chronological') {
 					$('#turn').prop('checked', true);
 					$('#random').removeAttr('checked');
 					$('#send_for_appv').hide();
 					// $('#monday').val('yes');
-				} else if (response.data.approval_order == 'random') {
+				} else if (response.data.approval_order === 'random') {
 					$('#random').prop('checked', true);
 					$('#turn').removeAttr('checked');
 					$('#send_for_appv').hide();
@@ -644,7 +756,10 @@ function delete_approver(approval_id) {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/hr_delete_approval_person',
-		data: { company_id: company_id, approval_id: approval_id },
+		data: { approval_id: approval_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 
@@ -652,7 +767,12 @@ function delete_approver(approval_id) {
 			// alert('Connection error');
 			$('#loader_row_' + approval_id).hide();
 			$('#row_' + approval_id).show();
-
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 			// alert('connection error');
 		},
 
@@ -661,8 +781,20 @@ function delete_approver(approval_id) {
 
 			if (response.status == '200') {
 				$('#row_' + approval_id).remove();
+				Swal.fire({
+					title: 'Success',
+					text: 'Success',
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					// onClose: window.location.reload(),
+				});
 			} else if (response.status == '401') {
-				alert(response.msg);
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 				$('#row_' + approval_id).show();
 			}
 
@@ -680,7 +812,10 @@ function list_of_forward_leaves_applicant() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/list_approvals',
-		data: { company_id: company_id, application_id: application_id },
+		data: { application_id: application_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -814,9 +949,9 @@ function list_of_forward_leaves_applicant() {
 					if (!document.querySelector('.radioOption').checked) {
 						// $('#requiredGroup').prop('checked', true);
 						// alert('checked');
-						$('#send_for_appv').show();
-					} else {
 						$('#send_for_appv').hide();
+					} else {
+						$('#send_for_appv').show();
 					}
 				} else {
 					strTable = '<tr><td colspan="5">No record.</td></tr>';
@@ -881,8 +1016,10 @@ function getEmployeeList(param) {
 	axios
 		.get(`${api_path}hrm/search_staff_autocomplete`, {
 			params: {
-				company_id: company_id,
 				query_param: param,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -928,7 +1065,7 @@ function addDraggedList(arr) {
 	// let to = $('#dept_to').val();
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		approvals: arr,
 	};
 	$.ajax({
@@ -936,6 +1073,9 @@ function addDraggedList(arr) {
 		dataType: 'json',
 		url: `${api_path}hrm/adjustApprovalPosition`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -945,7 +1085,12 @@ function addDraggedList(arr) {
 			console.log(error);
 			// $('#add_dept_loader').hide();
 			// $('#add_dept_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 			$('#appv_loader').hide();
 
 			$('#loader_div').css({

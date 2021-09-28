@@ -132,6 +132,7 @@ include("_common/header.php");
         </div>
     </div>
 </div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -254,16 +255,22 @@ function edit_company_position() {
             console.log(response);
 
             if (response.status == '200') {
+                Swal.fire({
+                    title: 'Success',
+                    text: `Success`,
+                    icon: 'success',
+                    confirmButtonText: 'Okay',
+                    onClose: window.location.href = base_url + "company_positions",
+                });
 
+                // $('#modal_position_edit').modal('show');
 
-                $('#modal_position_edit').modal('show');
-
-                $('#modal_position_edit').on('hidden.bs.modal', function() {
-                    $('#position_name').val();
-                    $('#position_description').val();
-                    // window.location.reload();
-                    window.location.href = base_url + "company_positions";
-                })
+                // $('#modal_position_edit').on('hidden.bs.modal', function() {
+                //     $('#position_name').val();
+                //     $('#position_description').val();
+                //     // window.location.reload();
+                //     window.location.href = base_url + "company_positions";
+                // })
 
 
             } else if (response.status == '400') { // coder error message

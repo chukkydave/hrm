@@ -9,13 +9,13 @@ $(document).ready(function() {
 
 		// init_echarts();
 	});
-	$('#salary-tab').on('click', () => {
-		if ($('#salary-tab').hasClass('no')) {
+	$('#salary-tabss').on('click', () => {
+		if ($('#salary-tabss').hasClass('no')) {
 			fetch_employee_view_details_salary_info();
 			list_employment_payment_type();
 			showBankDetails();
 			showSalaryDetails();
-			$('#salary-tab').removeClass('no');
+			$('#salary-tabss').removeClass('no');
 		}
 	});
 	$('#leaves-tab').on('click', () => {
@@ -97,8 +97,11 @@ function fetch_employee_view_details_salary_info() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_profile',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
 		timeout: 60000,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			// console.log(response);
@@ -115,11 +118,7 @@ function fetch_employee_view_details_salary_info() {
 					base_url +
 					'employees"><button class="btn btn-default">Back</button></a>';
 				str2 +=
-					'<a href="' +
-					base_url +
-					'edit_salary_info?id=' +
-					response.data.employee_id +
-					'"><button class="btn btn-primary">Edit</button></a>';
+					'<a onClick="viewBasicInfo()"><button id="editBasicInfo" data-toggle="modal" data-target="#edit_basic_modal" class="btn btn-primary">Edit</button></a>';
 
 				$('#profile_name').html(
 					'<b>' + response.data.firstname + ' ' + response.data.lastname + '</b>',
@@ -246,7 +245,10 @@ function list_of_salary_history(page) {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/view_company_employee_salary_history',
-		data: { company_id: company_id, page: page, limit: limit, employee_id: employee_id },
+		data: { page: page, limit: limit, employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -601,7 +603,10 @@ function init_echarts() {
 			type: 'POST',
 			dataType: 'json',
 			url: api_path + 'hrm/view_employee_salary_history_for_graph',
-			data: { company_id: company_id, employee_id: employee_id },
+			data: { employee_id: employee_id },
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 			timeout: 60000,
 
 			success: function(response) {
@@ -706,7 +711,10 @@ function fetch_employee_view_details_leave_history() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_profile',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -1103,7 +1111,10 @@ function init_echartsleave() {
 			type: 'POST',
 			dataType: 'json',
 			url: api_path + 'hrm/view_employee_leave_history_for_graph',
-			data: { company_id: company_id, employee_id: employee_id },
+			data: { employee_id: employee_id },
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 			timeout: 60000,
 
 			success: function(response) {
@@ -1304,94 +1315,6 @@ function isEmptyInput(first) {
 // }
 // job title history end
 
-// attendance start
-
-function list_employee_attendance() {
-	var company_id = localStorage.getItem('company_id');
-	// var pathArray = window.location.pathname.split( '/' );
-	var employee_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
-
-	var page = 1;
-	var limit = 10;
-
-	$('#loading_atten').show();
-	$('#attData').html('');
-
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: api_path + 'hrm/list_of_employee_attendances',
-		data: { company_id: company_id, employee_id: employee_id, page: page, limit: limit },
-		timeout: 60000,
-
-		success: function(response) {
-			console.log(response);
-			$('#loading_atten').hide();
-			var strTable = '';
-
-			if (response.status == '200') {
-				if (response.data.length > 0) {
-					var k = 1;
-					$.each(response['data'], function(i, v) {
-						strTable += '<tr>';
-
-						strTable += '<td width="25%">' + response['data'][i]['date'] + '</td>';
-						strTable += '<td>' + response['data'][i]['clock_in'] + '</td>';
-						strTable += '<td>' + response['data'][i]['clock_out'] + '</td>';
-						strTable += '<td>' + response['data'][i]['work_hours'] + '</td>';
-
-						strTable += '<td></td>';
-
-						strTable += '</tr>';
-
-						k++;
-					});
-				} else {
-					strTable = '<tr><td colspan="5">No record.</td></tr>';
-				}
-
-				$('#attData').html(strTable);
-				$('#attData').show();
-			} else if (response.status == '400') {
-				$('#loading_atten').hide();
-				strTable += '<tr>';
-				strTable += '<td colspan="5">' + response.msg + '</td>';
-				strTable += '</tr>';
-
-				$('#attData').html(strTable);
-				$('#attData').show();
-			} else if (response.status == '401') {
-				//missing parameters
-				var strTable = '';
-				$('#loading_atten').hide();
-				strTable += '<tr>';
-				strTable += '<td colspan="5">Technical Error</td>';
-				strTable += '</tr>';
-
-				$('#attData').html(strTable);
-				$('#attData').show();
-			}
-
-			$('#loading_atten').hide();
-		},
-
-		error: function(response) {
-			var strTable = '';
-			$('#loading_atten').hide();
-			// alert(response.msg);
-			strTable += '<tr>';
-			strTable +=
-				'<td colspan="5"><strong class="text-danger">Connection error!</strong></td>';
-			strTable += '</tr>';
-
-			$('#attData').html(strTable);
-			$('#attData').show();
-			$('#loading_atten').hide();
-		},
-	});
-}
-// attendance end
-
 // documents start
 
 // documents end
@@ -1401,7 +1324,10 @@ function load_employee_type() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_employment_types',
 		type: 'POST',
-		data: { company_id: company_id },
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -1437,7 +1363,10 @@ function load_branch() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_branches',
 		type: 'POST',
-		data: { company_id: company_id },
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -1478,7 +1407,10 @@ function list_employee_position_history() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/list_company_employee_positions_history',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -1571,7 +1503,10 @@ function list_all_departments() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_departments',
 		type: 'POST',
-		data: { company_id: company_id, page: 1, limit: 100 },
+		data: { page: 1, limit: 100 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -1621,7 +1556,10 @@ function viewBasicInfo() {
 		type: 'GET',
 		dataType: 'json',
 		url: api_path + 'hrm/new_employee_info',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// timeout: 60000,
 
 		success: function(response) {
@@ -1691,7 +1629,6 @@ function edit_employee() {
 			lastname: lastname,
 			middlename: middlename,
 			email: email,
-			company_id: company_id,
 			employee_id: employee_id,
 			gender: gender,
 			religion: religion,
@@ -1703,15 +1640,16 @@ function edit_employee() {
 			status: status,
 			user_id: user_id,
 		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			$('#employee_details_display').show();
 			if (response.status == '200') {
 				// $('#modal_update').modal('show');
 				$('#edit_basic_modal').modal('hide');
-				$('#mod_body').html('Basic Info Edit Successful');
-				$('#successModal').modal('show');
-				fetch_employee_details();
+
 				$('#edit_basic_modal').on('hidden.bs.modal', function() {
 					// do something…
 					// window.location.reload();
@@ -1729,6 +1667,13 @@ function edit_employee() {
 					$('#edit_basic_address').val('');
 					$('#edit_basic_next_of_kin').val('');
 					$('#edit_basic_status').val('');
+				});
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: fetch_employee_details(),
 				});
 			} else if (response.status == '400') {
 				// coder error message
@@ -1757,6 +1702,9 @@ function edit_employee() {
 
 Dropzone.options.employeepictureform = {
 	maxFiles: 1,
+	headers: {
+		Authorization: localStorage.getItem('token'),
+	},
 	accept: function(file, done) {
 		if (file.type != 'image/jpeg' && file.type != 'image/png' && file.type != 'image/gif') {
 			alert('You are allowed to drag only images');
@@ -1774,7 +1722,7 @@ Dropzone.options.employeepictureform = {
 		// });
 
 		this.on('sending', function(file, xhr, formData) {
-			formData.append('company_id', localStorage.getItem('company_id'));
+			// formData.append('company_id', localStorage.getItem('company_id'));
 
 			// var pathArray = window.location.pathname.split( '/' );
 			// var employment_type_id = $.urlParam('id');
@@ -1802,9 +1750,14 @@ Dropzone.options.employeepictureform = {
 		});
 
 		$('#edit_proPic_modal').modal('hide');
-		$('#mod_body').html('Image Upload Successful');
-		$('#successModal').modal('show');
-		fetch_employee_details();
+
+		Swal.fire({
+			title: 'Success',
+			text: `Success`,
+			icon: 'success',
+			confirmButtonText: 'Okay',
+			onClose: fetch_employee_details(),
+		});
 	},
 };
 // basic info end

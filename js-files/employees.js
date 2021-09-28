@@ -3,6 +3,7 @@ $(document).ready(function() {
 	list_of_companies_employees('', '');
 	load_position();
 	load_department();
+	load_employmentType();
 	$('input#dob_start').datepicker({
 		dateFormat: 'yy-mm-dd',
 	});
@@ -38,8 +39,11 @@ function total_no_of_employees() {
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
-		url: api_path + 'company/count_total_company_employees_not_terminated',
-		data: { company_id: company_id },
+		url: api_path + 'hrm/count_total_company_employees_not_terminated',
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 		error: function(response) {
@@ -104,7 +108,6 @@ function list_of_companies_employees(page, serial, order_by) {
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_employees',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
 			// email: email,
@@ -116,6 +119,9 @@ function list_of_companies_employees(page, serial, order_by) {
 			order: order_by,
 			employee_department: employee_department,
 			employee_code: employee_code,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -155,6 +161,7 @@ function list_of_companies_employees(page, serial, order_by) {
 						}
 						strTable += '<tr id="row_' + v.employee_id + '">';
 						strTable += '<td valign="top">' + k + '</td>';
+						// strTable += `<td valign="top">${v.employee_code}</td>`;
 						strTable +=
 							'<td  valign="top"><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="' +
 							window.location.origin +
@@ -176,10 +183,12 @@ function list_of_companies_employees(page, serial, order_by) {
 							v.middlename +
 							'</td>';
 
-						strTable += '<td valign="top">' + v.department_name + '</td>';
+						// strTable += '<td valign="top">' + v.department_name + '</td>';
 						strTable += '<td valign="top">' + empType + '</td>';
-						strTable += '<td valign="top">' + jobTitle + '</td>';
-						strTable += '<td valign="top">' + status(v.status) + '</td>';
+						strTable += `<td valign="top">${jobTitle}<p style="font-style: italic;color: blue;font-size: 0.9em;">${v.department_name}</p></td>`;
+						strTable += `<td valign="top">${
+							v.status.toLowerCase() === 'terminated' ? 'Exited' :
+							status(v.status)}</td>`;
 						strTable +=
 							'<td valign="top"><a href="' +
 							base_url +
@@ -229,7 +238,7 @@ function list_of_companies_employees(page, serial, order_by) {
 			} else if (response.status == '400') {
 				$('#loading').hide();
 				strTable += '<tr>';
-				strTable += '<td colspan="6">No result</td>';
+				strTable += '<td colspan="8">No record</td>';
 				strTable += '</tr>';
 
 				$('#employeeData').html(strTable);
@@ -239,7 +248,7 @@ function list_of_companies_employees(page, serial, order_by) {
 				var strTable = '';
 				$('#loading').hide();
 				strTable += '<tr>';
-				strTable += '<td colspan="6">' + response.msg + '</td>';
+				strTable += '<td colspan="8">' + response.msg + '</td>';
 				strTable += '</tr>';
 
 				$('#employeeData').html(strTable);
@@ -255,7 +264,7 @@ function list_of_companies_employees(page, serial, order_by) {
 			// alert(response.msg);
 			strTable += '<tr>';
 			strTable +=
-				'<td colspan="6"><strong class="text-danger">Connection error!</strong></td>';
+				'<td colspan="8"><strong class="text-danger">Connection error!</strong></td>';
 			strTable += '</tr>';
 
 			$('#employeeData').html(strTable);
@@ -281,7 +290,10 @@ function delete_employee(employee_id) {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/delete_company_employee',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 
@@ -310,7 +322,10 @@ function load_department() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_departments',
 		type: 'POST',
-		data: { company_id: company_id, page: 1, limit: 100 },
+		data: { page: 1, limit: 100 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -337,6 +352,43 @@ function load_department() {
 	});
 }
 
+function load_employmentType() {
+	var company_id = localStorage.getItem('company_id');
+
+	$.ajax({
+		url: api_path + 'hrm/list_of_company_employment_types',
+		type: 'POST',
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
+		dataType: 'json',
+
+		success: function(response) {
+			// console.log(response);
+			// $('#employee_details_display').show();
+
+			var options = '';
+
+			$.each(response['data'], function(i, v) {
+				options +=
+					'<option value="' +
+					response['data'][i]['type_id'] +
+					'">' +
+					response['data'][i]['type_name'] +
+					'</option>';
+			});
+			$('#employmentType').append(options);
+		},
+		// jqXHR, textStatus, errorThrown
+		error(response) {
+			// $('#employee_details_display').hide();
+			// $('#employee_error_display').show();
+			$('#employmentType').append('<option style="color:red;">Error</option>');
+		},
+	});
+}
+
 function load_position() {
 	var company_id = localStorage.getItem('company_id');
 
@@ -346,7 +398,10 @@ function load_position() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_positions',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {

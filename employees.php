@@ -81,14 +81,12 @@ include_once("../gen/_common/header.php"); // header contents
                                 <div class="form-row">
                                     <div class="col-sm-2 col-xs-4">
                                         <select class="form-control col-sm-2 col-xs-2" id="position">
-                                            <option value="">-- Select position --</option>
+                                            <option value="">-- Select Job title --</option>
 
                                         </select>
                                     </div>
 
-                                    <!-- <div class="col-sm-2 col-xs-4">
-                        <input type="text" class="form-control" placeholder="Code" id="employee_code">
-                      </div> -->
+
 
 
                                     <div class="col-sm-2 col-xs-4">
@@ -102,8 +100,8 @@ include_once("../gen/_common/header.php"); // header contents
                                         <select class="form-control col-sm-2 col-xs-4 required" id="status">
                                             <option value="">-- Select status --</option>
                                             <option value="active">Active</option>
-                                            <option value="suspended">Suspended</option>
-                                            <option value="terminated">Terminated</option>
+                                            <option value="inactive">Inactive</option>
+                                            <option value="terminated">Exited</option>
 
                                         </select>
                                     </div>
@@ -181,10 +179,11 @@ include_once("../gen/_common/header.php"); // header contents
                             </th> -->
                                             <!-- <th class="column-title">S/N </th> -->
                                             <th class="column-title">#</th>
+                                            <!-- <th class="column-title">Employee Code</th> -->
                                             <th class="column-title"></th>
                                             <!-- <th class="column-title" style="width: 10%">Code</th> -->
                                             <th class="column-title">Names</th>
-                                            <th class="column-title">Department</th>
+                                            <!-- <th class="column-title">Department</th> -->
                                             <th class="column-title">Employment Type</th>
                                             <th class="column-title">Job Title</th>
                                             <th class="column-title">Status</th>

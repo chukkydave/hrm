@@ -28,7 +28,10 @@ function get_shift_details(id, shift_name) {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'workshifts/get_workshift',
-		data: { company_id: localStorage.getItem('company_id'), shift_id: id },
+		data: { shift_id: id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -90,7 +93,10 @@ function do_connections_exist(id) {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'workshifts/count_connections',
-		data: { company_id: company_id, shift_id: id },
+		data: { shift_id: id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -98,10 +104,11 @@ function do_connections_exist(id) {
 			if (response.status == '200') {
 				if (parseInt(response.data) > 0) {
 					$('#msggg').html(
-						'<font size=3>Some employees are currently on this shift. Deleting this shift will leave them without shifts. <br><br>Do you still wish to delete it?</font> <br><br><button type="button" class="btn btn-success" id="">Yes</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>',
+						`<font size=3>Some employees are currently on this shift. Deleting this shift will leave them without shifts. <br><br>Do you still wish to delete it?</font> <br><br><button type="button" class="btn btn-success" onClick="delete_shift(${id})">Yes</button>&nbsp;&nbsp;<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>`,
 					);
 
-					$('#exampleModalLabel').html('Warning');
+					// $('#exampleModalLabel').html('Warning');
+					// document.getElementById('exampleModalLabel').innerText = 'Warning';
 
 					$('#modal_msg').modal('show');
 
@@ -142,19 +149,40 @@ function delete_shift(id) {
 			dataType: 'json',
 			cache: false,
 			url: api_path + 'workshifts/delete_workshift',
-			data: { company_id: localStorage.getItem('company_id'), shift_id: id },
+			data: { shift_id: id },
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			success: function(response) {
 				console.log(response);
 				if (response.status == '200') {
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+						onClose: fetch_list(),
+					});
 					$('#data_tr_' + id).remove();
+					$('#modal_msg').modal('hide');
 				} else if (response.status == '400') {
 					//coder error message
-
+					Swal.fire({
+						title: 'Error!',
+						text: `${response.statusText}`,
+						icon: 'error',
+						confirmButtonText: 'Close',
+					});
 					$('#data_tr_' + id).show();
 				} else if (response.status == '401') {
 					//user error message
-
+					Swal.fire({
+						title: 'Error!',
+						text: `${response.statusText}`,
+						icon: 'error',
+						confirmButtonText: 'Close',
+					});
 					$('#data_tr_' + id).show();
 				}
 
@@ -163,6 +191,12 @@ function delete_shift(id) {
 
 			error: function(response) {
 				console.log(response);
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 				$('#loadin_tr_' + id).hide();
 				$('#data_tr_' + id).show();
 			},
@@ -179,7 +213,10 @@ function fetch_list() {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'workshifts/list_shifts',
-		data: { company_id: company_id },
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);

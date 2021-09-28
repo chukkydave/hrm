@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	listPayRunHistory();
+	listPayRunHistory(1);
 	$('#smartwizard').smartWizard({
 		selected: 0, // Initial selected step, 0 = first step
 		theme: 'dots', // theme for the wizard, related css need to include for other than default theme
@@ -132,7 +132,7 @@ $(document).ready(function() {
 	listApprovers();
 });
 
-function listPayRunHistory() {
+function listPayRunHistory(page) {
 	let company_id = localStorage.getItem('company_id');
 	let id = window.location.search.split('=')[1];
 	$('#list_payrun_table').hide();
@@ -141,13 +141,18 @@ function listPayRunHistory() {
 	$('#list_payrun_loader2').show();
 	$('#list_payrun_table3').hide();
 	$('#list_payrun_loader3').show();
-	let limit = 100;
-	let page = 1;
+	let limit = 10;
+	// let page = 1;
 	axios
 		.get(`${api_path}hrm/single_pay_run`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				pay_run_id: id,
+				page: page,
+				limit: limit,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -166,6 +171,25 @@ function listPayRunHistory() {
 				pay_schedule_id,
 				pay_run_name,
 			} = response.data.data;
+			$('#secret_sche_id').html(pay_schedule_id);
+			if (!pay_run_name && !pay_period_start && !pay_period_end && !pay_date) {
+				$('#list_payrun_table').css({
+					PointerEvent: 'none',
+					cursor: 'not-allowed',
+					opacity: 0.2,
+				});
+				$('#step-2').css({
+					PointerEvent: 'none',
+					cursor: 'not-allowed',
+					opacity: 0.2,
+				});
+				$('#step-3').css({
+					PointerEvent: 'none',
+					cursor: 'not-allowed',
+					opacity: 0.2,
+				});
+				$('#error_showing').show();
+			}
 			if (is_pay_run_active == 'active') {
 				statuslo = 'Active';
 				$('#payrun_statuslo').css({ 'background-color': '#337ab7', color: 'white' });
@@ -183,7 +207,6 @@ function listPayRunHistory() {
 				let taxArr = [];
 				let deducArr = [];
 
-				$('#secret_sche_id').html(pay_schedule_id);
 				$(employee).map((i, v) => {
 					let net;
 					let tax;
@@ -235,11 +258,11 @@ function listPayRunHistory() {
 					}
 					payrun_list += `<tr class="even pointer" id="spay_row${v.employee_id}">`;
 					payrun_list += `<td>${v.fullname}<br>${v.workshift}</td>`;
-					payrun_list += `<td>${v.department}<div>${v.job_title}</div></td>`;
-					payrun_list += `<td>₦${numberWithCommas(v.salary)}</td>`;
-					payrun_list += `<td>₦${numberWithCommas(deduc)}</td>`;
-					payrun_list += `<td>₦${numberWithCommas(tax)}</td>`;
-					payrun_list += `<td>₦${numberWithCommas(v.net_pay)}</td>`;
+					payrun_list += `<td>${v.department}<p style="font-size:0.9em;font-style:italics;color:blue;">${v.job_title}</p></td>`;
+					payrun_list += `<td>${formatToCurrency(gross)}</td>`;
+					payrun_list += `<td>${formatToCurrency(deduc)}</td>`;
+					payrun_list += `<td>${formatToCurrency(tax)}</td>`;
+					payrun_list += `<td>${formatToCurrency(net)}</td>`;
 					payrun_list += `<td onClick="getPaySlipDetails(${v.employee_id})"><i class="fas fa-money-check-alt"></i></td>`;
 					payrun_list += `</tr>`;
 					payrun_list += `<tr id="spay_loader${v.employee_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
@@ -251,33 +274,33 @@ function listPayRunHistory() {
 
 					payrun_list2 += `<tr class="even pointer" id="spay_row${v.employee_id}">`;
 					payrun_list2 += `<td>${v.fullname}<br>${v.workshift}</td>`;
-					payrun_list2 += `<td>${v.department}<div>${v.job_title}</div></td>`;
-					payrun_list2 += `<td>₦${numberWithCommas(v.salary)}</td>`;
-					payrun_list2 += `<td>₦${numberWithCommas(deduc)}</td>`;
-					payrun_list2 += `<td>₦${numberWithCommas(tax)}</td>`;
-					payrun_list2 += `<td>₦${numberWithCommas(v.net_pay)}</td>`;
+					payrun_list2 += `<td>${v.department}<p style="font-size:0.9em;font-style:italics;color:blue;">${v.job_title}</p></td>`;
+					payrun_list2 += `<td>${formatToCurrency(gross)}</td>`;
+					payrun_list2 += `<td>${formatToCurrency(deduc)}</td>`;
+					payrun_list2 += `<td>${formatToCurrency(tax)}</td>`;
+					payrun_list2 += `<td>${formatToCurrency(net)}</td>`;
 					payrun_list2 += `<td onClick="getPaySlipDetails2(${v.employee_id})"><i class="fas fa-money-check-alt"></i></td>`;
 					payrun_list2 += `</tr>`;
 					payrun_list2 += `<tr id="spay_loader${v.employee_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 
 					payrun_list3 += `<tr class="even pointer" id="spay_row${v.employee_id}">`;
 					payrun_list3 += `<td>${v.fullname}<br>${v.workshift}</td>`;
-					payrun_list3 += `<td>${v.department}<div>${v.job_title}</div></td>`;
-					payrun_list3 += `<td>₦${numberWithCommas(v.salary)}</td>`;
-					payrun_list3 += `<td>₦${numberWithCommas(deduc)}</td>`;
-					payrun_list3 += `<td>₦${numberWithCommas(tax)}</td>`;
-					payrun_list3 += `<td>₦${numberWithCommas(v.net_pay)}</td>`;
+					payrun_list3 += `<td>${v.department}<p style="font-size:0.9em;font-style:italics;color:blue;">${v.job_title}</p></td>`;
+					payrun_list3 += `<td>${formatToCurrency(gross)}</td>`;
+					payrun_list3 += `<td>${formatToCurrency(deduc)}</td>`;
+					payrun_list3 += `<td>${formatToCurrency(tax)}</td>`;
+					payrun_list3 += `<td>${formatToCurrency(net)}</td>`;
 					payrun_list3 += `<td onClick="getPaySlipDetails2(${v.employee_id})"><i class="fas fa-money-check-alt"></i></td>`;
 					payrun_list3 += `</tr>`;
 					payrun_list3 += `<tr id="spay_loader${v.employee_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 
 					payrun_list4 += `<tr class="even pointer" id="spay_row${v.employee_id}">`;
 					payrun_list4 += `<td>${v.fullname}<br>${v.workshift}</td>`;
-					payrun_list4 += `<td>${v.department}<div>${v.job_title}</div></td>`;
-					payrun_list4 += `<td>₦${numberWithCommas(v.salary)}</td>`;
-					payrun_list4 += `<td>₦${numberWithCommas(deduc)}</td>`;
-					payrun_list4 += `<td>₦${numberWithCommas(tax)}</td>`;
-					payrun_list4 += `<td>₦${numberWithCommas(v.net_pay)}</td>`;
+					payrun_list4 += `<td>${v.department}<p style="font-size:0.9em;font-style:italics;color:blue;">${v.job_title}</p></td>`;
+					payrun_list4 += `<td>${formatToCurrency(gross)}</td>`;
+					payrun_list4 += `<td>${formatToCurrency(deduc)}</td>`;
+					payrun_list4 += `<td>${formatToCurrency(tax)}</td>`;
+					payrun_list4 += `<td>${formatToCurrency(net)}</td>`;
 					payrun_list4 += `<td onClick="getPaySlipDetails2(${v.employee_id})"><i class="fas fa-money-check-alt"></i></td>`;
 					payrun_list4 += `</tr>`;
 					payrun_list4 += `<tr id="spay_loader${v.employee_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
@@ -294,10 +317,10 @@ function listPayRunHistory() {
 					`<tr style="border-top:3px solid; border-bottom:3px solid;">
                     <td></td>
                     <td><b>Total</b></td>
-                    <td><b>₦${numberWithCommas(totalGross)}</b></td>
-                    <td><b>₦${numberWithCommas(totalDeduc)}</b></td>
-                    <td><b>₦${numberWithCommas(totalTax)}</b></td>
-                    <td><b>₦${numberWithCommas(totalNet)}</b></td>
+                    <td><b>${formatToCurrency(totalGross)}</b></td>
+                    <td><b>${formatToCurrency(totalDeduc)}</b></td>
+                    <td><b>${formatToCurrency(totalTax)}</b></td>
+                    <td><b>${formatToCurrency(totalNet)}</b></td>
                     <td></td>
                     </tr>`,
 				);
@@ -305,10 +328,10 @@ function listPayRunHistory() {
 					`<tr style="border-top:3px solid; border-bottom:3px solid;">
                     <td></td>
                     <td><b>Total</b></td>
-                    <td><b>₦${numberWithCommas(totalGross)}</b></td>
-                    <td><b>₦${numberWithCommas(totalDeduc)}</b></td>
-                    <td><b>₦${numberWithCommas(totalTax)}</b></td>
-                    <td><b>₦${numberWithCommas(totalNet)}</b></td>
+                    <td><b>${formatToCurrency(totalGross)}</b></td>
+                    <td><b>${formatToCurrency(totalDeduc)}</b></td>
+                    <td><b>${formatToCurrency(totalTax)}</b></td>
+                    <td><b>${formatToCurrency(totalNet)}</b></td>
                     <td></td>
                     </tr>`,
 				);
@@ -316,10 +339,10 @@ function listPayRunHistory() {
 					`<tr style="border-top:3px solid; border-bottom:3px solid;">
                     <td></td>
                     <td><b>Total</b></td>
-                    <td><b>₦${numberWithCommas(totalGross)}</b></td>
-                    <td><b>₦${numberWithCommas(totalDeduc)}</b></td>
-                    <td><b>₦${numberWithCommas(totalTax)}</b></td>
-                    <td><b>₦${numberWithCommas(totalNet)}</b></td>
+                    <td><b>${formatToCurrency(totalGross)}</b></td>
+                    <td><b>${formatToCurrency(totalDeduc)}</b></td>
+                    <td><b>${formatToCurrency(totalTax)}</b></td>
+                    <td><b>${formatToCurrency(totalNet)}</b></td>
                     <td></td>
                     </tr>`,
 				);
@@ -327,15 +350,17 @@ function listPayRunHistory() {
 					`<tr style="border-top:3px solid; border-bottom:3px solid;">
                     <td></td>
                     <td><b>Total</b></td>
-                    <td><b>₦${numberWithCommas(totalGross)}</b></td>
-                    <td><b>₦${numberWithCommas(totalDeduc)}</b></td>
-                    <td><b>₦${numberWithCommas(totalTax)}</b></td>
-                    <td><b>₦${numberWithCommas(totalNet)}</b></td>
+                    <td><b>${formatToCurrency(totalGross)}</b></td>
+                    <td><b>${formatToCurrency(totalDeduc)}</b></td>
+                    <td><b>${formatToCurrency(totalTax)}</b></td>
+                    <td><b>${formatToCurrency(totalNet)}</b></td>
                     <td></td>
                     </tr>`,
 				);
 				$('#pay_date').val(pay_date);
 				$('#paydate').html(pay_date);
+				$('#paydate3').html(pay_date);
+				$('#paydate4').html(pay_date);
 				if (pay_period_start !== null && pay_period_end !== null) {
 					let start = pay_period_start.split('-');
 					let end = pay_period_end.split('-');
@@ -345,11 +370,19 @@ function listPayRunHistory() {
 					$('#payperiod').html(
 						`${start[0]}/${start[1]}/${start[2]} - ${end[0]}/${end[1]}/${end[2]}`,
 					);
+					$('#payperiod3').html(
+						`${start[0]}/${start[1]}/${start[2]} - ${end[0]}/${end[1]}/${end[2]}`,
+					);
+					$('#payperiod4').html(
+						`${start[0]}/${start[1]}/${start[2]} - ${end[0]}/${end[1]}/${end[2]}`,
+					);
 				}
 
 				$('#namelo').html(schedule_name);
 				$('#payrun_name').val(pay_run_name);
 				$('#payrun_name2').html(pay_run_name);
+				$('#payrun_name3').html(pay_run_name);
+				$('#payrun_name4').html(pay_run_name);
 				$('#payrun_statuslo').html(statuslo);
 
 				$('#list_payrun_loader').hide();
@@ -374,6 +407,21 @@ function listPayRunHistory() {
 				$('#list_payrun_loader4').hide();
 				$('#list_payrun_table4').show();
 			}
+
+			$('#pagination').twbsPagination({
+				totalPages: Math.ceil(response.data.total_rows / limit),
+				visiblePages: 10,
+				onPageClick: function(event, page) {
+					listPayRunHistory(page);
+				},
+			});
+			$('#pagination2').twbsPagination({
+				totalPages: Math.ceil(response.data.total_rows / limit),
+				visiblePages: 10,
+				onPageClick: function(event, page) {
+					listPayRunHistory(page);
+				},
+			});
 		})
 		.catch(function(error) {
 			console.log(error, 'eeeeeeeerrrrrrrrrooooottt');
@@ -397,12 +445,16 @@ function listPayRunHistory() {
 
 function getArraySum(arr) {
 	const arrSum = arr.reduce((a, b) => a + b, 0);
-	// var total = 0;
-	// for (var i in a) {
-	// 	total += a[i];
-	// }
-	// return total;
+
 	return arrSum;
+}
+
+function formatToCurrency(amount) {
+	if (amount === 0 || amount === 0.0) {
+		return amount;
+	} else {
+		return '₦' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+	}
 }
 
 function addPayDates() {
@@ -419,7 +471,7 @@ function addPayDates() {
 
 	let data = {
 		pay_schedule_id: sche_id,
-		company_id: company_id,
+		// company_id: company_id,
 		date_range: pay_period,
 
 		pay_date: pay_date,
@@ -432,6 +484,9 @@ function addPayDates() {
 		dataType: 'json',
 		url: `${api_path}hrm/set_pay_period`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -441,12 +496,24 @@ function addPayDates() {
 			console.log(error);
 			$('#pay_dates_loader').hide();
 			$('#pay_dates_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#pay_dates_loader').hide();
 				$('#pay_dates_btn').show();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
+				});
 			}
 		},
 	});
@@ -478,9 +545,12 @@ function getPaySlipDetails(emp_id) {
 		dataType: 'json',
 		url: api_path + 'hrm/get_single_employee_slip',
 		data: {
-			company_id: company_id,
+			// company_id: company_id,
 			employee_id: emp_id,
 			pay_run_id: id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -493,15 +563,6 @@ function getPaySlipDetails(emp_id) {
 				let debit_checker = '';
 				let debit_table = '';
 				let credit_table = '';
-
-				// amount: "30000.00"
-				// breakdown_id: "1"
-				// breakdown_name: "Basic Salary"
-				// credit_or_debit: "credit"
-				// employee_id: "162"
-				// formula: "just there"
-				// is_checked: "checked"
-				// salary_breakdown_type: "35"
 
 				if (response.data) {
 					// $('#credit_table').html('');
@@ -553,21 +614,12 @@ function getPaySlipDetails(emp_id) {
 					});
 					$('#total_debit').val(response.total_debit);
 					$('#total_credit').val(response.total_credit);
-					$('#net_payment').html(`₦${numberWithCommas(response.net_pay)}`);
-					$('#salary_amt').html(`₦${numberWithCommas(response.data.salary)}`);
+					$('#net_payment').html(`${formatToCurrency(parseInt(response.net_pay))}`);
+					$('#salary_amt').html(`${formatToCurrency(parseInt(response.data.salary))}`);
 					$('#salary_type').val(response.data.earning_type);
 				} else {
 					debit_checker += `<p>No record found</p>`;
 					credit_checker += `<p>No record found</p>`;
-
-					// credit_table += `<tr>
-					//                     <td colspan="3">No Salary Component Found</td>
-
-					//                 <tr>`;
-					// debit_table += `<tr>
-					//                     <td colspan="3">No Salary Component Found</td>
-
-					//                 <tr>`;
 				}
 
 				$('#debit_body').html(debit_checker);
@@ -607,18 +659,10 @@ function getPaySlipDetails(emp_id) {
 }
 
 function getPaySlipDetails2(emp_id) {
-	// $('#secret_emp_id').html(emp_id);
 	let id = window.location.search.split('=')[1];
 	$('#view_payslip_modal').modal('show');
-	// showSalaryDetails(emp_id);
-	// $('#add_creditComponent_btn').attr('data', emp_id);
-	// $('#add_debitComponent_btn').attr('data', emp_id);
-	// $('#debit_body').html('');
-	// $('#credit_body').html('');
-	// $('#credit_table').html('<tr><td colspan="3">No Salary Component Found</td></tr>');
-	// $('#debit_table').html('<tr><td colspan="3">No Salary Component Found</td></tr>');
+
 	var company_id = localStorage.getItem('company_id');
-	// let employee_id = emp_id;
 
 	$('#credit_loader2').show();
 	$('#credit_body2').hide();
@@ -632,19 +676,17 @@ function getPaySlipDetails2(emp_id) {
 		dataType: 'json',
 		url: api_path + 'hrm/get_single_employee_slip',
 		data: {
-			company_id: company_id,
+			// company_id: company_id,
 			employee_id: emp_id,
 			pay_run_id: id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
 		success: function(response) {
 			console.log(response);
-
-			// $('#credit_loader').hide();
-			// $('#debit_loader').hide();
-			// $('#credit_body').show();
-			// $('#debit_body').show();
 
 			if (response.status == '200') {
 				let debit_table = '';
@@ -654,22 +696,12 @@ function getPaySlipDetails2(emp_id) {
 					$(response.data.company_salary).map((i, v) => {
 						if (v.credit_or_debit == 'credit' || v.credit_or_debit == 'Credit') {
 							if (v.pay_slip_is_checked == 'checked') {
-								// credit_table += ` <tr>
-								//                 <td>${v.breakdown_name}</td>
-								//                 <td><input type="number" value="${v.pay_slip_amount}" class="credit_input all_input" data="${v.pay_slip_id}" data-val="${v.insert_id}" data-type="credit"  data-toggle="tooltip" title="${v.formula}"></td>
-								//                 <td id="delCredDeb_${v.insert_id}" data="${v.pay_slip_id}" onClick="deleteBreakdown2(${v.insert_id})"><i class="fa fa-trash"></i></td>
-								//             <tr>`;
 								credit_table += `<tr>
                                                 <td><strong>${v.breakdown_name}</strong> <span class="float-right">${v.pay_slip_amount}</span></td>
                                             </tr>`;
 							}
 						} else if (v.credit_or_debit == 'debit' || v.credit_or_debit == 'Debit') {
 							if (v.pay_slip_is_checked == 'checked') {
-								// debit_table += `<tr>
-								//                 <td>${v.breakdown_name}</td>
-								//                 <td><input type="number" value="${v.pay_slip_amount}" class="debit_input all_input" data="${v.pay_slip_id}" data-val="${v.insert_id}" data-type="debit" data-toggle="tooltip" title="${v.formula}"></td>
-								//                 <td id="delCredDeb_${v.insert_id}" data="${v.pay_slip_id}" onClick="deleteBreakdown2(${v.insert_id})"><i class="fa fa-trash"></i></td>
-								//             <tr>`;
 								debit_table += `<tr>
                                                 <td><strong>${v.breakdown_name}</strong> <span
                                                         class="float-right">${v.pay_slip_amount}</span></td>
@@ -682,15 +714,11 @@ function getPaySlipDetails2(emp_id) {
 					$('#depy_name').html(response.data.department);
 					$('#joby_name').html(response.data.job_title);
 					$('#banky_name').html(response.data.bank_name);
-					$('#banky_no').html(response.data.bank_no);
+					$('#banky_no').html(response.data.account_no);
 					$('#pay_period_datey').html(response.data.pay_period);
 					$('#pay_datey').html(response.data.payment_date);
 					$('#gpay').html(`₦${numberWithCommas(response.data.salary)}`);
-					$('#npay').html(`₦${numberWithCommas(response.net_pay)}`);
-					// $('#total_credit').val(response.total_credit);
-					// $('#net_payment').html(`₦${numberWithCommas(response.net_pay)}`);
-					// $('#salary_amt').html(`₦${numberWithCommas(response.data.salary)}`);
-					// $('#salary_type').val(response.data.earning_type);
+					$('#npay').html(`${formatToCurrency(response.net_pay)}`);
 				} else {
 				}
 
@@ -774,8 +802,11 @@ function showSalaryDetails(id) {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -872,10 +903,9 @@ function addDebitComponent() {
 			});
 		}
 	});
-	console.log('aaaaaaaaaaarrrrrrrr', debit_arr);
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		pay_run_id: payrun_id,
 		payslips: debit_arr,
@@ -885,6 +915,9 @@ function addDebitComponent() {
 		dataType: 'json',
 		url: `${api_path}hrm/add_break_down_to_pay_slip?company_id=${company_id}&pay_run_id=${payrun_id}&employee_id=${employee_id}`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -894,26 +927,28 @@ function addDebitComponent() {
 			console.log(error);
 			$('#add_debitComponent_loader').hide();
 			$('#add_debitComponent_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_debitComponent_loader').hide();
 				$('#add_debitComponent_btn').show();
 				getPaySlipDetails(employee_id);
-				// $('#edit_bank_details_modal').modal('hide');
-				// $('#mod_body').html('Salary Account Details Added successfully');
-				// $('#successModal').modal('show');
-				// showBankDetails();
-				// $('#acct_name').val('');
-				// $('#bank_name').val('');
-				// $('#acct_no').val('');
-				// $('#sort_code').val('');
 			} else {
-				console.log(error);
+				console.log(response);
 				$('#add_debitComponent_loader').hide();
 				$('#add_debitComponent_btn').show();
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 		},
 	});
@@ -940,7 +975,7 @@ function addCreditComponent() {
 	});
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		pay_run_id: payrun_id,
 		payslips: credit_arr,
@@ -950,6 +985,9 @@ function addCreditComponent() {
 		dataType: 'json',
 		url: `${api_path}hrm/add_break_down_to_pay_slip?company_id=${company_id}&pay_run_id=${payrun_id}&employee_id=${employee_id}`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -959,26 +997,28 @@ function addCreditComponent() {
 			console.log(error);
 			$('#add_creditComponent_loader').hide();
 			$('#add_creditComponent_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_creditComponent_loader').hide();
 				$('#add_creditComponent_btn').show();
 				getPaySlipDetails(employee_id);
-				// $('#edit_bank_details_modal').modal('hide');
-				// $('#mod_body').html('Salary Account Details Added successfully');
-				// $('#successModal').modal('show');
-				// showBankDetails();
-				// $('#acct_name').val('');
-				// $('#bank_name').val('');
-				// $('#acct_no').val('');
-				// $('#sort_code').val('');
 			} else {
-				console.log(error);
+				console.log(response);
 				$('#add_creditComponent_loader').hide();
 				$('#add_creditComponent_btn').show();
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 		},
 	});
@@ -1002,7 +1042,7 @@ function deleteBreakdown(id) {
 			let employee_id = $('#add_debitComponent_btn').attr('data');
 			let idd = $(`#creddeb_${id}`).attr('data');
 			let data = {
-				company_id: company_id,
+				// company_id: company_id,
 				pay_slip_id: idd,
 				employee_id: employee_id,
 			};
@@ -1012,6 +1052,9 @@ function deleteBreakdown(id) {
 				dataType: 'json',
 				url: `${api_path}hrm/delete_sinlge_record_payslip`,
 				data: data,
+				headers: {
+					Authorization: localStorage.getItem('token'),
+				},
 
 				error: function(res) {
 					console.log(res);
@@ -1045,7 +1088,7 @@ function deleteBreakdown2(id) {
 		// let employee_id = window.location.search.split('=')[1];
 		let idd = $(`#delCredDeb_${id}`).attr('data');
 		let data = {
-			company_id: company_id,
+			// company_id: company_id,
 			pay_slip_id: idd,
 			employee_id: employee_id,
 		};
@@ -1055,13 +1098,21 @@ function deleteBreakdown2(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_sinlge_record_payslip`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				// $(`#qc_loader${id}`).hide();
 				// $(`#qc_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
@@ -1079,6 +1130,7 @@ function saveSalaryBreakdown() {
 	let company_id = localStorage.getItem('company_id');
 	let employee_id = $('#add_debitComponent_btn').attr('data');
 	let pay_run_id = window.location.search.split('=')[1];
+	let earn = $('#salary_type').val();
 
 	$('#save_pay').hide();
 	$('#save_pay_loader').show();
@@ -1105,10 +1157,11 @@ function saveSalaryBreakdown() {
 	// let obj = { breakdown_id: 9, amount: 5000 };
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		pay_slips: emp_breakdown,
 		pay_run_id: pay_run_id,
+		earning_type: earn,
 	};
 	console.log(data);
 	$.ajax({
@@ -1116,6 +1169,9 @@ function saveSalaryBreakdown() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_pay_slip`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -1125,20 +1181,25 @@ function saveSalaryBreakdown() {
 			console.log(error);
 			$('#save_pay_loader').hide();
 			$('#save_pay').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#save_pay_loader').hide();
 				$('#edit_payslip_modal').modal('hide');
-				listPayRunHistory();
-				// $('#save_pay').show();
-				// $('#mod_body').html('Salary Breakdown Saved successfully');
-				// $('#successModal').modal('show');
-				// $('#acct_name').val('');
-				// $('#bank_name').val('');
-				// $('#acct_no').val('');
-				// $('#sort_code').val('');
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listPayRunHistory(1),
+				});
 			}
 		},
 	});
@@ -1152,13 +1213,16 @@ function load_employee() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_employees',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
 			// console.log(response);
 
-			var options = '<option></option>';
+			var options = '';
 
 			$(response.data).each((i, v) => {
 				options += `<option value="${v.employee_id}">${v.firstname} ${v.lastname} (${v.position})</option>`;
@@ -1184,8 +1248,11 @@ function listApprovers() {
 	axios
 		.get(`${api_path}hrm/list_payrun_approval`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				pay_run_id: pay_run_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then((response) => {
@@ -1207,24 +1274,28 @@ function listApprovers() {
 						action = moment(v.date_acted, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					}
 					appv_list += `<tr id="appv_div${v.approval_id}">`;
-					appv_list += `<td><div class="profile_pic"><img src="${site_url}/files/images/employee_images/sml_${v.picture}" " alt="..." width="50"></div></td>`;
+					appv_list += `<td><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="${site_url}/files/images/employee_images/sml_${v.picture}" " alt="..." width="50"></div></td>`;
 					appv_list += `<td><b>${v.fullname} (${v.job_title})</b><br>Date Received: ${received} <br>Date Of Action: ${action}</td>`;
 					if (v.pay_run_approval_status == 'not_approved') {
 						appv_list += `<td><i class="fa fa-times-circle" style="color: red; font-size: 15px;"></i></td>`;
-					} else if (v.pay_run_approval_status == 'approved') {
+						appv_list += `<td onClick="deleteAppvrover(${v.approval_id})"><i  class="fa fa-trash-o"  data-toggle="tooltip" data-placement="top" title="Delete Approver"></i></td>`;
+					} else if (v.pay_run_approval_status == 'approve') {
 						appv_list += `<td><i class="fa fa-check-circle" style="color: green; font-size: 15px;"></i></td>`;
+					} else if (v.pay_run_approval_status.toLowerCase() == 'pending') {
+						appv_list += `<td><i class="fa fa-exclamation-triangle" style="color: orange; font-size: 15px;"></i></td>`;
 					}
-					appv_list += `<td onClick="deleteAppvrover(${v.approval_id})"><i  class="fa fa-trash-o"  data-toggle="tooltip" data-placement="top" title="Delete Approver"></i></td>`;
 					appv_list += `</tr>`;
 					appv_list += `<tr id="appv_del_loader${v.approval_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw fa-2x"></i></td></tr>`;
 
 					appv_list2 += `<tr id="appv_div${v.approval_id}">`;
-					appv_list2 += `<td><div class="profile_pic"><img src="${site_url}/files/images/employee_images/sml_${v.picture}" " alt="..." width="50"></div></td>`;
+					appv_list2 += `<td><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="${site_url}/files/images/employee_images/sml_${v.picture}" " alt="..." width="50"></div></td>`;
 					appv_list2 += `<td><b>${v.fullname} (${v.job_title})</b><br>Date Received: ${received} <br>Date Of Action: ${action}</td>`;
 					if (v.pay_run_approval_status == 'not_approved') {
 						appv_list2 += `<td><i class="fa fa-times-circle" style="color: red; font-size: 15px;"></i></td>`;
-					} else if (v.pay_run_approval_status == 'approved') {
+					} else if (v.pay_run_approval_status == 'approve') {
 						appv_list2 += `<td><i class="fa fa-check-circle" style="color: green; font-size: 15px;"></i></td>`;
+					} else if (v.pay_run_approval_status.toLowerCase() == 'pending') {
+						appv_list2 += `<td><i class="fa fa-exclamation-triangle" style="color: orange; font-size: 15px;"></i></td>`;
 					}
 					appv_list2 += `</tr>`;
 					appv_list2 += `<tr id="appv_del_loader${v.approval_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw fa-2x"></i></td></tr>`;
@@ -1267,7 +1338,7 @@ function addApprovals() {
 	$('#add_apprvoer_loader').show();
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		pay_run_id: pay_run_id,
 		approvals: arr,
 	};
@@ -1276,6 +1347,9 @@ function addApprovals() {
 		dataType: 'json',
 		url: `${api_path}hrm/create_payrun_approval`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -1285,7 +1359,12 @@ function addApprovals() {
 			console.log(error);
 			$('#add_apprvoer_loader').hide();
 			$('#add_apprvoer').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
@@ -1293,12 +1372,25 @@ function addApprovals() {
 				$('#add_apprvoer').show();
 				// $('#empo_name').val('');
 				$('#appv_display').toggle();
-				listApprovers();
+				$('#empo_name').val(null).trigger('change');
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listApprovers(),
+				});
 			} else {
-				console.log(error);
+				console.log(response);
 				$('#add_apprvoer_loader').hide();
 				$('#add_apprvoer').show();
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 		},
 	});
@@ -1312,7 +1404,7 @@ function deleteAppvrover(id) {
 		let company_id = localStorage.getItem('company_id');
 
 		let data = {
-			company_id: company_id,
+			// company_id: company_id,
 			approval_id: id,
 		};
 
@@ -1321,13 +1413,21 @@ function deleteAppvrover(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/remove_pay_run_approval`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#appv_del_loader${id}`).hide();
 				$(`#appv_div${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
@@ -1350,7 +1450,7 @@ function HRApprove() {
 		let user_id = localStorage.getItem('user_id');
 
 		let data = {
-			company_id: company_id,
+			// company_id: company_id,
 			approval_status: 'approve',
 			hr_id: user_id,
 			pay_run_id: pay_run_id,
@@ -1361,19 +1461,34 @@ function HRApprove() {
 			dataType: 'json',
 			url: `${api_path}hrm/hr_approval_payrun`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#approvee_loader`).hide();
 				$(`#approve_btnn`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					// getPaySlipDetails(employee_id);
 					$(`#approve_btnn`).remove();
 					$(`#approvee_loader`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Payrun has been Approved`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+						onClose: window.location.reload(),
+					});
 				}
 			},
 		});
@@ -1390,7 +1505,7 @@ function HRDecline() {
 		let user_id = localStorage.getItem('user_id');
 
 		let data = {
-			company_id: company_id,
+			// company_id: company_id,
 			approval_status: 'decline',
 			hr_id: user_id,
 			pay_run_id: pay_run_id,
@@ -1401,19 +1516,34 @@ function HRDecline() {
 			dataType: 'json',
 			url: `${api_path}hrm/hr_approval_payrun`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#declinee_loader`).hide();
 				$(`#decline_btnn`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					// getPaySlipDetails(employee_id);
-					$(`#declinee_loader`).hide();
-					$(`#decline_btnn`).show();
+					$(`#declinee_loader`).remove();
+					$(`#decline_btnn`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Payrun has been Declined`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+						onClose: window.location.reload(),
+					});
 				}
 			},
 		});

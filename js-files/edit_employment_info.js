@@ -30,7 +30,10 @@ function fetch_employee_edit_details_for_employment_info() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_profile',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -165,7 +168,10 @@ function load_employee_type() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_employment_types',
 		type: 'POST',
-		data: { company_id: company_id },
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -201,7 +207,10 @@ function load_branch() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_branches',
 		type: 'POST',
-		data: { company_id: company_id },
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -236,7 +245,10 @@ function load_department() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_departments',
 		type: 'POST',
-		data: { company_id: company_id, page: 1, limit: 100 },
+		data: { page: 1, limit: 100 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -275,7 +287,10 @@ function load_position() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_positions',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -359,10 +374,13 @@ function edit_employee_info() {
 			employment_branch: employment_branch,
 			date_of_employment: date_of_employment,
 			additional_info: additional_info,
-			company_id: company_id,
+
 			employee_id: employee_id,
 			supervisor: supervisor,
 			workshift: workshift,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
@@ -418,7 +436,10 @@ function fetch_employment_info() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_employment_info',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -487,7 +508,10 @@ function fetch_workShift_list() {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'workshifts/list_shifts',
-		data: { company_id: company_id },
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);

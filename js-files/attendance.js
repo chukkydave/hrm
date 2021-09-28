@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var socket = io.connect('https://api.empl-dev.site', { forceNew: true });
+	// var socket = io.connect('https://api.empl-dev.site', { forceNew: true });
 	load_employee();
 	attendance('');
 	load_department();
@@ -57,6 +57,14 @@ $(document).ready(function() {
 	});
 	$('.js-example-basic-single').select2();
 });
+document.getElementById('dot').addEventListener('change', function() {
+	var fr = new FileReader();
+	fr.onload = function() {
+		document.getElementById('output').textContent = fr.result;
+	};
+
+	fr.readAsText(this.files[0]);
+});
 
 function add_company_attendance() {
 	var employee_id = $('#employee_id').val();
@@ -76,31 +84,6 @@ function add_company_attendance() {
 
 		return;
 	}
-	// $(".required").each(function(){
-
-	//   var the_val = $.trim($(this).val());
-
-	//   if(the_val == "" || the_val == "0"){
-
-	//     $(this).addClass('has-error');
-
-	//     blank = "yes";
-
-	//   }else{
-
-	//     $(this).removeClass("has-error");
-
-	//   }
-
-	// });
-
-	// if(blank == "yes"){
-
-	//   $('#error_att').html("You have a blank field");
-
-	//   return;
-
-	// }
 
 	$('#error_att').html('');
 	$('#add').hide();
@@ -113,7 +96,6 @@ function add_company_attendance() {
 		url: api_path + 'hrm/add_employee_attendance',
 		data: {
 			employee_id: employee_id,
-			company_id: company_id,
 			user_id: user_id,
 			date: date,
 			clock_in: clock_in,
@@ -122,18 +104,20 @@ function add_company_attendance() {
 			status: status,
 			// attendance_type: attendance_type
 		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_attendance').modal('show');
-
-				$('#modal_attendance').on('hidden.bs.modal', function() {
-					// do something…
-					$('#add_attendance_display').hide();
-					window.location.reload();
-					//window.location.href = base_url+"/erp/hrm/employees";
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
 				});
 			} else if (response.status == '400') {
 				// coder error message
@@ -165,7 +149,10 @@ function load_employee() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_employees',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -219,12 +206,14 @@ function attendance(page) {
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_employees_attendance',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
 			date_range: date_range,
 			department: employee_dept,
 			order: order,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -273,7 +262,7 @@ function attendance(page) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="6">' + response.msg + '</td></tr>';
+					strTable = '<tr><td colspan="7">' + response.msg + '</td></tr>';
 				}
 
 				$('#attendanceData').html(strTable);
@@ -283,7 +272,7 @@ function attendance(page) {
 				$('#loading').hide();
 				// alert(response.msg);
 				strTable += '<tr>';
-				strTable += '<td colspan="6">' + response.msg + '</td>';
+				strTable += '<td colspan="7">' + response.msg + '</td>';
 				strTable += '</tr>';
 
 				$('#attendanceData').html(strTable);
@@ -332,13 +321,22 @@ function delete_attendance(attendance_id) {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/delete_employee_attendance',
-		data: { company_id: company_id, attendance_id: attendance_id },
+		data: { attendance_id: attendance_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 
 		error: function(response) {
 			$('#loader_row_' + attendance_id).hide();
 			$('#row_' + attendance_id).show();
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 
 			// alert('connection error');
 		},
@@ -347,7 +345,20 @@ function delete_attendance(attendance_id) {
 			// console.log(response);
 			if (response.status == '200') {
 				// $('#row_'+user_id).hide();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					// onClose: window.location.reload(),
+				});
 			} else if (response.status == '401') {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 
 			$('#loader_row_' + attendance_id).hide();
@@ -412,7 +423,10 @@ function load_department() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_departments',
 		type: 'POST',
-		data: { company_id: company_id, page: 1, limit: 100 },
+		data: { page: 1, limit: 100 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -447,7 +461,10 @@ function fetch_list() {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'workshifts/list_shifts',
-		data: { company_id: company_id },
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -481,3 +498,7 @@ function fetch_list() {
 		},
 	});
 }
+
+// function readDat(){
+
+// }

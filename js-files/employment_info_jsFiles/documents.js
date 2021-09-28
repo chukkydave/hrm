@@ -26,7 +26,7 @@ function addDocument() {
 	data.append('company_doc_type_id', type);
 	data.append('file_tag', '');
 	data.append('document_name', name);
-	data.append('company_id', company_id);
+	// data.append('company_id', company_id);
 	data.append('employee_id', employee_id);
 	data.append('uploaded_by', user_id);
 	data.append('file', doc_file);
@@ -40,6 +40,7 @@ function addDocument() {
 		contentType: false,
 		headers: {
 			enctype: 'multipart/form-data',
+			Authorization: localStorage.getItem('token'),
 		},
 		data: data,
 
@@ -47,20 +48,29 @@ function addDocument() {
 			console.log(error);
 			$('#add_docx_loader').hide();
 			$('#add_docx_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_docx_loader').hide();
 				$('#add_docx_btn').show();
 
-				$('#mod_body').html('Document Upload successful');
-				$('#successModal').modal('show');
 				$('#docx_name').val('');
 				$('#docx_type').val('');
 				$('#docx_file').val('');
 				$('#docx_display').toggle();
-				list_employee_documents();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: list_employee_documents(),
+				});
 			}
 		},
 	});
@@ -74,8 +84,11 @@ function list_employee_documents() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -154,110 +167,6 @@ function list_employee_documents() {
 		});
 }
 
-// function list_employee_documents() {
-// 	var company_id = localStorage.getItem('company_id');
-// 	var user_id = localStorage.getItem('user_id');
-
-// 	var page = 1;
-// 	var limit = 10;
-
-// 	$('#loading_docv').show();
-// 	$('#documentData').html('');
-
-// 	$.ajax({
-// 		type: 'POST',
-// 		dataType: 'json',
-// 		url: api_path + 'hrm/list_of_user_docs',
-// 		data: { company_id: company_id, user_id: user_id, page: page, limit: limit },
-// 		timeout: 60000,
-
-// 		success: function(response) {
-// 			console.log(response);
-// 			$('#loading_docv').hide();
-// 			var strTable = '';
-
-// 			if (response.status == '200') {
-// 				if (response.data.length > 0) {
-// 					var k = 1;
-// 					$.each(response['data'], function(i, v) {
-// 						strTable += '<tr id="row_' + response['data'][i]['document_id'] + '">';
-
-// 						// strTable += '<td>D' + response['data'][i]['document_id'] + '</td>';
-
-// 						strTable += '<td>' + response['data'][i]['original_filename'] + '</td>';
-
-// 						strTable += '<td>' + response['data'][i]['file_size'] + '</td>';
-// 						strTable += '<td>' + response['data'][i]['date_uploaded'] + '</td>';
-// 						// strTable += '<td valign="top"> <a class="delete_document" style="cursor: pointer;" id="doc_'+response['data'][i]['document_id']+'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Document"></i></a></td>';
-// 						strTable += `<td> <div class="dropdown">
-// 										<button class="btn btn-secondary dropdown-toggle"
-// 											type="button" id="dropdownMenuButton1"
-// 											data-toggle="dropdown" aria-expanded="false">
-// 											Actions
-// 										</button>
-// 										<ul class="dropdown-menu"
-// 											aria-labelledby="dropdownMenuButton1">
-// 											<li><a class="dropdown-item"><i
-// 														class="fa fa-pencil"></i> View</a></li>
-// 											<li><a class="dropdown-item"><i
-// 														class="fa fa-trash"></i> Delete</a></li>
-// 										</ul>
-// 									</div></td>`;
-
-// 						strTable += '</tr>';
-
-// 						// strTable += '<tr style="display: none;" id="loader_row_'+response['data'][i]['document_id']+'">';
-// 						// strTable += '<td colspan="5"><i class="fa fa-spinner fa-spin fa-fw fa-2x"  id="loading"></i>';
-// 						// strTable +=  '</td>';
-// 						// strTable += '</tr>';
-
-// 						k++;
-// 					});
-// 				} else {
-// 					strTable = '<tr><td colspan="4">No record.</td></tr>';
-// 				}
-
-// 				$('#documentData').html(strTable);
-// 				$('#documentData').show();
-// 			} else if (response.status == '400') {
-// 				$('#loading_docv').hide();
-// 				strTable += '<tr>';
-// 				strTable += '<td colspan="4">' + response.msg + '</td>';
-// 				strTable += '</tr>';
-
-// 				$('#documentData').html(strTable);
-// 				$('#documentData').show();
-// 			} else if (response.status == '401') {
-// 				//missing parameters
-// 				var strTable = '';
-// 				$('#loading_docv').hide();
-// 				strTable += '<tr>';
-// 				strTable += '<td colspan="4">Technical Error</td>';
-// 				strTable += '</tr>';
-
-// 				$('#documentData').html(strTable);
-// 				$('#documentData').show();
-// 			}
-
-// 			$('#loading_docv').hide();
-// 		},
-
-// 		error: function(response) {
-// 			var strTable = '';
-// 			$('#loading_docv').hide();
-// 			// alert(response.msg);
-// 			strTable += '<tr>';
-// 			strTable +=
-// 				'<td colspan="5"><strong class="text-danger">Connection error!</strong></td>';
-// 			strTable += '</tr>';
-
-// 			$('#documentData').html(strTable);
-// 			$('#documentData').show();
-// 			$('#loading_docv').hide();
-// 		},
-// 	});
-// }
-
 function viewDocument(id) {
 	$('#edit_docx_error').html('');
 	$('#edit_docx_modal').modal('show');
@@ -271,7 +180,10 @@ function viewDocument(id) {
 			params: {
 				document_id: id,
 				employee_id: employee_id,
-				company_id: company_id,
+				// company_id: company_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -288,9 +200,10 @@ function viewDocument(id) {
 				new_filename,
 			} = response.data.data;
 			let path = `${file_path}${new_filename}`;
+			let start = moment(date_uploaded, 'YYYY-MM-DD HH:mm:ss').format('LL');
 			$('#edit_docx_name').html(document_name);
 			$('#edit_docx_type').html(type);
-			$('#edit_docx_date').html(date_uploaded);
+			$('#edit_docx_date').html(start);
 			$('#edit_docx_file').attr('href', path);
 			$('#edit_docx_file').css('color', 'green');
 		})
@@ -300,7 +213,7 @@ function viewDocument(id) {
 			$('#edit_docx_loader').hide();
 			// $('#edit_docx_btn').show();
 
-			$('#edit_docx_error').html(error);
+			$('#edit_docx_error').html(error.statusText);
 		})
 		.then(function() {
 			// always executed
@@ -318,7 +231,7 @@ function deleteDocument(id) {
 		let data = {
 			document_id: id,
 			employee_id: employee_id,
-			company_id: company_id,
+			// company_id: company_id,
 		};
 
 		$.ajax({
@@ -326,18 +239,32 @@ function deleteDocument(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_employee_doc`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#docx_loader${id}`).hide();
 				$(`#docx_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#docx_row${id}`).remove();
 					$(`#docx_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 				}
 			},
 		});
@@ -357,7 +284,10 @@ function list_doctype() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_doctypes',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -388,7 +318,9 @@ function list_doctype() {
 		},
 
 		error: function(response) {
-			alert('Connection error');
+			options += `<option>Error loading</option>`;
+
+			$('#docx_type').append(options);
 		},
 	});
 }

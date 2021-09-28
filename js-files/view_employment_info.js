@@ -14,7 +14,10 @@ function fetch_employee_view_details_for_employment_info() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_profile',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -199,7 +202,10 @@ function employee_employement_info() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_employment_info',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {

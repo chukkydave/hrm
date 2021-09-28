@@ -79,6 +79,9 @@ $(document).ready(() => {
 	$('#view_ess_connect_btn').on('click', () => {
 		connectEmployee();
 	});
+	$('#view_ess_link_btn').on('click', () => {
+		sendLink();
+	});
 });
 
 $('#dept_from').datepicker({
@@ -142,7 +145,7 @@ function addDepartment() {
 	let data = {
 		started: from,
 		department_id: name,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		ended: to,
 		type: 'new',
@@ -152,6 +155,9 @@ function addDepartment() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_employee_department`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -161,20 +167,29 @@ function addDepartment() {
 			console.log(error);
 			$('#add_dept_loader').hide();
 			$('#add_dept_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_dept_loader').hide();
 				$('#add_dept_btn').show();
 
-				$('#mod_body').html('Department creation successful');
-				$('#successModal').modal('show');
 				$('#dept_name').val('');
 				$('#dept_from').val('');
 				$('#dept_to').val('');
 				$('#dept_display').toggle();
-				listDepartment();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listDepartment(),
+				});
 			}
 		},
 	});
@@ -188,8 +203,11 @@ function listDepartment() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -280,7 +298,10 @@ function viewDepartment(id) {
 			params: {
 				dep_his_id: id,
 				employee_id: employee_id,
-				company_id: company_id,
+				// company_id: company_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -301,7 +322,7 @@ function viewDepartment(id) {
 			$('#edit_dept_loader').hide();
 			$('#edit_dept_btn').show();
 
-			$('#edit_dept_error').html(error);
+			$('#edit_dept_error').html(error.statusText);
 		})
 		.then(function() {
 			// always executed
@@ -322,7 +343,7 @@ function editDepartment() {
 	let data = {
 		started: from,
 		department_id: name,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		ended: to,
 		dep_his_id: id,
@@ -333,6 +354,9 @@ function editDepartment() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_employee_department`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -342,7 +366,12 @@ function editDepartment() {
 			console.log(res);
 			$('#edit_dept_loader').hide();
 			$('#edit_dept_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${res.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
@@ -351,9 +380,13 @@ function editDepartment() {
 
 				$('#edit_dept_modal').modal('hide');
 
-				$('#mod_body').html('Department Edit Successful');
-				$('#successModal').modal('show');
-				listDepartment();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listDepartment(),
+				});
 			}
 		},
 	});
@@ -370,7 +403,7 @@ function deleteDepartment(id) {
 		let data = {
 			dep_his_id: id,
 			employee_id: employee_id,
-			company_id: company_id,
+			// company_id: company_id,
 		};
 
 		$.ajax({
@@ -378,18 +411,32 @@ function deleteDepartment(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_employee_department`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#dept_loader${id}`).hide();
 				$(`#dept_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#dept_row${id}`).remove();
 					$(`#dept_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 				}
 			},
 		});
@@ -417,8 +464,11 @@ function getEmployeeList(param) {
 	axios
 		.get(`${api_path}hrm/search_staff_autocomplete`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				query_param: param,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -454,7 +504,7 @@ function addWorkShift() {
 	let data = {
 		started: from,
 		workshift_id: name,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		ended: to,
 		type: 'new',
@@ -464,6 +514,9 @@ function addWorkShift() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_workshift_history`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -473,20 +526,30 @@ function addWorkShift() {
 			console.log(error);
 			$('#add_workShift_loader').hide();
 			$('#add_workShift_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_workShift_loader').hide();
 				$('#add_workShift_btn').show();
 
-				$('#mod_body').html('Work Shift creation successful');
-				$('#successModal').modal('show');
 				$('#workShift_name').val('');
 				$('#workShift_from').val('');
 				$('#workShift_to').val('');
 				$('#workShift_display').toggle();
-				listWorkShift();
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listWorkShift(),
+				});
 			}
 		},
 	});
@@ -500,8 +563,11 @@ function listWorkShift() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -594,7 +660,10 @@ function viewWorkShift(id) {
 			params: {
 				wrkshift_his_id: id,
 				employee_id: employee_id,
-				company_id: company_id,
+				// company_id: company_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -615,7 +684,7 @@ function viewWorkShift(id) {
 			$('#edit_workShift_loader').hide();
 			$('#edit_workShift_btn').show();
 
-			$('#edit_workShift_error').html(error);
+			$('#edit_workShift_error').html(error.statusText);
 		})
 		.then(function() {
 			// always executed
@@ -636,7 +705,7 @@ function editWorkShift() {
 	let data = {
 		started: from,
 		workshift_id: name,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		ended: to,
 		wrkshift_his_id: id,
@@ -647,6 +716,9 @@ function editWorkShift() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_workshift_history`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -656,7 +728,12 @@ function editWorkShift() {
 			console.log(res);
 			$('#edit_workShift_loader').hide();
 			$('#edit_workShift_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${res.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
@@ -665,9 +742,13 @@ function editWorkShift() {
 
 				$('#edit_workShift_modal').modal('hide');
 
-				$('#mod_body').html('Work Shift Edit Successful');
-				$('#successModal').modal('show');
-				listWorkShift();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listWorkShift(),
+				});
 			}
 		},
 	});
@@ -684,7 +765,7 @@ function deleteWorkShift(id) {
 		let data = {
 			wrkshift_his_id: id,
 			employee_id: employee_id,
-			company_id: company_id,
+			// company_id: company_id,
 		};
 
 		$.ajax({
@@ -692,18 +773,32 @@ function deleteWorkShift(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_workshift_history`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#workShift_loader${id}`).hide();
 				$(`#workShift_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#workShift_row${id}`).remove();
 					$(`#workShift_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 				}
 			},
 		});
@@ -719,7 +814,10 @@ function fetch_workList() {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'workshifts/list_shifts',
-		data: { company_id: company_id },
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -770,7 +868,7 @@ function EditEmpInf() {
 	let data = {
 		employee_type: type,
 		supervisor: name,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		employee_date: date,
 		branch: branch,
@@ -780,6 +878,9 @@ function EditEmpInf() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_employement_info`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -789,7 +890,12 @@ function EditEmpInf() {
 			console.log(error);
 			$('#edit_emp_loader').hide();
 			$('#edit_emp_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
@@ -800,9 +906,14 @@ function EditEmpInf() {
 				$('#edit_emp_type').val('');
 				$('#edit_emp_branch').val('');
 				$('#edit_employment_info_modal').modal('hide');
-				$('#mod_body').html('Employee details creation successful');
-				$('#successModal').modal('show');
-				showEmployeeDataInfo();
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: showEmployeeDataInfo(),
+				});
 				// employementInfo();
 			}
 		},
@@ -810,6 +921,7 @@ function EditEmpInf() {
 }
 
 function showEmployeeDataInfo() {
+	$('#empDataInfoError').html('');
 	let company_id = localStorage.getItem('company_id');
 	let employee_id = window.location.search.split('=')[1];
 	// $('#list_workShift_table').hide();
@@ -817,8 +929,11 @@ function showEmployeeDataInfo() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -830,24 +945,37 @@ function showEmployeeDataInfo() {
 					employment_type_name,
 					supervisor_name,
 					date_of_employ,
+					date_exited,
 				} = response.data.data.employee_data;
 				let sup_name = '';
 				if (supervisor_name !== 'N/A') {
 					sup_name = `${supervisor_name.lastname} ${supervisor_name.firstname} ${supervisor_name.middlename}`;
 				}
 				let empee;
+				let exdee;
 				if (date_of_employ === '0000-00-00 00:00:00' || date_of_employ === '0000-00-00') {
 					empee = '';
 				} else {
 					empee = moment(date_of_employ, 'YYYY-MM-DD').format('LL');
 				}
+				if (
+					date_exited === '0000-00-00 00:00:00' ||
+					date_exited === '0000-00-00' ||
+					date_exited === ''
+				) {
+					exdee = '';
+				} else {
+					exdee = moment(date_exited, 'YYYY-MM-DD').format('LL');
+				}
 				$('#branch').html(branch_name);
 				$('#employment_type').html(employment_type_name);
 				$('#date_of_employment').html(empee);
+				$('#date_of_exiting').html(exdee);
 				$('#supervisor').html(sup_name);
 				// $('#list_workShift_loader').hide();
 				// $('#list_workShift_table').show();
 			} else {
+				$('#empDataInfoError').html('No Data');
 				// $('#list_workShift_body').html(`<tr><td colspan="4">No record</td></tr>`);
 				// $('#list_workShift_loader').hide();
 				// $('#list_workShift_table').show();
@@ -855,7 +983,7 @@ function showEmployeeDataInfo() {
 		})
 		.catch(function(error) {
 			console.log(error);
-
+			$('#empDataInfoError').html('Error Loading Data');
 			// $('#list_workShift_loader').hide();
 			// $('#list_workShift_table').show();
 			// $('#list_workShift_body').html(
@@ -877,8 +1005,11 @@ function viewEmpInfo() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -949,7 +1080,7 @@ function addJobTitle() {
 	let data = {
 		from_date: from,
 		to_date: to,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		position_id: name,
 	};
@@ -958,6 +1089,9 @@ function addJobTitle() {
 		dataType: 'json',
 		url: `${api_path}hrm/add_company_employee_position_history`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -967,20 +1101,30 @@ function addJobTitle() {
 			console.log(error);
 			$('#add_jobTitle_loader').hide();
 			$('#add_jobTitle_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_jobTitle_loader').hide();
 				$('#add_jobTitle_btn').show();
 
-				$('#mod_body').html('Job Title creation successful');
-				$('#successModal').modal('show');
 				$('#jobTitle_name').val('');
 				$('#jobTitle_from').val('');
 				$('#jobTitle_to').val('');
 				$('#jobTitle_display').toggle();
-				listJobTitle();
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listJobTitle(),
+				});
 			}
 		},
 	});
@@ -997,7 +1141,10 @@ function listJobTitle() {
 		dataType: 'json',
 		cache: false,
 		url: `${api_path}hrm/list_company_employee_positions_history`,
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -1101,7 +1248,10 @@ function viewJobTitle(id) {
 			params: {
 				history_id: id,
 				// employee_id: employee_id,
-				company_id: company_id,
+				// company_id: company_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -1122,7 +1272,7 @@ function viewJobTitle(id) {
 			$('#edit_jobTitle_loader').hide();
 			$('#edit_jobTitle_btn').show();
 
-			$('#edit_jobTitle_error').html(error);
+			$('#edit_jobTitle_error').html(error.statusText);
 		})
 		.then(function() {
 			// always executed
@@ -1141,7 +1291,7 @@ function editJobTitle() {
 	let data = {
 		// started: from,
 		// jobTitle_id: name,
-		company_id: company_id,
+		// company_id: company_id,
 		// employee_id: employee_id,
 		enddate: to,
 		history_id: id,
@@ -1152,6 +1302,9 @@ function editJobTitle() {
 		dataType: 'json',
 		url: `${api_path}hrm/end_position_history`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -1161,7 +1314,12 @@ function editJobTitle() {
 			console.log(res);
 			$('#edit_jobTitle_loader').hide();
 			$('#edit_jobTitle_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${res.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
@@ -1170,13 +1328,17 @@ function editJobTitle() {
 				$('#edit_jobTitle_error').html('');
 				$('#edit_jobTitle_modal').modal('hide');
 
-				$('#mod_body').html('Job Title Edit Successful');
-				$('#successModal').modal('show');
-				listJobTitle();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: listJobTitle(),
+				});
 			} else {
 				$('#edit_jobTitle_loader').hide();
 				$('#edit_jobTitle_btn').show();
-				$('#edit_jobTitle_error').html(response.msg);
+				$('#edit_jobTitle_error').html(response.statusText);
 			}
 		},
 	});
@@ -1193,7 +1355,7 @@ function deleteJobTitle(id) {
 		let data = {
 			id: id,
 			// employee_id: employee_id,
-			company_id: company_id,
+			// company_id: company_id,
 		};
 
 		$.ajax({
@@ -1201,23 +1363,42 @@ function deleteJobTitle(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_company_employee_position_history`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#jobTitle_loader${id}`).hide();
 				$(`#jobTitle_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#jobTitle_row${id}`).remove();
 					$(`#jobTitle_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+					});
 				} else {
 					$(`#jobTitle_loader${id}`).hide();
 					$(`#jobTitle_row${id}`).show();
 
-					alert('error');
+					Swal.fire({
+						title: 'Error!',
+						text: `${response.statusText}`,
+						icon: 'error',
+						confirmButtonText: 'Close',
+					});
 				}
 			},
 		});
@@ -1234,7 +1415,10 @@ function fetch_jobTitle() {
 		dataType: 'json',
 		cache: false,
 		url: `${api_path}hrm/list_of_company_positions`,
-		data: { company_id: company_id, page: 1, limit: 1000 },
+		data: { page: 1, limit: 1000 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -1275,13 +1459,17 @@ function fetch_jobTitle() {
 function showAdditionalInfo() {
 	let company_id = localStorage.getItem('company_id');
 	let employee_id = window.location.search.split('=')[1];
+	$('#edit_additional_error').html('');
 	// $('#list_workShift_table').hide();
 	// $('#list_workShift_loader').show();
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -1298,21 +1486,12 @@ function showAdditionalInfo() {
 					$('#additional_info').val(additional_info);
 				}
 			} else {
-				// $('#list_workShift_body').html(`<tr><td colspan="4">No record</td></tr>`);
-				// $('#list_workShift_loader').hide();
-				// $('#list_workShift_table').show();
+				$('#edit_additional_error').html(`No Data`);
 			}
 		})
 		.catch(function(error) {
 			console.log(error);
-
-			// $('#list_workShift_loader').hide();
-			// $('#list_workShift_table').show();
-			// $('#list_workShift_body').html(
-			// 	`<tr><td colspan="4" style="color:red;">Error</td></tr>`,
-			// );
-
-			// $('#edit_QC_error').html(error);
+			$('#edit_additional_error').html(error.statusText);
 		})
 		.then(function() {
 			// always executed
@@ -1325,11 +1504,10 @@ function addAdditionalInfo() {
 
 	$('#edit_additional_btn').hide();
 	$('#edit_additional_loader').show();
-
 	let name = $('#additional_info').val();
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		additional_info: name,
 	};
@@ -1338,6 +1516,9 @@ function addAdditionalInfo() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_additional_information`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -1347,18 +1528,34 @@ function addAdditionalInfo() {
 			console.log(error);
 			$('#edit_additional_loader').hide();
 			$('#edit_additional_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#edit_additional_loader').hide();
 				$('#edit_additional_btn').show();
 				$('#edit_additional_info_modal').modal('hide');
-				$('#mod_body').html('Additional Info Edit successful');
-				$('#successModal').modal('show');
-				// $('#additional_info').val('');
 
-				showAdditionalInfo();
+				// $('#additional_info').val('');
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: showAdditionalInfo(),
+				});
+			} else {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 		},
 	});
@@ -1384,6 +1581,12 @@ document.addEventListener('click', (event) => {
 
 function getEmployeeEmail() {
 	// let param = $('#emp_email').val();
+	$('#view_ess_connect_btn').show();
+	$('#view_ess_link_btn').hide();
+	$('#view_ess_error').html('');
+	$('#view_ess_name').html('');
+	$('#view_ess_email').html('');
+	$('#view_ess_connect_btn').attr('data', '');
 	$('#view_ess_conect_btn').attr('disabled', true);
 	$('#view_ess_modal').modal('show');
 	let company_id = localStorage.getItem('company_id');
@@ -1395,17 +1598,24 @@ function getEmployeeEmail() {
 				// company_id: company_id,
 				email: param,
 			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 		})
 		.then(function(response) {
 			// console.log('res', response);
 
-			if (response.data.data) {
+			if (response.data.data && response.data.data.length !== 0) {
 				let { firstname, lastname, othernames, email, user_id } = response.data.data;
 				$('#view_ess_name').html(`${firstname} ${othernames} ${lastname}`);
 				$('#view_ess_email').html(email);
 				$('#view_ess_connect_btn').attr('data', user_id);
 			} else {
-				$('#view_ess_error').html('No record found');
+				$('#view_ess_error').html(
+					`${param} was not  found. Verify that the email address is correct and proceed to send Registration link`,
+				);
+				$('#view_ess_connect_btn').hide();
+				$('#view_ess_link_btn').show();
 			}
 
 			$('#view_ess_loader').hide();
@@ -1423,11 +1633,71 @@ function getEmployeeEmail() {
 			// $('#emp_email_list').addClass('show');
 		})
 		.catch(function(error) {
-			$('#view_ess_error').html('Error');
+			$('#view_ess_error').html(error.statusText);
 
 			$('#view_ess_loader').hide();
 			$('#view_ess_modal_body').show();
 			console.log(error);
+			// $('#emp_email_list').html(`<em>Error loading data</em>`);
+		})
+		.then(function() {
+			// always executed
+		});
+}
+function sendLink() {
+	// let param = $('#emp_email').val();
+	$('#view_ess_link_btn').hide();
+	$('#view_ess_connect_loader').show();
+	let company_id = localStorage.getItem('company_id');
+	let param = $('#emp_email').val();
+
+	axios
+		.get(`${api_path}hrm/ess_email_invite`, {
+			params: {
+				// company_id: company_id,
+				email: param,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
+		})
+		.then(function(response) {
+			console.log('res', response);
+			if (response.data.status === '200') {
+				$('#view_ess_connect_loader').hide();
+				$('#view_ess_link_btn').show();
+				$('#view_ess_modal').modal('hide');
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+				});
+			} else {
+				$('#view_ess_connect_loader').hide();
+				$('#view_ess_link_btn').show();
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
+			}
+		})
+		.catch(function(error) {
+			console.log(error);
+			$('#view_ess_connect_loader').hide();
+			$('#view_ess_link_btn').show();
+			Swal.fire({
+				title: 'Error!',
+				text: `Error sending request`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
+			// $('#view_ess_error').html(error.statusText);
+			// $('#view_ess_loader').hide();
+			// $('#view_ess_modal_body').show();
+			// console.log(error);
 			// $('#emp_email_list').html(`<em>Error loading data</em>`);
 		})
 		.then(function() {
@@ -1448,7 +1718,7 @@ function connectEmployee() {
 
 	let data = {
 		user_id: user_id,
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		email: email,
 	};
@@ -1457,6 +1727,9 @@ function connectEmployee() {
 		dataType: 'json',
 		url: `${api_path}hrm/assign_ess_users`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -1466,17 +1739,26 @@ function connectEmployee() {
 			console.log(error);
 			$('#view_ess_connect_loader').hide();
 			$('#view_ess_connect_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#view_ess_connect_loader').hide();
 				$('#view_ess_connect_btn').show();
 				$('#view_ess_modal').modal('hide');
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: showConnectedInfo(),
+				});
 
-				$('#mod_body').html('Employee Connect successful');
-				$('#successModal').modal('show');
-				showConnectedInfo();
 				// $('#jobTitle_name').val('');
 				// $('#jobTitle_from').val('');
 				// $('#jobTitle_to').val('');
@@ -1485,7 +1767,12 @@ function connectEmployee() {
 			} else {
 				$('#view_ess_connect_loader').hide();
 				$('#view_ess_connect_btn').show();
-				alert(response.msg);
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 		},
 	});
@@ -1501,8 +1788,11 @@ function showConnectedInfo() {
 	axios
 		.get(`${api_path}hrm/ess_company_staff_image`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {

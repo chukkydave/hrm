@@ -73,7 +73,10 @@ function fetch_employee_edit_details_job_titles() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_profile',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -217,7 +220,10 @@ function fetch_employment_info() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_employment_info',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -318,7 +324,10 @@ function load_position() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_positions',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -360,7 +369,10 @@ function delete_history(id) {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/delete_company_employee_position_history',
-		data: { company_id: company_id, id: id },
+		data: { id: id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 
@@ -455,9 +467,12 @@ function add_position_history() {
 		data: {
 			from_date: from_date,
 			to_date: to_date,
-			company_id: company_id,
+
 			employee_id: employee_id,
 			position_id: position_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
@@ -505,7 +520,10 @@ function list_of_position_history() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/list_company_employee_positions_history',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {

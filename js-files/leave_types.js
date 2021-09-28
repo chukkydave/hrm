@@ -30,9 +30,11 @@ function leave_types(page) {
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_leaves_type',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -43,7 +45,7 @@ function leave_types(page) {
 
 			if (response.status == '200') {
 				$('#loading').hide();
-				if (response.data.length > 0) {
+				if (response.data && response.data.length > 0) {
 					var k = 1;
 					$.each(response['data'], function(i, v) {
 						strTable += '<tr id="row_' + response['data'][i]['leave_id'] + '">';
@@ -117,7 +119,7 @@ function leave_types(page) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="6">' + response.msg + '</td></tr>';
+					strTable = '<tr><td colspan="6">No record found</td></tr>';
 				}
 
 				$('#leaveData').html(strTable);
@@ -164,8 +166,10 @@ function delete_leave_type(leave_id) {
 		dataType: 'json',
 		url: api_path + 'hrm/delete_company_leave',
 		data: {
-			company_id: company_id,
 			leave_id: leave_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
@@ -174,14 +178,32 @@ function delete_leave_type(leave_id) {
 			$('#loader_row_' + leave_id).hide();
 			$('#row_' + leave_id).show();
 
-			alert('connection error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 
 		success: function(response) {
 			// console.log(response);
 			if (response.status == '200') {
 				// $('#row_'+user_id).hide();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: leave_types(''),
+				});
 			} else if (response.status == '401') {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 
 			$('#loader_row_' + leave_id).hide();
@@ -201,9 +223,11 @@ function activate_leave(leave_id) {
 		dataType: 'json',
 		url: api_path + 'hrm/activate_company_leave',
 		data: {
-			company_id: company_id,
 			leave_id: leave_id,
 			active_status: active_status,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
@@ -246,9 +270,11 @@ function deactivate_leave(leave_id) {
 		dataType: 'json',
 		url: api_path + 'hrm/activate_company_leave',
 		data: {
-			company_id: company_id,
 			leave_id: leave_id,
 			active_status: active_status,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError

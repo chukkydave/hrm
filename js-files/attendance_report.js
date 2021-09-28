@@ -58,7 +58,10 @@ function load_department() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_departments',
 		type: 'POST',
-		data: { company_id: company_id, page: 1, limit: 100 },
+		data: { page: 1, limit: 100 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -105,15 +108,10 @@ function attendance_report(page) {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: `${api_path}hrm/attendance_report?company_id=${company_id}&page=${page}&limit=${limit}&filter_month=${monthy}&filter_year=${year}&order=${order}&user_id=${user_id}`,
-		// data: {
-		// 	company_id: company_id,
-		// 	page: page,
-		// 	limit: limit,
-		// 	date_range: date_range,
-		// 	department: employee_dept,
-		// 	order: order
-		// },
+		url: `${api_path}hrm/attendance_report?page=${page}&limit=${limit}&filter_month=${monthy}&filter_year=${year}&order=${order}&user_id=${user_id}`,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -129,7 +127,7 @@ function attendance_report(page) {
 						strTable += `<td class="td-title">${v.fullname}</td>`;
 						strTable += `<td class="td-title">${v.workshift}</td>`;
 						strTable += `<td class="td-title">${v.summary_of_days_worked}/${v.monthly_workdays}</td>`;
-						$(v.days_of_work).map((i, v) => {
+						$(v.theday).map((i, v) => {
 							let status;
 							if (v.status == 'nill') {
 								status = `"`;
@@ -142,6 +140,9 @@ function attendance_report(page) {
 							} else if (v.status == 'Holiday') {
 								status =
 									'<i data-toggle="tooltip" title="Holiday" class="fab fa-houzz"></i>';
+							} else if (v.status === 'Leave') {
+								status =
+									'<img style="max-width:15.781px; max-height:18px;" src="./assets/images/leave.ico"/>';
 							} else {
 								status = v.status;
 							}
@@ -151,37 +152,6 @@ function attendance_report(page) {
 						strTable += `</tr>`;
 						k++;
 					});
-					// $.each(response['data'], function(i, v) {
-					// 	strTable += '<tr id="row_' + response['data'][i]['attendance_id'] + '">';
-
-					// 	strTable += '<td>' + response['data'][i]['date'] + '</td>';
-					// 	strTable += `<td class="sortAll" id="${v.employee_id}">${v.employee_name}</td>`;
-					// 	strTable += '<td>' + response['data'][i]['clock_in'] + '</td>';
-					// 	strTable += '<td>' + response['data'][i]['clock_out'] + '</td>';
-					// 	// strTable += '<td>' + response['data'][i]['work_hours'] + '</td>';
-					// 	strTable += '<td>' + response['data'][i]['workshift'] + '</td>';
-					// 	// strTable += '<td>' + response['data'][i]['attendance_type'] + '</td>';
-					// 	strTable += '<td>' + response['data'][i]['status'] + '</td>';
-
-					// 	strTable +=
-					// 		'<td valign="top"><a href="' +
-					// 		base_url +
-					// 		'edit_employee_attendance?id=' +
-					// 		response['data'][i]['attendance_id'] +
-					// 		'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp; <a class="delete_attendance" style="cursor: pointer;" id="att_' +
-					// 		response['data'][i]['attendance_id'] +
-					// 		'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Attendance"></i></a></td>';
-
-					// 	strTable += '</tr>';
-
-					// 	strTable +=
-					// 		'<tr style="display: none;" id="loader_row_' + response['data'][i]['attendance_id'] + '">';
-					// 	strTable += '<td colspan="7"><i class="fa fa-spinner fa-spin fa-fw fa-2x"  id="loading"></i>';
-					// 	strTable += '</td>';
-					// 	strTable += '</tr>';
-
-					// 	k++;
-					// });
 				} else {
 					strTable = '<tr><td colspan="34">' + response.msg + '</td></tr>';
 				}

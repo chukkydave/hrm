@@ -21,9 +21,11 @@ function list_of_positions(page) {
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_positions',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -34,7 +36,7 @@ function list_of_positions(page) {
 
 			if (response.status == '200') {
 				$('#loading').hide();
-				if (response.data.length > 0) {
+				if (response.data && response.data.length > 0) {
 					$.each(response['data'], function(i, v) {
 						strTable += '<tr id="row_' + response['data'][i]['position_id'] + '">';
 						// strTable += '<td>PN'+response['data'][i]['position_id']+'</td>';
@@ -63,7 +65,11 @@ function list_of_positions(page) {
 						strTable += '</tr>';
 					});
 				} else {
-					strTable = '<tr><td colspan="4">No record.</td></tr>';
+					strTable = '<tr><td colspan="4">No record found</td></tr>';
+				}
+
+				if (!response.data) {
+					strTable = '<tr><td colspan="4">No record found</td></tr>';
 				}
 
 				$('#pagination').twbsPagination({
@@ -133,23 +139,33 @@ function add_company_position() {
 		data: {
 			position_name: position_name,
 			position_description: position_description,
-			company_id: company_id,
+
 			leave_eligible: eligibility,
 			alloted_leave: alloted,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_position').modal('show');
-
-				$('#modal_position').on('hidden.bs.modal', function() {
-					// do something…
-					$('#position_display').hide();
-					window.location.reload();
-					//window.location.href = base_url+"/erp/hrm/employees";
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
 				});
+				// $('#modal_position').modal('show');
+
+				// $('#modal_position').on('hidden.bs.modal', function() {
+				// 	// do something…
+				// 	$('#position_display').hide();
+				// 	window.location.reload();
+				// 	//window.location.href = base_url+"/erp/hrm/employees";
+				// });
 			} else if (response.status == '400') {
 				// coder error message
 
@@ -188,8 +204,10 @@ function delete_position(position_id) {
 		dataType: 'json',
 		url: api_path + 'hrm/delete_company_position',
 		data: {
-			company_id: company_id,
 			position_id: position_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
@@ -198,14 +216,32 @@ function delete_position(position_id) {
 			$('#loader_row_' + position_id).hide();
 			$('#row_' + position_id).show();
 
-			alert('connection error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 
 		success: function(response) {
 			// console.log(response);
 			if (response.status == '200') {
 				// $('#row_'+user_id).hide();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					// onClose: window.location.reload,
+				});
 			} else if (response.status == '401') {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 
 			$('#loader_row_' + position_id).hide();

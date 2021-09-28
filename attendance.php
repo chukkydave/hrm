@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
@@ -17,7 +18,7 @@ include("_common/header.php");
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Attendance </h3>
+                <h3>Daily Attendance </h3>
             </div>
 
             <div class="title_right" style="text-align: right">
@@ -27,6 +28,9 @@ include("_common/header.php");
                         <button type="button" class="btn btn-primary" id="filter_attendence">Filter</button>
 
                         <button type="button" class="btn btn-success" id="add_attendence">Add</button>
+                        <button type="button" class="btn btn-success" id="add_position" data-toggle="collapse"
+                            data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">Upload
+                            file</button>
 
                         <!-- <button type="button" class="btn btn-success" id="upload_attendence">Upload</button> -->
 
@@ -38,7 +42,7 @@ include("_common/header.php");
         </div>
 
 
-        <div id="upload_display" style="display: none;">
+        <div class="collapse" id="collapseExample4">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
@@ -64,6 +68,7 @@ include("_common/header.php");
                                             class="form-control col-md-7 col-xs-12 required">
                                     </div>
                                 </div>
+                                <pre id="output"></pre>
 
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
@@ -87,6 +92,54 @@ include("_common/header.php");
 
                             </span>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse" id="collapseExample5">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="x_panel">
+
+                        <div class="x_content">
+                            <br />
+                            <span id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                        for="notification_text">File<span>*</span>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input class="form-control col-md-7 col-xs-12 required" id="datFile">
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="error_dat">
+                                        <!--  <div class="text-danger form-control col-md-7 col-xs-12" style="display: none;" > -->
+
+                                    </div>
+                                </div>
+                        </div>
+
+
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <!-- <button class="btn btn-primary" type="button">Cancel</button>
+                          <button class="btn btn-primary" type="reset">Reset</button> -->
+                                <button type="button" class="btn btn-success" id="add_dat">Upload</button>
+                                <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;" id="dat_loader"></i>
+                            </div>
+                        </div>
+
+                        </span>
                     </div>
                 </div>
             </div>
@@ -155,6 +208,8 @@ include("_common/header.php");
                                             <option value="Present">Present</option>
                                             <option value="Leave">Leave</option>
                                             <option value="Absent">Absent</option>
+                                            <option value="Late">Late</option>
+                                            <option value="Overclocked">Overclocked</option>
 
                                         </select>
                                     </div>
@@ -276,7 +331,7 @@ include("_common/header.php");
                         <div class="table-responsive">
                             <select class="form-select no-border" id="order_by" aria-label="Default select example">
                                 <option value="latest">Order by Latest</option>
-                                <option value="alphabetical">Order from A-Z </option>
+                                <!-- <option value="alphabetical">Order from A-Z </option> -->
                             </select>
                             <table class="table table-striped jambo_table bulk_action">
                                 <thead>
@@ -354,5 +409,5 @@ include("_common/header.php");
 <script src="js-files/attendance.js"></script>
 
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

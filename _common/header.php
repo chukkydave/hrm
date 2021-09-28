@@ -36,6 +36,15 @@
 
     <!-- Custom Theme Style -->
     <link href="assets/admin_template/build/css/custom.min.css" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/attempt-to-update-packagist/pnotify.min.css"
+        integrity="sha512-/odx7DzBB1VWp8CF129ic9JIUkR8Lv32iJcGeugeJ6JyeYwdUKtlYAs579Bg1EOtKnuFPyMYF/kFkc06YlBXLw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/pnotify/attempt-to-update-packagist/pnotify.mobile.min.css"
+        integrity="sha512-JaG15+IIzk+zd5R143YThPq4or/YMUokBQr2d7SDflDWCtgjYtrBAJA6KnHE7EzDG34uOxNBj2IDDnGWF/3E1A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
 
 
     <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.8.0/echarts-en.common.js"></script>-->
@@ -2487,25 +2496,17 @@
                                 </li> -->
 
                                     <li><a href="employees"><i class="fa fa-users"></i> Employees </a></li>
-
-                                    <li><a href="leaves"><i class="fa fa-edit"></i> Leaves </a></li>
-
-                                    <li><a href="terminations"><i class="fa fa-user"></i> Exits </a></li>
-
-                                    <li><a href="grievances"><i class="fa fa-edit"></i> Grievances </a></li>
-
-                                    <!-- <li><a href="attendance"><i class="fa fa-bell-o"></i>Attendance</a></li> -->
-
                                     <li><a><i class="fa fa-user"></i> Attendance<span
                                                 class="fa fa-chevron-down"></span></a>
 
                                         <ul class="nav child_menu">
                                             <li><a href="attendance">Daily Attendance</a></li>
                                             <li><a href="attendance_report">Attendance Report</a></li>
-
                                         </ul>
 
                                     </li>
+
+                                    <li><a href="leaves"><i class="fa fa-edit"></i> Leaves </a></li>
 
 
                                     <li><a><i class="fa fa-money"></i> Payroll <span
@@ -2517,6 +2518,24 @@
                                             <!-- <li><a href="payroll_settings">Payroll Settings</a></li> -->
                                         </ul>
                                     </li>
+                                    <li><a href="grievances"><i class="fa fa-edit"></i> Grievances </a></li>
+
+                                    <!-- <li><a href="terminations"><i class="fa fa-power-off"></i> Exits </a></li> -->
+                                    <li><a><i class="fa fa-power-off"></i> Exits<span
+                                                class="fa fa-chevron-down"></span></a>
+
+                                        <ul class="nav child_menu">
+                                            <li><a href="terminations">All Exit</a></li>
+                                            <li><a href="exit_config">Exit Configuration</a></li>
+                                        </ul>
+
+                                    </li>
+
+
+                                    <!-- <li><a href="attendance"><i class="fa fa-bell-o"></i>Attendance</a></li> -->
+
+
+
 
 
                                     <li id="dropMe"><a><i class="fa fa-user"></i> HR Settings <span
@@ -2530,7 +2549,7 @@
                                             <li><a href="branches">Company Branches</a></li>
                                             <li><a href="employement_type">Employment Types</a></li>
                                             <li><a href="employment_payment_types">Salary Component</a></li>
-                                            <li><a href="#">Company Profile Settings</a></li>
+                                            <!-- <li><a href="#">Company Profile Settings</a></li> -->
                                             <li><a href="emp_doc_type">Employee Doc Types</a></li>
                                             <li><a href="company_holidays">Company Holidays</a></li>
                                             <li><a href="work_shift">Work Shifts</a></li>

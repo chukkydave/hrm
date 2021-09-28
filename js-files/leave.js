@@ -48,8 +48,10 @@ function delete_leave(leave_id) {
 		dataType: 'json',
 		url: api_path + 'hrm/delete_employee_leave',
 		data: {
-			company_id: company_id,
 			leave_id: leave_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
@@ -58,7 +60,12 @@ function delete_leave(leave_id) {
 			// alert('Connection error');
 			$('#loader_row_' + leave_id).hide();
 			$('#row_' + leave_id).show();
-
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 			// alert('connection error');
 		},
 
@@ -67,7 +74,20 @@ function delete_leave(leave_id) {
 			if (response.status == '200') {
 				// $('#row_'+user_id).hide();
 				// alert(leave_id);
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					// onClose: window.lo,
+				});
 			} else if (response.status == '401') {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 
 			$('#loader_row_' + leave_id).hide();
@@ -94,13 +114,15 @@ function list_of_leaves_applicant(page) {
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_leaves_applicant',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
 			employee_id: employee_id,
 			leave_type: leave_type,
 			leave_code: leave_code,
 			date_range: date_range,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -198,7 +220,7 @@ function list_of_leaves_applicant(page) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="9">No record.</td></tr>';
+					strTable = '<tr><td colspan="9">No record found</td></tr>';
 				}
 
 				$('#pagination').twbsPagination({
@@ -222,7 +244,7 @@ function list_of_leaves_applicant(page) {
 				$('#loading').hide();
 				// alert(response.msg);
 				strTable += '<tr>';
-				strTable += '<td colspan="10">No leave found for this Employee</td>';
+				strTable += `<td colspan="10" style="color:red;">${response.msg}</td>`;
 				strTable += '</tr>';
 
 				$('#leavesData').html(strTable);
@@ -232,7 +254,7 @@ function list_of_leaves_applicant(page) {
 				$('#loading').hide();
 				// alert(response.msg);
 				strTable += '<tr>';
-				strTable += '<td colspan="10">' + response.msg + '</td>';
+				strTable += '<td colspan="10" style="color:red;">' + response.msg + '</td>';
 				strTable += '</tr>';
 
 				$('#leavesData').html(strTable);
@@ -264,9 +286,11 @@ function load_employee() {
 		url: api_path + 'hrm/list_of_company_employees',
 		type: 'POST',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		dataType: 'json',
 
@@ -303,9 +327,11 @@ function load_leave_type() {
 		url: api_path + 'hrm/list_of_company_leaves_type',
 		type: 'POST',
 		data: {
-			company_id: company_id,
 			page: 1,
 			limit: 20,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		dataType: 'json',
 

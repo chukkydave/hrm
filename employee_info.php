@@ -204,7 +204,7 @@ include_once("../gen/_common/header.php"); // header contents
                                 role="tab" aria-controls="profile" aria-selected="false">Employment Info</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link no" id="salary-tab" data-toggle="tab" href="#salary_info_block"
+                            <a class="nav-link no" id="salary-tabss" data-toggle="tab" href="#salary_info_blockss"
                                 role="tab" aria-controls="salary" aria-selected="false">Salary Info</a>
                         </li>
                         <li class="nav-item">
@@ -672,6 +672,15 @@ include_once("../gen/_common/header.php"); // header contents
                                                 <p id="date_of_employment"></p>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <p><strong>Exit Date:</strong></p>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                <p id="date_of_exiting"></p>
+                                            </div>
+                                        </div>
 
                                         <div class="row">
                                             <div class="col-md-4 col-sm-4 col-xs-6">
@@ -680,6 +689,12 @@ include_once("../gen/_common/header.php"); // header contents
 
                                             <div class="col-md-6 col-sm-6 col-xs-6">
                                                 <p id="supervisor"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <p id="empDataInfoError" style="color:red;"></p>
                                             </div>
                                         </div>
 
@@ -928,7 +943,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="tooltip" id="add_workShift" title="Add Department">
+                                        <li data-toggle="tooltip" id="add_workShift" title="Add Work Shift">
                                             <a class=""><i class="fa fa-plus"></i></a>
                                         </li>
 
@@ -1145,7 +1160,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                 </div>
 
-                <div id="salary_info_block" class="tab-pane fade" role="tabpanel" aria-labelledby="salary-tab">
+                <div id="salary_info_blockss" class="tab-pane fade" role="tabpanel" aria-labelledby="salary-tabss">
 
                     <!-- <br> -->
                     <div class="row">
@@ -1474,7 +1489,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <!-- <div style=" display: grid; justify-content: center; align-items: center;
                                                         font-weight: bold; margin-right: 10px;">Per</div> -->
                                             <div style="margin-left:1.5em">
-                                                <Select class="form-control" style="border:none;" id="salary_type">
+                                                <Select class="form-control" id="salary_type">
                                                     <option>Select</option>
                                                     <option value="Hour">Hourly</option>
                                                     <option value="Week">Weekly</option>
@@ -1487,7 +1502,7 @@ include_once("../gen/_common/header.php"); // header contents
                                         </div>
 
                                         <div style="font-size:1.5em; color: #26B99A;"><b>Net Payment:
-                                                <span id="net_payment">0</span></b></div>
+                                                <span id="net_payment">0.00</span></b></div>
                                         <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                             id="save_pay_loader"></i>
                                         <button style="margin-top:2em; display:none;" class="btn btn-sm btn-primary"
@@ -1924,46 +1939,106 @@ include_once("../gen/_common/header.php"); // header contents
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="table-responsive">
-                                <table class="table table-striped jambo_table bulk_action">
-                                    <thead>
-                                        <tr class="headings">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Employee Attendance History</h2>
+                                    <ul class="nav navbar-right panel_toolbox">
 
-
-                                            <th class="column-title">Date</th>
-
-                                            <th class="column-title">Clock In Time</th>
-                                            <th class="column-title">Clock Out Time</th>
-                                            <th class="column-title">Work Hours</th>
-                                            <th class="column-title">Over Time/Late By</th>
-
-
-                                            <th class="bulk-actions" colspan="5">
-                                                <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions (
-                                                    <span class="action-cnt"> </span> ) <i
-                                                        class="fa fa-chevron-down"></i></a>
-                                            </th>
-                                        </tr>
-                                    </thead>
-
-                                    <tr id="loading_atten">
-                                        <td colspan="5"><i class="fa fa-spinner fa-spin fa-fw fa-3x"
-                                                style="display: none;"></i></td>
-                                    </tr>
-
-                                    <tbody id="attData">
+                                        <li><button type="button" class="btn btn-sm btn-primary" data-toggle="collapse"
+                                                data-target="#collapseExample23" aria-expanded="false"
+                                                aria-controls="collapseExample">Filter</button></li>
+                                    </ul>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <div class="collapse" id="collapseExample23" style="margin-bottom:2em;">
 
 
 
-                                    </tbody>
+                                        <div class="form-row">
+
+                                            <div class="col-sm-4 col-xs-4">
+                                                <select class="form-control col-sm-7 col-xs-12" id="atten_month_filter">
+                                                    <option value="0">January</option>
+                                                    <option value="1">Febuary</option>
+                                                    <option value="2">March</option>
+                                                    <option value="3">April</option>
+                                                    <option value="4">May</option>
+                                                    <option value="5">June</option>
+                                                    <option value="6">July</option>
+                                                    <option value="7">August</option>
+                                                    <option value="8">September</option>
+                                                    <option value="9">October</option>
+                                                    <option value="10">November</option>
+                                                    <option value="11">December</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="col-sm-4 col-xs-4">
+                                                <select class="form-control col-sm-7 col-xs-12" id="atten_year_filter">
+                                                    <?php
+                                                    for ($year = (int)date('Y'); 1900 <= $year; $year--): ?>
+                                                    <option value="<?=$year;?>"><?=$year;?></option>
+                                                    <?php endfor; ?>
+                                                </select>
+
+                                            </div>
+
+                                            <button type="button" class="btn btn-success"
+                                                id="atten_filter">Search</button>
 
 
-                                </table>
+                                        </div>
+
+                                    </div>
+                                    <!-- <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
+                                        id="loading_atten"></i> -->
+                                    <div class="table-responsive">
+                                        <table class="table table-striped jambo_table bulk_action">
+                                            <thead>
+                                                <tr class="headings">
 
 
+                                                    <th class="column-title">Date</th>
+
+                                                    <th class="column-title">Clock In Time</th>
+                                                    <th class="column-title">Clock Out Time</th>
+                                                    <th class="column-title">Work Hours</th>
+                                                    <!-- <th class="column-title">Over Time/Late By</th> -->
+
+
+                                                    <th class="bulk-actions" colspan="5">
+                                                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk
+                                                            Actions (
+                                                            <span class="action-cnt"> </span> ) <i
+                                                                class="fa fa-chevron-down"></i></a>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <tr id="loading_atten">
+                                                <td colspan="5"><i class="fa fa-spinner fa-spin fa-fw fa-3x"
+                                                        style="display: none;"></i></td>
+                                            </tr>
+
+                                            <tbody id="attData">
+
+
+
+                                            </tbody>
+
+
+                                        </table>
+
+
+
+
+                                    </div>
+                                </div>
 
 
                             </div>
+
                         </div>
                     </div>
 
@@ -2333,11 +2408,11 @@ include_once("../gen/_common/header.php"); // header contents
                                 <!-- <input type="text"  required="required" class="form-control col-md-7 col-xs-12 required"> -->
                                 <select class="form-control col-md-7 col-xs-12 required" id="edit_basic_status">
                                     <option value="">-- Select --</option>
-                                    <option value="Suspended">Suspended</option>
+                                    <!-- <option value="Suspended">Suspended</option> -->
                                     <option value="Active">Active</option>
-                                    <option value="Leave">Leave</option>
+                                    <!-- <option value="Leave">Leave</option> -->
                                     <option value="Inactive">Inactive</option>
-                                    <option value="Terminated/Resigned">Terminated/Resigned</option>
+                                    <option value="Exited">Exited</option>
                                 </select>
                             </div>
                         </div>
@@ -3034,6 +3109,8 @@ include_once("../gen/_common/header.php"); // header contents
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button style="display:none;" type="button" class="btn btn-success" id="view_ess_link_btn">Send
+                    Link</button>
                 <button type="button" class="btn btn-success" id="view_ess_connect_btn">Connect</button>
                 <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;" id="view_ess_connect_loader"></i>
             </div>
@@ -3191,8 +3268,7 @@ include_once("../gen/_common/header.php"); // header contents
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header ">
-                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Qualifcations and
-                    Certifications
+                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Next of Kin
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -3313,9 +3389,9 @@ include_once("../gen/_common/header.php"); // header contents
                             <!-- <div class="invoice-details"> -->
 
                             <ul class="list-unstyled">
-                                <li>
+                                <!-- <li>
                                     <h3 class="text-uppercase">Payslip #49029</h3>
-                                </li>
+                                </li> -->
                                 <li>Pay Period: <span id="pay_period_datey">March 15th 2019 - March 28th 2019</span>
                                 </li>
                                 <li>Payment Date: <span id="pay_datey">March 15th 2019</span></li>
@@ -3464,4 +3540,5 @@ include_once("../gen/_common/footer.php");
     <script type="text/javascript" src="js-files/employment_info_jsFiles/leave_days.js"></script>
     <script type="text/javascript" src="js-files/employment_info_jsFiles/salary_info.js"></script>
     <script type="text/javascript" src="js-files/employment_info_jsFiles/payslip.js"></script>
+    <script type="text/javascript" src="js-files/employment_info_jsFiles/attendance.js"></script>
     <script type="text/javascript" src="js-files/employee_info_general.js"></script>

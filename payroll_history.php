@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 <!-- page content -->
 <div class="right_col" role="main">
@@ -57,9 +58,9 @@ include("_common/header.php");
 
                                 <div class="col-sm-4 col-xs-4">
                                     <select class="form-control" name="status_filter" id="status_filter">
-                                        <!-- <option>Status</option> -->
+                                        <option value="all">All</option>
                                         <option value="active">Active</option>
-                                        <option value="approved">Approved</option>
+                                        <option value="approve">Approved</option>
 
                                     </select>
                                 </div>
@@ -216,5 +217,5 @@ include("_common/header.php");
 <script src="js-files/payroll_history.js"></script>
 
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

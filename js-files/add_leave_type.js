@@ -82,19 +82,21 @@ function add_leave_type() {
 			paid_status: paid_status,
 			exclude_holidays: exclude_holidays,
 			exclude_weekends: exclude_weekends,
-			company_id: company_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_leave_type').modal('show');
-
-				$('#modal_leave_type').on('hidden.bs.modal', function() {
-					// do something…
-					// window.location.reload();
-					window.location.href = 'leave_types';
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: (window.location.href = 'leave_types'),
 				});
 			} else if (response.status == '400') {
 				// coder error message

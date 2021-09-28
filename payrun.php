@@ -22,8 +22,10 @@ include_once("../gen/_common/header.php"); // header contents
             <div class="title_right" style="text-align: right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                     <div class="input-group" style="float: right;display:flex;">
-                        <div style="text-align:center; padding:5px;border-radius:5px;" id="payrun_statuslo"></div>
-                        <!-- <a href="payroll_history"><button type="button" class="btn btn-primary">Back</button></a> -->
+                        <!-- <div style="text-align:center; padding:5px;border-radius:5px; margin-right:5px;"
+                            id="payrun_statuslo"></div> -->
+                        <!-- <button type="button" id="payrun_statuslo" class="btn btn-danger"></button> -->
+                        <a href="payroll_history"><button type="button" class="btn btn-danger">Back</button></a>
 
                     </div>
                 </div>
@@ -50,6 +52,17 @@ include_once("../gen/_common/header.php"); // header contents
                     <br>
 
                     <div class="x_content">
+                        <div class="title_right" style="text-align: right">
+                            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                                <div class="input-group" style="float: right;display:flex;">
+                                    <div style="text-align:center; padding:5px;border-radius:5px; margin-right:5px;"
+                                        id="payrun_statuslo"></div>
+                                    <!-- <button type="button" id="payrun_statuslo" class="btn btn-danger"></button> -->
+                                    <!-- <a href="payroll_history"><button type="button" class="btn btn-danger">Back</button></a> -->
+
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div id="smartwizard">
 
@@ -104,12 +117,16 @@ include_once("../gen/_common/header.php"); // header contents
                                                     </div>
                                                     <p id="secret_sche_id" style="display:none;"></p>
                                                     <br>
-                                                    <div class="form-group">
+                                                    <div class="form-group" style="margin-top:10px;">
                                                         <button class="btn btn-sm btn-primary"
                                                             id="pay_dates_btn">Save</button>
                                                         <i class="fa fa-spinner fa-spin fa-fw fa-2x"
                                                             style="display: none;" id="pay_dates_loader"></i>
+                                                        <p style="margin-top:10px; color:red; display:none;"
+                                                            id="error_showing">Kindly fill in the
+                                                            details to proceed</p>
                                                     </div>
+
                                                 </div>
 
                                                 <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
@@ -136,6 +153,11 @@ include_once("../gen/_common/header.php"); // header contents
 
                                                         </tbody>
                                                     </table>
+                                                    <div class="container">
+                                                        <nav aria-label="Page navigation">
+                                                            <ul class="pagination" id="pagination"></ul>
+                                                        </nav>
+                                                    </div>
 
                                                 </div>
                                                 <!-- </div> -->
@@ -221,11 +243,40 @@ include_once("../gen/_common/header.php"); // header contents
                                             <br>
 
                                             <div class="x_content">
+                                                <div class="form-inline" style="margin-bottom:2em;">
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-4 col-xs-6">
+                                                            <p><strong>Payrun Name: </strong></p>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                                            <p id="payrun_name3"></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-4 col-xs-6">
+                                                            <p><strong>Pay Period: </strong></p>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                                            <p id="payperiod3"></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-4 col-xs-6">
+                                                            <p><strong>Pay Date: </strong></p>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                                            <p id="paydate3"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                                     <div class="x_panel">
                                                         <div class="x_title" style="border:none;">
                                                             <h2>
-                                                                Approver List
+                                                                Approval List
                                                             </h2>
                                                             <ul class="nav navbar-right panel_toolbox">
                                                                 <li>
@@ -417,10 +468,39 @@ include_once("../gen/_common/header.php"); // header contents
 
                     <div class="x_content">
                         <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-inline" style="margin-bottom:2em;">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4 col-xs-6">
+                                        <p><strong>Payrun Name: </strong></p>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <p id="payrun_name4"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4 col-xs-6">
+                                        <p><strong>Pay Period: </strong></p>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <p id="payperiod4"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4 col-xs-6">
+                                        <p><strong>Pay Date: </strong></p>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <p id="paydate4"></p>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="x_panel">
                                 <div class="x_title" style="border:none;">
                                     <h2>
-                                        Approver List
+                                        Approval List
                                     </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li>
@@ -493,6 +573,11 @@ include_once("../gen/_common/header.php"); // header contents
 
                                     </tbody>
                                 </table>
+                                <div class="container">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination" id="pagination2"></ul>
+                                    </nav>
+                                </div>
 
                             </div>
 
@@ -730,19 +815,19 @@ include_once("../gen/_common/header.php"); // header contents
                 <div class="col-md-12" style="margin-top:2em;">
                     <!-- <div class="card"> -->
                     <!-- <div class="card-body"> -->
-                    <h3 class="payslip-title title_center" id="com_name">NaHere Limited</h3>
+                    <h3 class="payslip-title title_center" id="com_name"></h3>
                     <!-- <h5 class="subtitle">8/10 Ilupeju Byepass, Lagos State, Nigeria</h5> -->
 
                     <div class="row" style="background:#17a2b8;color:white;">
                         <div class="col-sm-6 m-b-20">
                             <ul class="list-unstyled">
                                 <li>
-                                    <h3 class="text-uppercase" id="emy_name"><strong>John Doe</strong></h3>
+                                    <h3 class="text-uppercase" id="emy_name"><strong></strong></h3>
                                 </li>
-                                <li><span id="depy_name">IT </span> - <span id="joby_name">Computer Programming</span>
+                                <li><span id="depy_name"></span> - <span id="joby_name"></span>
                                 </li>
-                                <li>Bank Name: <span id="banky_name">First Bank</span></li>
-                                <li>Account Number: <span id="banky_no">1234567890</span></li>
+                                <li>Bank Name: <span id="banky_name"></span></li>
+                                <li>Account Number: <span id="banky_no"></span></li>
                             </ul>
                         </div>
                         <div class="col-sm-6 m-b-20">
@@ -750,11 +835,11 @@ include_once("../gen/_common/header.php"); // header contents
 
                             <ul class="list-unstyled">
                                 <li>
-                                    <h3 class="text-uppercase">Payslip #49029</h3>
+                                    <h3 class="text-uppercase">&#8203;</h3>
                                 </li>
-                                <li>Pay Period: <span id="pay_period_datey">March 15th 2019 - March 28th 2019</span>
+                                <li>Pay Period: <span id="pay_period_datey"></span>
                                 </li>
-                                <li>Payment Date: <span id="pay_datey">March 15th 2019</span></li>
+                                <li>Payment Date: <span id="pay_datey"></span></li>
                             </ul>
                         </div>
                     </div>
@@ -823,8 +908,8 @@ include_once("../gen/_common/header.php"); // header contents
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <p><strong>Gross Pay: <span id="gpay">$59698</span></strong></p>
-                            <p><strong>Net Salary: <span id="npay">$59698</span></strong></p>
+                            <p><strong>Gross Pay: <span id="gpay"></span></strong></p>
+                            <p><strong>Net Salary: <span id="npay"></span></strong></p>
                         </div>
                     </div>
                     <!-- </div> -->

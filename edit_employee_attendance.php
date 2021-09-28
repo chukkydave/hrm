@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 <div id="page_loader" style="display: ;">
 
@@ -126,6 +127,19 @@ include("_common/header.php");
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">Status
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <select id="status" class="form-control col-md-7 col-xs-12">
+                                                <option value="">-- Select status --</option>
+                                                <option value="Present">Present</option>
+                                                <option value="Leave">Leave</option>
+                                                <option value="Absent">Absent</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12">
@@ -236,242 +250,8 @@ include("_common/header.php");
 </div>
 
 
-<script type="text/javascript">
-$(document).ready(function() {
-    fetch_employee_attendance();
-    // load_employee();
-    $('#clock_in').datetimepicker({
-        format: 'HH:mm:ss'
-    });
+<script src="js-files/edit_employee_attendance.js"></script>
 
-    $('#clock_out').datetimepicker({
-
-        format: 'HH:mm:ss'
-    });
-
-
-    $('#update_att').on('click', edit_employee_attendance);
-
-})
-
-function load_employee() {
-
-    var company_id = localStorage.getItem('company_id');
-    var page = -1;
-    var limit = 0;
-
-    $.ajax({
-        url: api_path + "hrm/list_of_company_employees",
-        type: "POST",
-        data: {
-            "company_id": company_id,
-            "page": page,
-            "limit": limit
-        },
-        dataType: "json",
-
-
-        success: function(response) {
-            // console.log(response);
-
-            var options = '';
-
-            $.each(response['data'], function(i, v) {
-                options += '<option value="' + response['data'][i]['employee_id'] + '">' + response[
-                        'data'][i]['firstname'] + " " + response['data'][i]['lastname'] +
-                    '</option>';
-            });
-            $('#employee_id').append(options);
-        },
-        // jqXHR, textStatus, errorThrown
-        error(response) {
-            // alert('Connection error');
-        }
-    });
-
-}
-
-
-
-
-function edit_employee_attendance() {
-
-    var company_id = localStorage.getItem('company_id');
-    var user_id = localStorage.getItem('user_id');
-    // var pathArray = window.location.pathname.split( '/' );
-    var attendance_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
-    var employee_id = $('#employee_id').val();
-    // var employment_position = $('#employment_position').val();
-    var date = $('#date').val();
-    var clock_out = $('#clock_out').val();
-    var clock_in = $('#clock_in').val();
-    var additional_info = $('#additional_info').val();
-
-    var blank;
-
-
-    $(".required").each(function() {
-
-        var the_val = $.trim($(this).val());
-
-        if (the_val == "" || the_val == "0") {
-
-            $(this).addClass('has-error');
-
-            blank = "yes";
-
-        } else {
-
-            $(this).removeClass("has-error");
-
-        }
-
-    });
-
-    if (blank == "yes") {
-
-        $('#error').html("You have a blank field");
-
-        return;
-
-    }
-
-
-    $('#error').html("");
-    $('#update_att').hide();
-    $('#att_loader').show();
-
-
-
-    $.ajax({
-
-        type: "POST",
-        dataType: "json",
-        cache: false,
-        url: api_path + "hrm/edit_employee_attendance",
-        data: {
-            "date": date,
-            "clock_in": clock_in,
-            "clock_out": clock_out,
-            "user_id": user_id,
-            "attendance_id": attendance_id,
-            "company_id": company_id,
-            "employee_id": employee_id
-        },
-
-        success: function(response) {
-
-            $('#employee_details_display').show();
-            console.log(response);
-
-            if (response.status == '200') {
-
-
-                $('#modal_attendance_info').modal('show');
-
-
-
-                $('#modal_attendance_info').on('hidden.bs.modal', function() {
-                    // do something…
-                    // window.location.reload();
-                    // window.location.href = base_url+"/erp/hrm/employees";
-                    employee_id;
-                    date;
-                    clock_out;
-                    clock_in;
-
-
-                })
-
-
-            } else if (response.status == '400') { // coder error message
-                $('#page_loader').hide();
-
-                $('#error').html('Technical Error. Please try again later.');
-
-            } else if (response.status == '401') { //user error message
-
-                $('#page_loader').hide();
-                $('#error').html(response.msg);
-
-            }
-
-            $('#update_att').show();
-            $('#att_loader').hide();
-
-        },
-        // objAJAXRequest, strError
-        error: function(response) {
-            $('#page_loader').hide();
-            $('#employee_details_display').hide();
-            $('#employee_error_display').show();
-
-        }
-
-    });
-}
-
-function fetch_employee_attendance() {
-
-    var company_id = localStorage.getItem('company_id');
-    // var pathArray = window.location.pathname.split( '/' );
-    var attendance_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
-
-    // alert(employee_id);
-    $.ajax({
-
-        type: "POST",
-        dataType: "json",
-        url: api_path + "hrm/fetch_employee_attendance",
-        data: {
-            "company_id": company_id,
-            "attendance_id": attendance_id
-        },
-        timeout: 60000,
-
-        success: function(response) {
-            $('#page_loader').hide();
-            $('#employee_details_display').show();
-
-            console.log(response);
-            var str3 = "";
-            if (response.status == '200') {
-
-
-                $('#employee_id').val(response.data.employee_name);
-                $('#date').val(response.data.insert_date);
-                $('#clock_out').val(response.data.clock_out);
-                $('#clock_in').val(response.data.clock_in);
-                // $('#profile_name').html('<b>Attendance</b> | <font color="red">Edit</font>');
-                // $('#additional_info').val(response.data.additional_info);
-                // str2 += '<a href="attendance"><button id="send"  class="btn btn-primary">Back</button></a>';
-
-                str3 += '<div id="crop-avatar">';
-
-                str3 += '<img src="' + site_url + '/files/images/employee_images/mid_' + response.data
-                    .profile_picture + '" alt="...">';
-                str3 += '</div>';
-
-                $("#picture").html(str3);
-
-            } else if (response.status == '400') {
-                $('#page_loader').hide();
-                $('#employee_details_display').hide();
-                $('#employee_data_display').show();
-            }
-
-        },
-        // objAJAXRequest, strError
-        error: function(response) {
-            $('#page_loader').hide();
-            $('#employee_details_display').hide();
-            $('#employee_error_display').show();
-
-        }
-
-    });
-}
-</script>
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

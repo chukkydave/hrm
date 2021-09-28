@@ -235,7 +235,7 @@ include_once("../gen/_common/header.php"); // header contents
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="position_name">Payment
                                         Type<span>*</span>
                                     </label>
@@ -247,7 +247,7 @@ include_once("../gen/_common/header.php"); // header contents
                                         <i class="fa fa-spinner fa-spin fa-fw fa-2x" id="list_payment_loader"
                                             style="display: none;"></i>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="position_name">Payroll

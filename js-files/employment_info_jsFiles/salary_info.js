@@ -59,7 +59,18 @@ $(document).ready(() => {
 	});
 	// $('#generate_netPay').on('click', addCreditInput);
 	$(document).on('keyup', '.all_input', addCreditInput);
+	$(document).on('keyup', '.credit_input', () => {
+		let value = $(this).val();
+		numberWithCommas(value);
+	});
+	$(document).on('keyup', '.debit_input', () => {
+		let value = $(this).val();
+		numberWithCommas(value);
+	});
 	$(document).on('change', '.all_input', () => {
+		$('#save_pay').show();
+	});
+	$(document).on('change', '#salary_type', () => {
 		$('#save_pay').show();
 	});
 
@@ -138,8 +149,11 @@ function list_employment_payment_type() {
 		dataType: 'json',
 		url: api_path + 'hrm/get_employee_salary_breakdown',
 		data: {
-			company_id: company_id,
+			// company_id: company_id,
 			employee_id: employee_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -217,7 +231,7 @@ function list_employment_payment_type() {
 					});
 					$('#total_debit').val(response.total_debit);
 					$('#total_credit').val(response.total_credit);
-					$('#net_payment').html(`₦${response.net_pay}`);
+					$('#net_payment').html(formatToCurrency(response.net_pay));
 				} else {
 					debit_checker += `<p>No record found</p>`;
 					credit_checker += `<p>No record found</p>`;
@@ -280,7 +294,7 @@ function addDebitComponent() {
 	console.log('aaaaaaaaaaarrrrrrrr', debit_arr);
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		breakdown: debit_arr,
 	};
@@ -289,6 +303,9 @@ function addDebitComponent() {
 		dataType: 'json',
 		url: `${api_path}hrm/create_employee_salary_breakdown`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -298,13 +315,25 @@ function addDebitComponent() {
 			console.log(error);
 			$('#add_debitComponent_loader').hide();
 			$('#add_debitComponent_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_debitComponent_loader').hide();
 				$('#add_debitComponent_btn').show();
-				list_employment_payment_type();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: list_employment_payment_type(),
+				});
+
 				// $('#edit_bank_details_modal').modal('hide');
 				// $('#mod_body').html('Salary Account Details Added successfully');
 				// $('#successModal').modal('show');
@@ -314,10 +343,15 @@ function addDebitComponent() {
 				// $('#acct_no').val('');
 				// $('#sort_code').val('');
 			} else {
-				console.log(error);
+				console.log(response);
 				$('#add_debitComponent_loader').hide();
 				$('#add_debitComponent_btn').show();
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 		},
 	});
@@ -339,7 +373,7 @@ function addCreditComponent() {
 	});
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		breakdown: credit_arr,
 	};
@@ -348,6 +382,9 @@ function addCreditComponent() {
 		dataType: 'json',
 		url: `${api_path}hrm/create_employee_salary_breakdown`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -357,26 +394,34 @@ function addCreditComponent() {
 			console.log(error);
 			$('#add_creditComponent_loader').hide();
 			$('#add_creditComponent_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_creditComponent_loader').hide();
 				$('#add_creditComponent_btn').show();
-				list_employment_payment_type();
-				// $('#edit_bank_details_modal').modal('hide');
-				// $('#mod_body').html('Salary Account Details Added successfully');
-				// $('#successModal').modal('show');
-				// showBankDetails();
-				// $('#acct_name').val('');
-				// $('#bank_name').val('');
-				// $('#acct_no').val('');
-				// $('#sort_code').val('');
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: list_employment_payment_type(),
+				});
 			} else {
 				console.log(error);
 				$('#add_creditComponent_loader').hide();
 				$('#add_creditComponent_btn').show();
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${error.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 		},
 	});
@@ -399,7 +444,7 @@ function deleteBreakdown(id) {
 			let employee_id = window.location.search.split('=')[1];
 			let idd = $(`#creddeb_${id}`).attr('data');
 			let data = {
-				company_id: company_id,
+				// company_id: company_id,
 				breakdown_id: idd,
 				employee_id: employee_id,
 			};
@@ -409,17 +454,31 @@ function deleteBreakdown(id) {
 				dataType: 'json',
 				url: `${api_path}hrm/delete_employee_salary_breakdown`,
 				data: data,
+				headers: {
+					Authorization: localStorage.getItem('token'),
+				},
 
 				error: function(res) {
 					console.log(res);
 					// $(`#qc_loader${id}`).hide();
 					// $(`#qc_row${id}`).show();
 
-					alert('error');
+					Swal.fire({
+						title: 'Error!',
+						text: `${res.statusText}`,
+						icon: 'error',
+						confirmButtonText: 'Close',
+					});
 				},
 				success: function(response) {
 					if (response.status == 200 || response.status == 201) {
-						list_employment_payment_type();
+						Swal.fire({
+							title: 'Success',
+							text: `Success`,
+							icon: 'success',
+							confirmButtonText: 'Okay',
+							onClose: list_employment_payment_type(),
+						});
 						// $(`#qc_row${id}`).remove();
 						// $(`#qc_loader${id}`).remove();
 					}
@@ -441,7 +500,7 @@ function deleteBreakdown2(id) {
 		let employee_id = window.location.search.split('=')[1];
 		let idd = $(`#delCredDeb_${id}`).attr('data');
 		let data = {
-			company_id: company_id,
+			// company_id: company_id,
 			breakdown_id: idd,
 			employee_id: employee_id,
 		};
@@ -451,17 +510,31 @@ function deleteBreakdown2(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_employee_salary_breakdown`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				// $(`#qc_loader${id}`).hide();
 				// $(`#qc_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
-					list_employment_payment_type();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+						onClose: list_employment_payment_type(),
+					});
 					// $(`#qc_row${id}`).remove();
 					// $(`#qc_loader${id}`).remove();
 				}
@@ -484,7 +557,7 @@ function addAcctDetails() {
 	let sort_code = $('#sort_code').val();
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		bank_name: bank_name,
 		account_name: acct_name,
@@ -496,6 +569,9 @@ function addAcctDetails() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_employee_bank_account`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -505,16 +581,26 @@ function addAcctDetails() {
 			console.log(error);
 			$('#add_acctDetails_loader').hide();
 			$('#add_acctDetails_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_acctDetails_loader').hide();
 				$('#add_acctDetails_btn').show();
 				$('#edit_bank_details_modal').modal('hide');
-				$('#mod_body').html('Salary Account Details Added successfully');
-				$('#successModal').modal('show');
-				showBankDetails();
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: showBankDetails(),
+				});
 				// $('#acct_name').val('');
 				// $('#bank_name').val('');
 				// $('#acct_no').val('');
@@ -532,8 +618,11 @@ function showBankDetails() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -562,6 +651,9 @@ function showBankDetails() {
 				// $('#list_workShift_body').html(`<tr><td colspan="4">No record</td></tr>`);
 				// $('#list_workShift_loader').hide();
 				// $('#list_workShift_table').show();
+				$('#edit_acctDetails_error').html(`<p>No Data</p>`);
+
+				$('#acctDetails_error').html(`<p>No Data</p>`);
 			}
 		})
 		.catch(function(error) {
@@ -593,7 +685,7 @@ function addSalaryDetails() {
 	let result = salary[1].replace(/,/g, '');
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		salary: result,
 		earning_type: type,
@@ -603,6 +695,9 @@ function addSalaryDetails() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_employee_salary`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -612,14 +707,24 @@ function addSalaryDetails() {
 			console.log(error);
 			$('#add_salaryDetails_loader').hide();
 			$('#add_salaryDetails_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#add_salaryDetails_loader').hide();
 				$('#add_salaryDetails_btn').show();
-				$('#mod_body').html('Salary Amount Details Added successfully');
-				$('#successModal').modal('show');
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					// onClose: leave_types(''),
+				});
 				// $('#salary_amt').val('');
 				// $('#salary_type').val('');
 			}
@@ -635,8 +740,11 @@ function showSalaryDetails() {
 	axios
 		.get(`${api_path}hrm/new_employee_info`, {
 			params: {
-				company_id: company_id,
+				// company_id: company_id,
 				employee_id: employee_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -645,8 +753,13 @@ function showSalaryDetails() {
 			if (employee_data) {
 				const { salary, earning_type } = response.data.data.employee_data;
 
-				let sals = numberWithCommas(salary);
-				$('#salary_amt').html(`₦${sals}`);
+				let sals;
+				if (salary === null) {
+					sals = '₦0.00';
+				} else {
+					sals = formatToCurrency(salary);
+				}
+				$('#salary_amt').html(`${sals}`);
 				$('#salary_type').val(earning_type);
 
 				// $('#list_workShift_loader').hide();
@@ -655,7 +768,7 @@ function showSalaryDetails() {
 				// $('#list_workShift_body').html(`<tr><td colspan="4">No record</td></tr>`);
 				// $('#list_workShift_loader').hide();
 				// $('#list_workShift_table').show();
-				$('#salaryDetails_error').html(`<span style="color:red;">No record</span>`);
+				$('#salaryDetails_error').html(`<span>No record</span>`);
 			}
 		})
 		.catch(function(error) {
@@ -692,6 +805,14 @@ $("input[data-type='currency']").on({
 function formatNumber(n) {
 	// format number 1000000 to 1,234,567
 	return n.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function formatToCurrency(amount) {
+	if (amount === '0' || amount === '0.0') {
+		return '₦' + '0.00';
+	} else {
+		return '₦' + parseFloat(amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+	}
 }
 
 function formatCurrency(input, blur) {
@@ -839,7 +960,7 @@ function saveSalaryBreakdown() {
 	// let obj = { breakdown_id: 9, amount: 5000 };
 
 	let data = {
-		company_id: company_id,
+		// company_id: company_id,
 		employee_id: employee_id,
 		employee_salary_breakdown: emp_breakdown,
 		net_pay: net,
@@ -852,6 +973,9 @@ function saveSalaryBreakdown() {
 		dataType: 'json',
 		url: `${api_path}hrm/update_employee_salary_breakdown`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -861,14 +985,24 @@ function saveSalaryBreakdown() {
 			console.log(error);
 			$('#save_pay_loader').hide();
 			$('#save_pay').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
 				$('#save_pay_loader').hide();
 				// $('#save_pay').show();
-				$('#mod_body').html('Salary Breakdown Saved successfully');
-				$('#successModal').modal('show');
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					// onClose: leave_types(''),
+				});
 				// $('#acct_name').val('');
 				// $('#bank_name').val('');
 				// $('#acct_no').val('');

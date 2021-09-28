@@ -44,8 +44,9 @@ function list_employment_payment_type() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_payment_types',
-		data: {
-			company_id: company_id,
+		data: {},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -57,7 +58,7 @@ function list_employment_payment_type() {
 			if (response.status == '200') {
 				$('#loading').hide();
 
-				if (response.data.length > 0) {
+				if (response.data && response.data.length > 0) {
 					var k = 1;
 					$.each(response['data'], function(i, v) {
 						strTable += '<tr id="row_' + response['data'][i]['payment_type_id'] + '">';
@@ -92,7 +93,7 @@ function list_employment_payment_type() {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="3">' + response.msg + '</td></tr>';
+					strTable = '<tr><td colspan="3">No record</td></tr>';
 				}
 
 				$('#paymentData').html(strTable);
@@ -111,7 +112,7 @@ function list_employment_payment_type() {
 		},
 
 		error: function(response) {
-			alert('Connection error');
+			$('#paymentData').html('<tr><td colspan="3" style="color:red;">Error</td></tr>');
 		},
 	});
 }
@@ -131,8 +132,10 @@ function delete_payment_type(payment_type_id) {
 		dataType: 'json',
 		url: api_path + 'hrm/delete_company_payment_type',
 		data: {
-			company_id: company_id,
 			payment_type_id: payment_type_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
@@ -141,14 +144,32 @@ function delete_payment_type(payment_type_id) {
 			$('#loader_row_' + payment_type_id).hide();
 			$('#row_' + payment_type_id).show();
 
-			alert('connection error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 
 		success: function(response) {
 			// console.log(response);
 			if (response.status == '200') {
 				// $('#row_'+user_id).hide();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: list_employment_payment_type(),
+				});
 			} else if (response.status == '401') {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 
 			$('#loader_row_' + payment_type_id).hide();
@@ -205,23 +226,26 @@ function add_pay_type() {
 		data: {
 			payment_name: payment_name,
 			payment_description: payment_description,
-			company_id: company_id,
+
 			payment_creditdebit: payment_creditdebit,
 			user_id: user_id,
 			formula: formula,
 			is_taxable: is_taxable,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_pay').modal('show');
-
-				$('#modal_pay').on('hidden.bs.modal', function() {
-					// do something…
-					window.location.reload();
-					//window.location.href = base_url+"/erp/hrm/employees";
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
 				});
 			} else if (response.status == '400') {
 				// coder error message

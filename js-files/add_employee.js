@@ -17,7 +17,10 @@ function load_employee_type() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_employment_types',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -52,7 +55,10 @@ function load_position() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_positions',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -141,21 +147,29 @@ function add_employee() {
 			// employment_date: employment_date,
 			email: email,
 			// position: position,
-			company_id: company_id,
+
 			user_id: user_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_emp').modal('show');
-
-				$('#modal_emp').on('hidden.bs.modal', function() {
-					// do something…
-					window.location.reload();
-					//window.location.href = base_url+"/erp/hrm/employees";
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
 				});
+				if ($('#remain_check').is(':checked')) {
+					window.location.reload();
+				} else {
+					window.location.href = 'employees';
+				}
 			} else if (response.status == '400') {
 				// coder error message
 

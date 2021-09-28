@@ -67,20 +67,29 @@ function add_company_department() {
 		data: {
 			department_name: department_name,
 			department_description: department_description,
-			company_id: company_id,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_department').modal('show');
+				// $('#modal_department').modal('show');
 
-				$('#modal_department').on('hidden.bs.modal', function() {
-					// do something…
-					$('#department_display').hide();
-					window.location.reload();
-					//window.location.href = base_url+"/erp/hrm/employees";
+				// $('#modal_department').on('hidden.bs.modal', function() {
+				// 	// do something…
+				// 	$('#department_display').hide();
+				// 	window.location.reload();
+				// 	//window.location.href = base_url+"/erp/hrm/employees";
+				// });
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: window.location.reload(),
 				});
 			} else if (response.status == '400') {
 				// coder error message
@@ -119,7 +128,10 @@ function delete_deparment(department_id) {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/delete_company_department',
-		data: { company_id: company_id, department_id: department_id },
+		data: { department_id: department_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000, // sets timeout to one minute
 		// objAJAXRequest, strError
 
@@ -134,6 +146,13 @@ function delete_deparment(department_id) {
 			// console.log(response);
 			if (response.status == '200') {
 				// $('#row_'+user_id).hide();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: list_of_departments(''),
+				});
 			} else if (response.status == '401') {
 			}
 
@@ -153,7 +172,10 @@ function list_of_departments(page) {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_departments',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -163,7 +185,7 @@ function list_of_departments(page) {
 
 			if (response.status == '200') {
 				$('#loading').hide();
-				if (response.data.length > 0) {
+				if (response.data && response.data.length > 0) {
 					var k = 1;
 					$.each(response['data'], function(i, v) {
 						strTable += '<tr id="row_' + response['data'][i]['department_id'] + '">';
@@ -194,7 +216,7 @@ function list_of_departments(page) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="4">' + response.msg + '</td></tr>';
+					strTable = '<tr><td colspan="4">No record</td></tr>';
 				}
 
 				$('#pagination').twbsPagination({
@@ -255,8 +277,10 @@ function list_Hods(dept_id) {
 	axios
 		.get(`${api_path}hrm/list_dept_hod`, {
 			params: {
-				company_id: company_id,
 				department_id: dept_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -291,8 +315,10 @@ function getEmployeeList(param) {
 	axios
 		.get(`${api_path}hrm/search_staff_autocomplete`, {
 			params: {
-				company_id: company_id,
 				query_param: param,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {

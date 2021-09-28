@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 
 <div class="right_col" role="main">
@@ -143,8 +144,7 @@ include("_common/header.php");
                                             </div>
 
                                             <div class="form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                    for="hod_to">To<span>*</span>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="hod_to">To
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                                     <input type="text" id="hod_to" required="required"
@@ -302,5 +302,5 @@ include("_common/header.php");
 
 <script src="js-files/edit_department.js"></script>
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

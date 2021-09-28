@@ -171,7 +171,10 @@ function get_employee_cat() {
 			type: 'POST',
 			dataType: 'json',
 			url: api_path + 'company/count_total_employee_for_each_company_employment_type',
-			data: { company_id: company_id },
+			data: {},
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 			timeout: 60000,
 
 			success: function(response) {
@@ -290,7 +293,10 @@ function fetch_employee_view_details() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_profile',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -425,7 +431,10 @@ function fetch_employee_details() {
 		type: 'GET',
 		dataType: 'json',
 		url: api_path + 'hrm/new_employee_info',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -436,9 +445,16 @@ function fetch_employee_details() {
 			var str2 = '';
 			var str3 = '';
 
-
 			if (response.status == '200') {
-				let dobs = moment(response.data.employee_data.dob, 'YYYY-MM-DD').format('LL');
+				let dobs;
+				if (
+					response.data.employee_data.dob === '' ||
+					response.data.employee_data.dob === '0000-00-00'
+				) {
+					dobs = '...';
+				} else {
+					dobs = moment(response.data.employee_data.dob, 'YYYY-MM-DD').format('LL');
+				}
 				$('#firstname').html(response.data.employee_data.firstname);
 				$('#lastname').html(response.data.employee_data.lastname);
 				$('#gender').html(response.data.employee_data.gender);
@@ -450,7 +466,12 @@ function fetch_employee_details() {
 				$('#email').html(response.data.employee_data.email);
 				$('#religion').html(response.data.employee_data.religion);
 				$('#next_of_kin').html(response.data.employee_data.next_of_kin);
-				$('#status').html(response.data.employee_data.active_status);
+				$('#status').html(
+					`${
+						response.data.employee_data.active_status.toLowerCase() ===
+						'terminated' ? 'Exited' :
+						capitalizeFirstLetter(response.data.employee_data.active_status)}`,
+				);
 
 				$('#profile_name').html(
 					'<b>' +
@@ -474,7 +495,7 @@ function fetch_employee_details() {
 					site_url +
 					'/files/images/employee_images/mid_' +
 					response.data.employee_data.profile_picture +
-					'" alt="..."><div style="text-decoration:underline;text-align:center;margin-top:5px;" data-toggle="modal" data-target="#edit_proPic_modal">Update Image</div>';
+					'" alt="..."><div style="text-decoration:underline;text-align:center;margin-top:5px;" data-toggle="modal" data-target="#edit_proPic_modal" class="pointer">Update Image</div>';
 				str3 += '</div>';
 
 				str += '<li><i class="fa fa-map-marker user-profile-icon"></i>&nbsp;&nbsp;';
@@ -573,7 +594,10 @@ function fetch_employee_edit_details() {
 		type: 'POST',
 		dataType: 'json',
 		url: api_path + 'hrm/fetch_company_employee_profile',
-		data: { company_id: company_id, employee_id: employee_id },
+		data: { employee_id: employee_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		timeout: 60000,
 
 		success: function(response) {
@@ -590,11 +614,7 @@ function fetch_employee_edit_details() {
 					base_url +
 					'employees"><button id="send"  class="btn btn-default">Back</button></a>';
 				str2 +=
-					'<a href="' +
-					base_url +
-					'view_salary_info?id=' +
-					response.data.employee_id +
-					'"><button id="send"  class="btn btn-primary">View Profile</button></a>';
+					'<a onClick="viewBasicInfo()"><button id="editBasicInfo" data-toggle="modal" data-target="#edit_basic_modal" class="btn btn-primary">Edit</button></a>';
 
 				$('#profile_name').html(
 					'<b>' +
@@ -712,4 +732,8 @@ function isValidDate(dateString) {
 
 function logout() {
 	localStorage.clear();
+}
+
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }

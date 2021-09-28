@@ -1,7 +1,7 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
-
 <!-- page content -->
 <div id="employee_details_display" style="display: ;">
     <div class="right_col" role="main">
@@ -15,7 +15,7 @@ include("_common/header.php");
                     <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                         <div class="input-group" style="float: right">
 
-                            <a href="employees"><button type="button" class="btn btn-primary"
+                            <a href="employees"><button type="button" class="btn btn-danger"
                                     id="add_employee">Back</button></a>
 
 
@@ -69,7 +69,6 @@ include("_common/header.php");
 
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="middlename">Middlename
-                                        <span>*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" id="middlename" required="required"
@@ -82,8 +81,17 @@ include("_common/header.php");
                                         <span>*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" id="gender" required="required"
-                                            class="form-control col-md-7 col-xs-12 required">
+                                        <!-- <input type="text" id="gender" required="required"
+                                            class="form-control col-md-7 col-xs-12 required"> -->
+
+                                        <select class="form-control col-md-7 col-xs-12 required" required="required"
+                                            id="gender">
+                                            <option value="">-- Select --</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+
+                                        </select>
                                     </div>
                                 </div>
 
@@ -206,10 +214,26 @@ include("_common/header.php");
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="checkbox" id="remain_check" /> &nbsp; &nbsp; Check to remain on the
+                                        page after adding
+                                        an employee
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
                                         Note: After adding an employee, the admin will have to activate login
                                         capabilities before employee can login in and use this portal.
                                     </div>
+
                                 </div>
+
+
+
+
 
 
                                 <div class="ln_solid"></div>
@@ -284,5 +308,5 @@ include("_common/header.php");
 
 
 <?php
-  include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

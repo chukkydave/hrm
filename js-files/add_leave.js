@@ -60,22 +60,25 @@ function add_company_leave() {
 		data: {
 			leave_type: leave_type,
 			resumption_date: resumption_date,
-			company_id: company_id,
 			employee_id: employee_id,
 			leave_start: leave_start,
 			comment: comment,
 			days_requested: days_req,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_leave').modal('show');
-
-				$('#modal_leave').on('hidden.bs.modal', function() {
-					// window.location.reload();
-					window.location.href = base_url + 'leaves';
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: (window.location.href = 'leaves'),
 				});
 			} else if (response.status == '400') {
 				// coder error message
@@ -108,8 +111,11 @@ function load_employee() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_employees',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
 		dataType: 'json',
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -137,8 +143,11 @@ function load_leave_type() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_leaves_type',
 		type: 'POST',
-		data: { company_id: company_id },
+		data: {},
 		dataType: 'json',
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);

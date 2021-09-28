@@ -20,15 +20,6 @@ $menu = '<ul class="nav side-menu" style="display: ;" id="main_menu">
                                 </li> -->
 
                                     <li><a href="employees"><i class="fa fa-users"></i> Employees </a></li>
-
-                                    <li><a href="leaves"><i class="fa fa-edit"></i> Leaves </a></li>
-
-                                    <li><a href="terminations"><i class="fa fa-user"></i> Exits </a></li>
-
-                                    <li><a href="grievances"><i class="fa fa-edit"></i> Grievances </a></li>
-
-                                    <!-- <li><a href="attendance"><i class="fa fa-bell-o"></i>Attendance</a></li> -->
-
                                     <li><a><i class="fa fa-user"></i> Attendance<span
                                                 class="fa fa-chevron-down"></span></a>
 
@@ -40,7 +31,7 @@ $menu = '<ul class="nav side-menu" style="display: ;" id="main_menu">
 
                                     </li>
 
-
+                                    <li><a href="leaves"><i class="fa fa-edit"></i> Leaves </a></li>
                                     <li><a><i class="fa fa-money"></i> Payroll <span
                                                 class="fa fa-chevron-down"></span></a>
 
@@ -50,6 +41,25 @@ $menu = '<ul class="nav side-menu" style="display: ;" id="main_menu">
                                             <!--<li><a href="payroll_settings">Payroll Settings</a></li>-->
                                         </ul>
                                     </li>
+                                    <li><a href="grievances"><i class="fa fa-edit"></i> Grievances </a></li>
+
+                                    <li><a><i class="fa fa-power-off"></i> Exits<span
+                                                class="fa fa-chevron-down"></span></a>
+
+                                        <ul class="nav child_menu">
+                                            <li><a href="terminations">All Exit</a></li>
+                                            <li><a href="exit_config">Exit Configuration</a></li>
+                                        </ul>
+
+                                    </li>
+
+
+                                    <!-- <li><a href="attendance"><i class="fa fa-bell-o"></i>Attendance</a></li> -->
+
+                                    
+
+
+                                    
 
 
                                     <li id="dropMe"><a><i class="fa fa-user"></i> HR Settings <span
@@ -63,10 +73,11 @@ $menu = '<ul class="nav side-menu" style="display: ;" id="main_menu">
                                             <li><a href="branches">Company Branches</a></li>
                                             <li><a href="employement_type">Employment Types</a></li>
                                             <li><a href="employment_payment_types">Salary Component</a></li>
-                                            <li><a href="#">Company Profile Settings</a></li>
+                                            <!--<li><a href="#">Company Profile Settings</a></li>-->
                                             <li><a href="emp_doc_type">Employee Doc Types</a></li>
                                             <li><a href="company_holidays">Company Holidays</a></li>
                                             <li><a href="work_shift">Work Shifts</a></li>
+                                            <li><a href="notice_board">Notifications</a></li>
                                         </ul>
 
                                     </li>

@@ -23,7 +23,10 @@ function fetch_payment_type_details() {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'hrm/fetch_company_payment_type_byID',
-		data: { payment_type_id: payment_type_id, company_id: company_id },
+		data: { payment_type_id: payment_type_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -110,24 +113,26 @@ function edit_payment_type() {
 		data: {
 			payment_type_name: payment_type_name,
 			payment_type_description: payment_type_description,
-			company_id: company_id,
+
 			payment_type_id: payment_type_id,
 			payment_type_credit_or_debit: payment_type_credit_or_debit,
 			formula: formula,
 			is_taxable: is_taxable,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_payment_type').modal('show');
-
-				$('#modal_payment_type').on('hidden.bs.modal', function() {
-					$('#payment_type_name').val();
-					$('#employment_type_description').val();
-					// window.location.reload();
-					window.location.href = 'employment_payment_types';
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: (window.location.href = 'employment_payment_types'),
 				});
 			} else if (response.status == '400') {
 				// coder error message

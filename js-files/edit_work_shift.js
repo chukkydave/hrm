@@ -38,22 +38,26 @@ function edit_work_shift() {
 		cache: false,
 		url: api_path + 'workshifts/update_workshift',
 		data: {
-			company_id: localStorage.getItem('company_id'),
 			shift_id: shift_id,
 			shift_name: shift_name,
 			day_list: workshift_dtl,
 			duration: joint,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#msggg').html('<font size=3>Successfully Updated</font> <br>');
-
-				$('#exampleModalLabel').html('Successful');
-
-				$('#modal_shift').modal('show');
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					// onClose: leave_types(''),
+				});
 
 				$('#edit_work_shift').show();
 				$('#edit_work_shift_loader').hide();
@@ -61,16 +65,34 @@ function edit_work_shift() {
 				// coder error message
 				$('#edit_work_shift').show();
 				$('#edit_work_shift_loader').hide();
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			} else if (response.status == '401') {
 				//user error message
 				$('#edit_work_shift').show();
 				$('#edit_work_shift_loader').hide();
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.statusText}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			}
 		},
 
 		error: function(response) {
 			$('#edit_work_shift').show();
 			$('#edit_work_shift_loader').hide();
+			Swal.fire({
+				title: 'Error!',
+				text: `${response.statusText}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 	});
 }
@@ -84,7 +106,10 @@ function get_shift_details() {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'workshifts/get_workshift',
-		data: { company_id: localStorage.getItem('company_id'), shift_id: shift_id },
+		data: { shift_id: shift_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);

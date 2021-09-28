@@ -66,7 +66,6 @@ async function list_of_companies_employees(page, serial, order_by) {
 		dataType: 'json',
 		url: api_path + 'hrm/list_of_company_employees',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
 			// email: email,
@@ -78,6 +77,9 @@ async function list_of_companies_employees(page, serial, order_by) {
 			order: order_by,
 			employee_department: employee_department,
 			employee_code: employee_code,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		timeout: 60000,
 
@@ -218,8 +220,11 @@ function load_position() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_positions',
 		type: 'POST',
-		data: { company_id: company_id, page: page, limit: limit },
+		data: { page: page, limit: limit },
 		dataType: 'json',
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			// console.log(response);
@@ -250,7 +255,10 @@ function load_department() {
 	$.ajax({
 		url: api_path + 'hrm/list_of_company_departments',
 		type: 'POST',
-		data: { company_id: company_id, page: 1, limit: 100 },
+		data: { page: 1, limit: 100 },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		dataType: 'json',
 
 		success: function(response) {
@@ -377,9 +385,11 @@ function load_employee() {
 		url: api_path + 'hrm/list_of_company_employees',
 		type: 'POST',
 		data: {
-			company_id: company_id,
 			page: page,
 			limit: limit,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 		dataType: 'json',
 
@@ -435,14 +445,13 @@ function addPaySchedule() {
 		days = 0;
 		recurring = 'one_off';
 	}
-	let payType = $('#list_payment_option').val();
+	// let payType = $('#list_payment_option').val();
 	let payrollType = $('#list_payroll_option').val();
 	let idtee = window.location.search.split('=')[1];
 
 	let data = {
-		company_id: company_id,
 		employees: employee,
-		pay_calender_type: payType,
+		pay_calender_type: '',
 		schedule_name: name,
 		pay_setting_type: payrollType,
 
@@ -457,6 +466,9 @@ function addPaySchedule() {
 		dataType: 'json',
 		url: `${api_path}hrm/edit_payment_schedule`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -487,8 +499,9 @@ function listPayrollType() {
 	$('#list_payroll_loader').show();
 	axios
 		.get(`${api_path}hrm/get_payroll_settings`, {
-			params: {
-				company_id: company_id,
+			params: {},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -530,8 +543,9 @@ function listPaymentType() {
 	$('#list_payment_loader').show();
 	axios
 		.get(`${api_path}hrm/get_company_payroll_payment_type`, {
-			params: {
-				company_id: company_id,
+			params: {},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -540,21 +554,21 @@ function listPaymentType() {
 				$(response.data.data).map((i, v) => {
 					options += `<option value="${v.pay_type_id}">${v.payment_type}</option>`;
 				});
-				$('#list_payment_option').append(options);
-				$('#list_payment_loader').hide();
-				$('#list_payment_option').show();
+				// $('#list_payment_option').append(options);
+				// $('#list_payment_loader').hide();
+				// $('#list_payment_option').show();
 			} else {
-				$('#list_payment_option').append(`<option>No record found</option>`);
-				$('#list_payment_loader').hide();
-				$('#list_payment_option').show();
+				// $('#list_payment_option').append(`<option>No record found</option>`);
+				// $('#list_payment_loader').hide();
+				// $('#list_payment_option').show();
 			}
 			fetchScheduleData();
 		})
 		.catch(function(error) {
 			console.log(error);
-			$('#list_payment_loader').hide();
-			$('#list_payment_option').show();
-			$('#list_payment_option').append(`<option>Error</option>`);
+			// $('#list_payment_loader').hide();
+			// $('#list_payment_option').show();
+			// $('#list_payment_option').append(`<option>Error</option>`);
 			// $('#edit_QC_error').html(error);
 		})
 		.then(function() {
@@ -565,7 +579,7 @@ function listPaymentType() {
 function refresh() {
 	$('#empListTable').html('<tr><td colspan="4">No Employee(s) Selected</td></tr>');
 	$('#schedule_name').val('');
-	$('#list_payment_option').val('');
+	// $('#list_payment_option').val('');
 	$('#list_payroll_option').val('');
 	$('#recurring').attr('checked', false);
 	$('#date_div').fadeOut();
@@ -598,8 +612,10 @@ function fetchScheduleData() {
 	axios
 		.get(`${api_path}hrm/single_payment_schedule`, {
 			params: {
-				company_id: company_id,
 				pay_schedule_id: idt,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then((res) => {
@@ -620,7 +636,7 @@ function fetchScheduleData() {
 				} = res.data.data;
 
 				$('#schedule_name').val(schedule_name);
-				$('#list_payment_option').val(pay_calender_type);
+				// $('#list_payment_option').val(pay_calender_type);
 				$('#list_payroll_option').val(pay_setting_id);
 
 				if (mode_type === 'recurring') {

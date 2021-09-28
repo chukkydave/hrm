@@ -15,95 +15,6 @@ $(document).ready(() => {
 	});
 });
 
-// function listWorkShift() {
-// 	let company_id = localStorage.getItem('company_id');
-// 	let employee_id = window.location.search.split('=')[1];
-// 	$('#list_workShift_table').hide();
-// 	$('#list_workShift_loader').show();
-// 	axios
-// 		.get(`${api_path}hrm/new_employee_info`, {
-// 			params: {
-// 				company_id: company_id,
-// 				employee_id: employee_id,
-// 			},
-// 		})
-// 		.then(function(response) {
-// 			let workShift_list;
-// 			const { workshift_data } = response.data.data;
-
-// 			if (workshift_data.length > 0) {
-// 				$(workshift_data).map((i, v) => {
-// 					let start;
-// 					let end;
-// 					if (v.ended === '0000-00-00 00:00:00') {
-// 						end = '';
-// 					} else {
-// 						end = moment(v.ended, 'YYYY-MM-DD HH:mm:ss').format('LL');
-// 					}
-
-// 					if (v.started === '0000-00-00 00:00:00') {
-// 						start = '';
-// 					} else {
-// 						start = moment(v.started, 'YYYY-MM-DD HH:mm:ss').format('LL');
-// 					}
-// 					workShift_list += `<tr class="even pointer" id="workShift_row${v.id}">`;
-// 					workShift_list += `<td>${v.workshift_name}  <span class="greent_${i}_trial"></span></td>`;
-// 					// workShift_list += `<td>${v.nxt_kin_relationship}</td>`;
-// 					workShift_list += `<td>${start}</td>`;
-// 					workShift_list += `<td>${end}</td>`;
-
-// 					workShift_list += `<td>
-// 						<div class="dropdown">
-// 							<button
-// 								class="btn btn-secondary dropdown-toggle"
-// 								type="button"
-// 								id="dropdownMenuButton1"
-// 								data-toggle="dropdown"
-// 								aria-expanded="false">
-// 								Actions
-// 							</button>
-// 							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-// 								<li onClick="viewWorkShift(${v.id})">
-// 									<a class="dropdown-item">
-// 										<i class="fa fa-pencil" /> Edit
-// 									</a>
-// 								</li>
-// 								<li onClick="deleteWorkShift(${v.id})">
-// 									<a class="dropdown-item">
-// 										<i class="fa fa-trash" /> Delete
-// 									</a>
-// 								</li>
-// 							</ul>
-// 						</div></td>`;
-// 					workShift_list += `</tr>`;
-// 					workShift_list += `<tr id="workShift_loader${v.id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
-// 				});
-
-// 				$('#list_workShift_body').html(workShift_list);
-// 				$('#list_workShift_loader').hide();
-// 				$('#list_workShift_table').show();
-// 			} else {
-// 				$('#list_workShift_body').html(`<tr><td colspan="4">No record</td></tr>`);
-// 				$('#list_workShift_loader').hide();
-// 				$('#list_workShift_table').show();
-// 			}
-// 		})
-// 		.catch(function(error) {
-// 			console.log(error);
-
-// 			$('#list_workShift_loader').hide();
-// 			$('#list_workShift_table').show();
-// 			$('#list_workShift_body').html(
-// 				`<tr><td colspan="4" style="color:red;">Error</td></tr>`,
-// 			);
-
-// 			// $('#edit_QC_error').html(error);
-// 		})
-// 		.then(function() {
-// 			// always executed
-// 		});
-// }
-
 function listPayHistory(page) {
 	let company_id = localStorage.getItem('company_id');
 	$('#list_sche_table').hide();
@@ -116,12 +27,14 @@ function listPayHistory(page) {
 	axios
 		.get(`${api_path}hrm/get_all_pay_run`, {
 			params: {
-				company_id: company_id,
 				only_active: status,
 				limit: limit,
 				date_range: payPeriod,
 				name: name,
 				page: page,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -145,9 +58,13 @@ function listPayHistory(page) {
 						status = 'Active';
 					} else if (v.is_pay_run_active === 'approve') {
 						status = 'Approved';
+					} else if (v.is_pay_run_active === 'inactive') {
+						status = 'Inactive';
 					}
 					sche_list += `<tr class="even pointer" data-type="${v.pay_schedule_id}" id="pay_row${v.pay_run_id}">`;
-					sche_list += `<td><a href="payrun?id=${v.pay_run_id}" style="color:green !important;">${v.schedule_name}</a><p style="color:#73879C;font-size:0.8em; font-weight:lighter;">'${v.pay_run_name} (${v.no_of_employee})'</p> </td>`;
+					sche_list += `<td><a href="payrun?id=${v.pay_run_id}" style="color:green !important;">${v.schedule_name}</a><p style="color:#73879C;font-size:0.8em; font-weight:lighter;">${
+						!v.pay_run_name ? 'No Entry' :
+						v.pay_run_name} (${v.no_of_employee})</p> </td>`;
 					// sche_list += `<td>${v.nxt_kin_relationship}</td>`;
 					sche_list += `<td>${start} - ${end}</td>`;
 					sche_list += `<td>${status}</td>`;
@@ -187,9 +104,9 @@ function listPayHistory(page) {
 				$('#list_sche_table').show();
 			}
 
-			if (response.total_rows) {
+			if (response.data.total_rows && response.data.total_rows !== '0') {
 				$('#pagination').twbsPagination({
-					totalPages: Math.ceil(response.total_rows / limit),
+					totalPages: Math.ceil(response.data.total_rows / limit),
 					visiblePages: 10,
 					onPageClick: function(event, page) {
 						listPayHistory(page);
@@ -221,7 +138,6 @@ function deletePayRun(id) {
 
 		let data = {
 			pay_run_id: id,
-			company_id: company_id,
 			pay_schedule_id: idt,
 		};
 
@@ -230,18 +146,33 @@ function deletePayRun(id) {
 			dataType: 'json',
 			url: `${api_path}hrm/delete_pay_record`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
 				$(`#pay_loader${id}`).hide();
 				$(`#pay_row${id}`).show();
 
-				alert('error');
+				Swal.fire({
+					title: 'Error!',
+					text: `${res.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
 			},
 			success: function(response) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#pay_row${id}`).remove();
 					$(`#pay_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+						onClose: listPayHistory(1),
+					});
 				}
 			},
 		});
@@ -258,8 +189,10 @@ function listSPayrun(id) {
 	axios
 		.get(`${api_path}hrm/single_pay_run`, {
 			params: {
-				company_id: company_id,
 				pay_run_id: id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {

@@ -57,7 +57,10 @@ function fetch_department_details() {
 		dataType: 'json',
 		cache: false,
 		url: api_path + 'hrm/fetch_company_department_byID',
-		data: { department_id: department_id, company_id: company_id },
+		data: { department_id: department_id },
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 
 		success: function(response) {
 			console.log(response);
@@ -116,22 +119,32 @@ function edit_company_department() {
 		data: {
 			department_name: department_name,
 			department_description: department_description,
-			company_id: company_id,
+
 			department_id: department_id,
 			hod: hod,
+		},
+		headers: {
+			Authorization: localStorage.getItem('token'),
 		},
 
 		success: function(response) {
 			console.log(response);
 
 			if (response.status == '200') {
-				$('#modal_department_edit').modal('show');
+				// $('#modal_department_edit').modal('show');
 
-				$('#modal_department_edit').on('hidden.bs.modal', function() {
-					$('#department_name').val();
-					$('#department_description').val();
-					// window.location.reload();
-					window.location.href = base_url + 'departments';
+				// $('#modal_department_edit').on('hidden.bs.modal', function() {
+				// 	$('#department_name').val();
+				// 	$('#department_description').val();
+				// 	// window.location.reload();
+				// 	window.location.href = base_url + 'departments';
+				// });
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: (window.location.href = base_url + 'departments'),
 				});
 			} else if (response.status == '400') {
 				// coder error message
@@ -162,8 +175,10 @@ function getEmployeeList(param, placement) {
 	axios
 		.get(`${api_path}hrm/search_staff_autocomplete`, {
 			params: {
-				company_id: company_id,
 				query_param: param,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -214,15 +229,24 @@ function addHODE() {
 	let company_id = localStorage.getItem('company_id');
 	let department_id = $.urlParam('id');
 
+	let start_date = $('#hod_from').val();
+	let end_date = $('#hod_to').val();
+	if (document.querySelector('#hod_name').attributes.data === undefined) {
+		Swal.fire({
+			title: 'Caution!',
+			text: `HOD Name selected does not exist on the system`,
+			icon: 'warning',
+			confirmButtonText: 'Close',
+			onClose: $('#hod_name').val(''),
+		});
+		return;
+	}
+	let employee_id = document.querySelector('#hod_name').attributes.data.value;
+
 	$('#add_hode_btn').hide();
 	$('#add_hode_loader').show();
 
-	let start_date = $('#hod_from').val();
-	let end_date = $('#hod_to').val();
-	let employee_id = document.querySelector('#hod_name').attributes.data.value;
-
 	let data = {
-		company_id: company_id,
 		employee_id: employee_id,
 		department_id: department_id,
 		start_date: start_date,
@@ -233,6 +257,9 @@ function addHODE() {
 		dataType: 'json',
 		url: `${api_path}hrm/create_department_hod`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -242,7 +269,12 @@ function addHODE() {
 			console.log(error);
 			$('#add_hode_loader').hide();
 			$('#add_hode_btn').show();
-			alert('error');
+			Swal.fire({
+				title: 'Error!',
+				text: `${error.msg}`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		},
 		success: function(response) {
 			if (response.status == 200 || response.status == 201) {
@@ -255,7 +287,13 @@ function addHODE() {
 				$('#hod_from').val('');
 				$('#hod_to').val('');
 				$('#hod_display').toggle();
-				list_Hods();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: list_Hods(),
+				});
 			}
 		},
 	});
@@ -269,8 +307,10 @@ function list_Hods() {
 	axios
 		.get(`${api_path}hrm/list_dept_hod`, {
 			params: {
-				company_id: company_id,
 				department_id: dept_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -335,8 +375,11 @@ function viewHOD(id, employee_id) {
 			params: {
 				dept_hod_id: id,
 				employee_id: employee_id,
-				company_id: company_id,
+
 				department_id: department_id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
 			},
 		})
 		.then(function(response) {
@@ -346,20 +389,20 @@ function viewHOD(id, employee_id) {
 			$('#edit_HOD_btn').show();
 
 			let { employee_id, employee_name, start_date, end_date } = response.data.data;
-			let start
-			let end
-			if(start_date == "0000-00-00 00:00:00"){
-				start = ''
-			}else{
-			start = moment(start_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+			let start;
+			let end;
+			if (start_date == '0000-00-00 00:00:00') {
+				start = '';
+			} else {
+				start = moment(start_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
 			}
 
-			if(end_date == "0000-00-00 00:00:00"){
-				end = ''
-			}else{
+			if (end_date == '0000-00-00 00:00:00') {
+				end = '';
+			} else {
 				end = moment(end_date, 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
 			}
-			
+
 			$('#edit_HOD_name').val(employee_name);
 			$('#edit_HOD_name').attr('data', employee_id);
 			$('#edit_HOD_from').val(start);
@@ -391,7 +434,6 @@ function editHOD() {
 	let to = $('#edit_HOD_to').val();
 
 	let data = {
-		company_id: company_id,
 		employee_id: id,
 		department_id: department_id,
 		enddate: to,
@@ -401,6 +443,9 @@ function editHOD() {
 		dataType: 'json',
 		url: `${api_path}hrm/hod_end_tenure`,
 		data: data,
+		headers: {
+			Authorization: localStorage.getItem('token'),
+		},
 		// headers: {
 		// 	Accept: 'application/json',
 		// 	'Content-Type': 'application/json',
@@ -419,9 +464,16 @@ function editHOD() {
 
 				$('#edit_HOD_modal').modal('hide');
 
-				$('#mod_body').html('Head Of Department Edit Successful');
-				$('#modal_department_edit').modal('show');
-				list_Hods();
+				// $('#mod_body').html('Head Of Department Edit Successful');
+				// $('#modal_department_edit').modal('show');
+				// list_Hods();
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: list_Hods(),
+				});
 			}
 		},
 	});
@@ -438,7 +490,6 @@ function deleteHOD(id, employee_id) {
 		let data = {
 			dept_hod_id: id,
 			employee_id: employee_id,
-			company_id: company_id,
 		};
 
 		$.ajax({
@@ -446,6 +497,9 @@ function deleteHOD(id, employee_id) {
 			dataType: 'json',
 			url: `${api_path}hrm/remove_hod`,
 			data: data,
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
 
 			error: function(res) {
 				console.log(res);
@@ -458,6 +512,13 @@ function deleteHOD(id, employee_id) {
 				if (response.status == 200 || response.status == 201) {
 					$(`#HOD_row${id}`).remove();
 					$(`#HOD_loader${id}`).remove();
+					Swal.fire({
+						title: 'Success',
+						text: `Success`,
+						icon: 'success',
+						confirmButtonText: 'Okay',
+						// onClose: list_Hods(),
+					});
 				}
 			},
 		});
