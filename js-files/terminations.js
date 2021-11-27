@@ -1,13 +1,28 @@
 $(document).ready(function() {
-	// list_of_terminations('');
-	listTerminations('');
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('#add_termination').on('click', termination);
 
 	$('input#dot').datepicker({
 		dateFormat: 'yy-mm-dd',
 	});
 
-	load_employee();
 	$('#add_terminate').on('click', add_company_termination);
 
 	$(document).on('click', '.delete_termination', function() {
@@ -42,7 +57,6 @@ $(document).ready(function() {
 			$('#checkall').prop('checked', false);
 		}
 	});
-	listInterviewQuestion();
 
 	$('#sel_employee').on('change', () => {
 		if ($('#sel_employee').val() !== '') {
@@ -51,8 +65,28 @@ $(document).ready(function() {
 			$('#list_empo_details').hide();
 		}
 	});
-	listExitType();
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-77-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		listExitType();
+		listInterviewQuestion();
+		listTerminations('');
+		load_employee();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-78-') >= 0) {
+		$('#add_termination').show();
+	}
+}
 
 function list_of_terminations(page) {
 	var company_id = localStorage.getItem('company_id');
@@ -217,11 +251,13 @@ function listTerminations(page) {
 						v.job_title !== null ? v.job_title :
 						'.....'}</p></td>`;
 					// term_list += `<td>${v.nxt_kin_relationship}</td>`;
-					term_list += `<td>${v.exit_type_name}</td>`;
+					term_list += `<td>${capitalizeFirstLetter(v.exit_type_name)}</td>`;
 					// term_list += `<td>${
 					// 	v.employee_status === 'terminated' ? 'Exited' :
 					// 	capitalizeFirstLetter(v.employee_status)}</td>`;
-					term_list += `<td><select style="border:none; padding:5px;" id="updateStatus${v.exited_id}" onChange="updateStatus(${v.exited_id}, ${v.employee_id})">
+					let role_list = $('#does_user_have_roles').html();
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-79-') >= 0) {
+						term_list += `<td><select style="border:none; padding:5px;" id="updateStatus${v.exited_id}" onChange="updateStatus(${v.exited_id}, ${v.employee_id})">
                                             <option value="">--Status--</option>
                                             <option value="inactive" ${
 												v.employee_status.toLowerCase() ===
@@ -240,6 +276,27 @@ function listTerminations(page) {
 										<i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none;"
                                                 id="updateStatus_loader${v.exited_id}"></i>
 										</td>`;
+					} else {
+						term_list += `<td><select disabled style="border:none; padding:5px;" id="updateStatus${v.exited_id}" onChange="updateStatus(${v.exited_id}, ${v.employee_id})">
+                                            <option value="">--Status--</option>
+                                            <option value="inactive" ${
+												v.employee_status.toLowerCase() ===
+												'inactive' ? 'selected' :
+												''}>Inactive</option>
+                                            <option value="active" ${
+												v.employee_status.toLowerCase() ===
+												'active' ? 'selected' :
+												''}>Active</option>
+                                            <option value="terminated" ${
+												v.employee_status.toLowerCase() ===
+												'terminated' ? 'selected' :
+												''}>Exited</option>
+                                            
+                                        </select>
+										<i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none;"
+                                                id="updateStatus_loader${v.exited_id}"></i>
+										</td>`;
+					}
 					term_list += `<td>${v.pre_approved}</td>`;
 
 					if (v.employee_status.toLowerCase() === 'inactive') {
@@ -286,11 +343,11 @@ function listTerminations(page) {
 										<i class="fa fa-eye" /> View
 									</a>
 								</li>
-								<li >
+								<!--<li >
 									<a href="correspondence?exitId=${v.exited_id}" class="dropdown-item">
 										<i class="fa fa-comment" /> Correspondence
 									</a>
-								</li>
+								</li>-->
 							</ul>
 						</div></td>`;
 						} else if (v.exit_status === 'approve') {
@@ -311,37 +368,39 @@ function listTerminations(page) {
 										<i class="fa fa-eye" /> View
 									</a>
 								</li>
-								<li >
+								<!--<li >
 									<a href="correspondence?exitId=${v.exited_id}" class="dropdown-item">
 										<i class="fa fa-comment" /> Correspondence
 									</a>
-								</li>`;
-							if (v.sending_status === '0') {
-								term_list += `<li onClick="bringUpModal(${v.exited_id}, ${v.employee_id})">
-														<a class="dropdown-item">
-															<i class="fa fa-question-circle"></i> Interview ask
-														</a>
-													</li>
-												</ul>
-											</div></td>`;
-							} else if (v.sending_status === '1') {
-								term_list += `<li onClick="listInterviewQuestionAndAnswer(${v.exited_id}, ${v.employee_id})">
-													<a class="dropdown-item">
-														<i class="fa fa-question-circle"></i> View Interview Response
-													</a>
-												</li>
-												</ul>
-											</div></td>`;
-							} else if (v.sending_status === '2') {
-								term_list += `<li onClick="bringUpModal2(${v.exited_id}, ${v.employee_id})">
-													<a class="dropdown-item">
-														<i class="fa fa-question-circle"></i> View Interview Schedule
-													</a>
-												</li>
-												
-											</ul>
+								</li>-->
+								</ul>
 										</div></td>`;
-							}
+							// if (v.sending_status === '0') {
+							// 	term_list += `<li onClick="bringUpModal(${v.exited_id}, ${v.employee_id})">
+							// 							<a class="dropdown-item">
+							// 								<i class="fa fa-question-circle"></i> Interview ask
+							// 							</a>
+							// 						</li>
+							// 					</ul>
+							// 				</div></td>`;
+							// } else if (v.sending_status === '1') {
+							// 	term_list += `<li onClick="listInterviewQuestionAndAnswer(${v.exited_id}, ${v.employee_id})">
+							// 						<a class="dropdown-item">
+							// 							<i class="fa fa-question-circle"></i> View Interview Response
+							// 						</a>
+							// 					</li>
+							// 					</ul>
+							// 				</div></td>`;
+							// } else if (v.sending_status === '2') {
+							// 	term_list += `<li onClick="bringUpModal2(${v.exited_id}, ${v.employee_id})">
+							// 						<a class="dropdown-item">
+							// 							<i class="fa fa-question-circle"></i> View Interview Schedule
+							// 						</a>
+							// 					</li>
+
+							// 				</ul>
+							// 			</div></td>`;
+							// }
 						}
 					} else if (v.employee_status.toLowerCase() === 'active') {
 						if (v.exit_status === 'pending') {
@@ -1620,7 +1679,9 @@ function listExitType() {
 
 			if (response.data.data.length > 0) {
 				$(response.data.data).map((i, v) => {
-					options += `<option value="${v.exit_type_id}">${v.exit_type}</option>`;
+					options += `<option value="${v.exit_type_id}">${capitalizeFirstLetter(
+						v.exit_type,
+					)}</option>`;
 				});
 			} else {
 				options += `<option value="${v.exit_type_id}">No Record</option>`;
@@ -1634,4 +1695,8 @@ function listExitType() {
 		.then(function() {
 			// always executed
 		});
+}
+
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }

@@ -37,11 +37,27 @@ include_once("../gen/_common/header.php"); // header contents
         </div>
     </div>
 </div>
+<!-- loader page -->
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
 
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /loader page content -->
 <!-- page content -->
-<div id="employee_details_display" style="display: none;">
+<div class="right_col" role="main" id="main_display" style="display: none;">
+    <div id="employee_details_display" style="display: none;">
 
-    <div class="right_col" role="main">
+
 
         <div class="">
 
@@ -259,7 +275,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="tooltip" id="add_QC" title="Add Q&C">
+                                        <li data-toggle="tooltip" id="add_QC" title="Add Q&C" style="display:none;">
                                             <a class=""><i class="fa fa-plus"></i></a>
                                         </li>
 
@@ -368,7 +384,8 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="tooltip" id="add_work-exp" title="Add Work Exp.">
+                                        <li data-toggle="tooltip" id="add_work-exp" title="Add Work Exp."
+                                            style="display:none;">
                                             <a class=""><i class="fa fa-plus"></i></a>
                                         </li>
 
@@ -412,7 +429,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="workExp_start">Start<span>*</span>
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="workExp_start"
+                                                                <input type="date" id="workExp_start"
                                                                     required="required"
                                                                     class="form-control col-md-7 col-xs-12 required add_workExp_fields">
                                                             </div>
@@ -423,7 +440,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="workExp_end">End
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="workExp_end" required="required"
+                                                                <input type="date" id="workExp_end" required="required"
                                                                     class="form-control col-md-7 col-xs-12 required add_workExp_fields">
                                                             </div>
                                                         </div>
@@ -492,7 +509,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="tooltip" id="add_NOK" title="Add N.O.K">
+                                        <li data-toggle="tooltip" style="display:none;" id="add_NOK" title="Add N.O.K">
                                             <a class=""><i class="fa fa-plus"></i></a>
                                         </li>
 
@@ -630,7 +647,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="modal" id="edit_emp_info"
+                                        <li style="display:none;" data-toggle="modal" id="edit_emp_info"
                                             data-target="#edit_employment_info_modal" title="Edit Employment Info">
                                             <a class=""><i class="fa fa-pencil"></i></a>
                                         </li>
@@ -754,7 +771,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="jobTitle_from">From<span>*</span>
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="jobTitle_from"
+                                                                <input type="date" id="jobTitle_from"
                                                                     required="required"
                                                                     class="form-control col-md-7 col-xs-12 required add_jobTitle_fields">
                                                             </div>
@@ -765,7 +782,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="jobTitle_to">To
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="jobTitle_to" required="required"
+                                                                <input type="date" id="jobTitle_to" required="required"
                                                                     class="form-control col-md-7 col-xs-12 required ">
                                                             </div>
                                                         </div>
@@ -867,7 +884,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="dept_from">From<span>*</span>
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="dept_from" required="required"
+                                                                <input type="date" id="dept_from" required="required"
                                                                     class="form-control col-md-7 col-xs-12 required add_dept_fields">
                                                             </div>
                                                         </div>
@@ -877,7 +894,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="dept_to">To
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="dept_to" required="required"
+                                                                <input type="date" id="dept_to" required="required"
                                                                     class="form-control col-md-7 col-xs-12 required ">
                                                             </div>
                                                         </div>
@@ -979,7 +996,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="workShift_from">From<span>*</span>
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="workShift_from"
+                                                                <input type="date" id="workShift_from"
                                                                     required="required"
                                                                     class="form-control col-md-7 col-xs-12 required add_workShift_fields">
                                                             </div>
@@ -990,7 +1007,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                                 for="workShift_to">To
                                                             </label>
                                                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                <input type="text" id="workShift_to" required="required"
+                                                                <input type="date" id="workShift_to" required="required"
                                                                     class="form-control col-md-7 col-xs-12 required ">
                                                             </div>
                                                         </div>
@@ -1057,7 +1074,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="modal" id="edit_additional_info"
+                                        <li style="display:none;" data-toggle="modal" id="edit_additional_info"
                                             data-target="#edit_additional_info_modal" title="Edit Additional Info">
                                             <a class=""><i class="fa fa-pencil"></i></a>
                                         </li>
@@ -1176,7 +1193,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="modal" id="edit_bank_details"
+                                        <li style="display:none;" data-toggle="modal" id="edit_bank_details"
                                             data-target="#edit_bank_details_modal" title="Edit Bank Details">
                                             <a class=""><i class="fa fa-pencil"></i></a>
                                         </li>
@@ -1309,7 +1326,8 @@ include_once("../gen/_common/header.php"); // header contents
                                                     <ul class="nav navbar-right panel_toolbox">
 
 
-                                                        <li data-toggle="tooltip" id="add_credit" title="Add Credit">
+                                                        <li style="display:none;" data-toggle="tooltip" id="add_credit"
+                                                            title="Add Credit">
                                                             <a class=""><i class="fa fa-plus"></i></a>
                                                         </li>
 
@@ -1391,7 +1409,8 @@ include_once("../gen/_common/header.php"); // header contents
                                                     <ul class="nav navbar-right panel_toolbox">
 
 
-                                                        <li data-toggle="tooltip" id="add_debit" title="Add Debit">
+                                                        <li style="display:none;" data-toggle="tooltip" id="add_debit"
+                                                            title="Add Debit">
                                                             <a class=""><i class="fa fa-plus"></i></a>
                                                         </li>
 
@@ -1751,9 +1770,9 @@ include_once("../gen/_common/header.php"); // header contents
 
                                         <div class="col-md-6 col-sm-6 col-xs-6">
                                             <input class="inc-input" type="text" name="turtle-doves"
-                                                id="extra-allot-inp" value="0"><button id="inc-btn"
-                                                class="inc">+</button><button id="dec-btn" style="border:none;"
-                                                class="">-</button>
+                                                id="extra-allot-inp" value="0" disabled><button id="inc-btn" class="inc"
+                                                style="display:none;">+</button><button id="dec-btn"
+                                                style="border:none;display:none;" class="">-</button>
                                         </div>
                                     </div>
                                     <div style="display:none;" id="allot-btns">
@@ -2061,7 +2080,8 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li data-toggle="tooltip" id="add_docx" title="Add Document">
+                                        <li data-toggle="tooltip" id="add_docx" title="Add Document"
+                                            style="display:none;">
                                             <a class=""><i class="fa fa-plus"></i></a>
                                         </li>
 
@@ -2187,7 +2207,7 @@ include_once("../gen/_common/header.php"); // header contents
                                                     placeholder="Search for...">
                                                 <span class="input-group-btn">
                                                     <button class="btn btn-success" style="color:white;"
-                                                        id="emp_connect" type="button">Go!</button>
+                                                        id="emp_connect" type="button" disabled>Go!</button>
 
                                                 </span>
                                                 <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display:none;"
@@ -2412,7 +2432,7 @@ include_once("../gen/_common/header.php"); // header contents
                                     <option value="Active">Active</option>
                                     <!-- <option value="Leave">Leave</option> -->
                                     <option value="Inactive">Inactive</option>
-                                    <option value="Exited">Exited</option>
+                                    <option value="terminated">Exited</option>
                                 </select>
                             </div>
                         </div>
@@ -2861,7 +2881,7 @@ include_once("../gen/_common/header.php"); // header contents
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_workExp_start">Start
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="edit_workExp_start" required="required"
+                                <input type="date" id="edit_workExp_start" required="required"
                                     style="margin-bottom:5px;" class="form-control col-md-7 col-xs-12 required">
 
                             </div>
@@ -2871,7 +2891,7 @@ include_once("../gen/_common/header.php"); // header contents
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_workExp_end">End
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="edit_workExp_end" required="required" style="margin-bottom:5px;"
+                                <input type="date" id="edit_workExp_end" required="required" style="margin-bottom:5px;"
                                     class="form-control col-md-7 col-xs-12 required">
 
                             </div>
@@ -2934,7 +2954,7 @@ include_once("../gen/_common/header.php"); // header contents
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_dept_start">From
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="edit_dept_from" required="required" style="margin-bottom:5px;"
+                                <input type="date" id="edit_dept_from" required="required" style="margin-bottom:5px;"
                                     class="form-control col-md-7 col-xs-12 required">
 
                             </div>
@@ -2944,7 +2964,7 @@ include_once("../gen/_common/header.php"); // header contents
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_dept_end">To
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="edit_dept_to" required="required" style="margin-bottom:5px;"
+                                <input type="date" id="edit_dept_to" required="required" style="margin-bottom:5px;"
                                     class="form-control col-md-7 col-xs-12 required">
 
                             </div>
@@ -3151,7 +3171,7 @@ include_once("../gen/_common/header.php"); // header contents
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_workShift_start">From
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="edit_workShift_from" required="required"
+                                <input type="date" id="edit_workShift_from" required="required"
                                     style="margin-bottom:5px;" class="form-control col-md-7 col-xs-12 required">
 
                             </div>
@@ -3161,7 +3181,7 @@ include_once("../gen/_common/header.php"); // header contents
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_workShift_end">To
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="edit_workShift_to" required="required" style="margin-bottom:5px;"
+                                <input type="date" id="edit_workShift_to" required="required" style="margin-bottom:5px;"
                                     class="form-control col-md-7 col-xs-12 required">
 
                             </div>
@@ -3233,7 +3253,7 @@ include_once("../gen/_common/header.php"); // header contents
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="edit_jobTitle_end">To
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" id="edit_jobTitle_to" required="required" style="margin-bottom:5px;"
+                                <input type="date" id="edit_jobTitle_to" required="required" style="margin-bottom:5px;"
                                     class="form-control col-md-7 col-xs-12 required">
 
                             </div>

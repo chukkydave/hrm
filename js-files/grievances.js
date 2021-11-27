@@ -1,12 +1,43 @@
 $(document).ready(function() {
-	list_of_grievance(1);
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('.js-example-basic-single').select2();
-	load_employee();
 	$('#add_party').on('click', addParty);
 	$(document).on('click', '#filter_g', function() {
 		list_of_grievance(1);
 	});
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-73-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		list_of_grievance(1);
+		load_employee();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 
 function list_of_grievance(page) {
 	var company_id = localStorage.getItem('company_id');
@@ -69,7 +100,9 @@ function list_of_grievance(page) {
 							strTable += `<td>${v.grievance_person_against_fullname}<br>(${v.grievance_person_against_job_title})</td>`;
 						}
 						strTable += `<td>${capitalizeFirstLetter(v.grievance_type)}</td>`;
-						strTable += `<td>
+						let role_list = $('#does_user_have_roles').html();
+						if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-76-') >= 0) {
+							strTable += `<td>
                                         <select style="border:none; padding:5px;" id="updateStatus${v.grievance_id}" onChange="updateStatus(${v.grievance_id})">
                                             <option value="">--Status--</option>
                                             <option value="pending" ${
@@ -88,9 +121,32 @@ function list_of_grievance(page) {
                                         <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none;"
                                                 id="updateStatus_loader${v.grievance_id}"></i>
                                     </td>`;
-						strTable +=
+						} else {
+							strTable += `<td>
+                                        <select disabled style="border:none; padding:5px;" id="updateStatus${v.grievance_id}" onChange="updateStatus(${v.grievance_id})">
+                                            <option value="">--Status--</option>
+                                            <option value="pending" ${
+												v.greviance_status === 'pending' ? 'selected' :
+												''}>Pending</option>
+                                            <option value="in-progress" ${
+												v.greviance_status === 'in-progress' ? 'selected' :
+												''}>In Progress</option>
+                                            <option value="on-hold" ${
+												v.greviance_status === 'on-hold' ? 'selected' :
+												''}>On Hold</option>
+                                            <option value="resolved" ${
+												v.greviance_status === 'resolved' ? 'selected' :
+												''}>Resolved</option>
+                                        </select>
+                                        <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none;"
+                                                id="updateStatus_loader${v.grievance_id}"></i>
+                                    </td>`;
+						}
 
-								v.greviance_status === 'resolved' ? `<td>
+						if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-74-') >= 0) {
+							strTable +=
+
+									v.greviance_status === 'resolved' ? `<td>
                                         <div class="dropdown">
                                             <button
                                                 class="btn btn-secondary dropdown-toggle"
@@ -115,7 +171,7 @@ function list_of_grievance(page) {
                                             </ul>
                                         </div>
                                     </td>` :
-								`<td>
+									`<td>
                                         <div class="dropdown">
                                             <button
                                                 class="btn btn-secondary dropdown-toggle"
@@ -140,6 +196,57 @@ function list_of_grievance(page) {
                                             </ul>
                                         </div>
                                     </td>`;
+						} else {
+							strTable +=
+
+									v.greviance_status === 'resolved' ? `<td>
+                                        <div class="dropdown">
+                                            <button
+                                                class="btn btn-secondary dropdown-toggle"
+                                                type="button"
+                                                id="dropdownMenuButton1"
+                                                data-toggle="dropdown"
+                                                aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li>
+                                                    <a class="dropdown-item" href="view_grievance?id=${v.grievance_id}" id="">
+                                                        <i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View Grievance info" /> View
+                                                    </a>
+                                                </li>
+                                                <!--<li onClick="listParties(${v.grievance_id})">
+                                                    <a class="dropdown-item" id="">
+                                                        <i class="fa fa-pencil" data-toggle="modal" data-target="#addParty" title="Add/Remove Party"/>Add/Remove Party
+                                                    </a>
+                                                </li>-->
+                                                
+                                            </ul>
+                                        </div>
+                                    </td>` :
+									`<td>
+                                        <div class="dropdown">
+                                            <button
+                                                class="btn btn-secondary dropdown-toggle"
+                                                type="button"
+                                                id="dropdownMenuButton1"
+                                                data-toggle="dropdown"
+                                                aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li>
+                                                    <a class="dropdown-item" href="view_grievance?id=${v.grievance_id}" id="">
+                                                        <i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="View Grievance info" /> View
+                                                    </a>
+                                                </li>
+                                                
+                                                
+                                            </ul>
+                                        </div>
+                                    </td>`;
+						}
+
 						strTable += `</tr>`;
 						k++;
 					});

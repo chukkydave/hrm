@@ -13,8 +13,24 @@ include_once("../gen/_common/header.php"); // header contents
     margin-bottom: 2em;
 }
 </style>
+<!-- loader page -->
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
+
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /loader page content -->
 <!-- page content -->
-<div class="right_col" role="main">
+<div class="right_col" role="main" id="main_display" style="display: none;">
     <div class="">
         <div class="page-title">
             <div class="title_left">
@@ -27,9 +43,11 @@ include_once("../gen/_common/header.php"); // header contents
 
                         <button type="button" class="btn btn-primary" id="filter_attendence">Filter</button>
 
-                        <button type="button" class="btn btn-success" id="add_attendence">Add</button>
+                        <button type="button" class="btn btn-success" id="add_attendence"
+                            style="display:none;">Add</button>
                         <button type="button" class="btn btn-success" id="add_position" data-toggle="collapse"
-                            data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample">Upload
+                            data-target="#collapseExample4" aria-expanded="false" aria-controls="collapseExample"
+                            style="display:none;">Upload
                             file</button>
 
                         <!-- <button type="button" class="btn btn-success" id="upload_attendence">Upload</button> -->
@@ -65,15 +83,13 @@ include_once("../gen/_common/header.php"); // header contents
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="file" id="dot" required="required"
-                                            class="form-control col-md-7 col-xs-12 required">
+                                            class="form-control col-md-7 col-xs-12 required dotty">
                                     </div>
                                 </div>
-                                <pre id="output"></pre>
-
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                     </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="error">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="add_csv_error">
 
                                     </div>
                                 </div>
@@ -84,9 +100,9 @@ include_once("../gen/_common/header.php"); // header contents
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                         <!-- <button class="btn btn-primary" type="button">Cancel</button>
                           <button class="btn btn-primary" type="reset">Reset</button> -->
-                                        <button type="button" class="btn btn-success" id="add_terminate">Upload</button>
+                                        <button type="button" class="btn btn-success" id="add_csv_btn">Upload</button>
                                         <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
-                                            id="termination_loader"></i>
+                                            id="add_csv_loader"></i>
                                     </div>
                                 </div>
 

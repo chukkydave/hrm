@@ -1,8 +1,22 @@
 $(document).ready(function() {
 	$('#logout').on('click', logout);
-	setTimeout(() => {
-		wait_to_load();
-	}, 2000);
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
 });
 
 function wait_to_load(warehouse_id) {
@@ -485,17 +499,26 @@ function fetch_employee_details() {
 					'<a href="' +
 					base_url +
 					'employees"><button id="send"  class="btn btn-default">Back</button></a>';
-				str2 +=
-					'<a onClick="viewBasicInfo()"><button id="editBasicInfo" data-toggle="modal" data-target="#edit_basic_modal" class="btn btn-primary">Edit</button></a>';
+				let role_list = $('#does_user_have_roles').html();
 
-				str3 += '<div id="crop-avatar">';
+				if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+					str2 +=
+						'<a onClick="viewBasicInfo()"><button id="editBasicInfo" data-toggle="modal" data-target="#edit_basic_modal" class="btn btn-primary">Edit</button></a>';
+				}
+
+				str3 += '<div  class="profile_pic pfl_ctna" id="crop-avatar">';
 
 				str3 +=
-					'<img src="' +
+					'<img class="pfl_ctna" src="' +
 					site_url +
 					'/files/images/employee_images/mid_' +
 					response.data.employee_data.profile_picture +
-					'" alt="..."><div style="text-decoration:underline;text-align:center;margin-top:5px;" data-toggle="modal" data-target="#edit_proPic_modal" class="pointer">Update Image</div>';
+					'" alt="...">';
+				if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+					str3 +=
+						'<div style="text-decoration:underline;text-align:center;margin-top:5px;" data-toggle="modal" data-target="#edit_proPic_modal" class="pointer"> Update Image</div>';
+				}
+
 				str3 += '</div>';
 
 				str += '<li><i class="fa fa-map-marker user-profile-icon"></i>&nbsp;&nbsp;';

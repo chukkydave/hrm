@@ -1,8 +1,38 @@
 $(document).ready(function() {
-	fetch_doctype_details();
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
 
 	$('#edit_doctype').on('click', edit_company_doctype);
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-82-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		fetch_doctype_details();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 
 function edit_company_doctype() {
 	var doctype_name = $('#doctype_name').val();

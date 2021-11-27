@@ -1,6 +1,23 @@
 $(document).ready(function() {
-	fetch_employee_attendance();
 	// load_employee();
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('#clock_in').datetimepicker({
 		format: 'HH:mm:ss',
 	});
@@ -11,6 +28,20 @@ $(document).ready(function() {
 
 	$('#update_att').on('click', edit_employee_attendance);
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-62-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		fetch_employee_attendance();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 
 function load_employee() {
 	var company_id = localStorage.getItem('company_id');

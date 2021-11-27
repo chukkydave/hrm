@@ -1,5 +1,22 @@
 $(document).ready(() => {
-	listPayHistory(1);
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('input#payperiod_filter').daterangepicker({
 		autoUpdateInput: false,
 	});
@@ -14,6 +31,24 @@ $(document).ready(() => {
 		listPayHistory(1);
 	});
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (
+		role_list.indexOf('-83-') >= 0 ||
+		role_list.indexOf('-69-') >= 0 ||
+		role_list.indexOf('-68-') >= 0
+	) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		listPayHistory(1);
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 
 function listPayHistory(page) {
 	let company_id = localStorage.getItem('company_id');
@@ -68,8 +103,39 @@ function listPayHistory(page) {
 					// sche_list += `<td>${v.nxt_kin_relationship}</td>`;
 					sche_list += `<td>${start} - ${end}</td>`;
 					sche_list += `<td>${status}</td>`;
-
-					sche_list += `<td>
+					let role_list = $('#does_user_have_roles').html();
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-71-') >= 0) {
+						if (v.is_pay_run_active === 'approve') {
+							sche_list += `<td>
+						<div class="dropdown">
+							<button
+								class="btn btn-secondary dropdown-toggle"
+								type="button"
+								id="dropdownMenuButton1"
+								data-toggle="dropdown"
+								aria-expanded="false">
+								Actions
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+								<!--<li onClick="listSPayrun(${v.pay_run_id})">
+									<a class="dropdown-item">
+										<i class="fa fa-pencil" /> Edit
+									</a>
+								</li>-->
+								<li onClick="deletePayRun(${v.pay_run_id})">
+									<a class="dropdown-item">
+										<i class="fa fa-trash" /> Delete
+									</a>
+								</li>
+								<li onClick="downloadPayhistory(${v.pay_run_id})">
+									<a class="dropdown-item">
+										<i class="fa fa-download"></i> Download
+									</a>
+								</li>
+							</ul>
+						</div></td>`;
+						} else {
+							sche_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -92,6 +158,56 @@ function listPayHistory(page) {
 								</li>
 							</ul>
 						</div></td>`;
+						}
+					} else {
+						if (v.is_pay_run_active === 'approve') {
+							sche_list += `<td>
+						<div class="dropdown">
+							<button
+								class="btn btn-secondary dropdown-toggle"
+								type="button"
+								id="dropdownMenuButton1"
+								data-toggle="dropdown"
+								aria-expanded="false">
+								Actions
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+								<!--<li onClick="listSPayrun(${v.pay_run_id})">
+									<a class="dropdown-item">
+										<i class="fa fa-pencil" /> Edit
+									</a>
+								</li>-->
+								
+								<li onClick="downloadPayhistory(${v.pay_run_id})">
+									<a class="dropdown-item">
+										<i class="fa fa-download"></i> Download
+									</a>
+								</li>
+							</ul>
+						</div></td>`;
+						} else {
+							sche_list += `<td>
+						<div class="dropdown">
+							<button
+								class="btn btn-secondary dropdown-toggle"
+								type="button"
+								id="dropdownMenuButton1"
+								data-toggle="dropdown"
+								aria-expanded="false">
+								Actions
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+								<!--<li onClick="listSPayrun(${v.pay_run_id})">
+									<a class="dropdown-item">
+										<i class="fa fa-pencil" /> Edit
+									</a>
+								</li>-->
+								
+							</ul>
+						</div></td>`;
+						}
+					}
+
 					sche_list += `</tr>`;
 					sche_list += `<tr id="pay_loader${v.pay_run_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 				});
@@ -223,6 +339,45 @@ function listSPayrun(id) {
 			$('#list_sPayrun_loader').hide();
 			$('#list_sPayrun_table').show();
 			$('#list_sPayrun_body').html(`<tr><td colspan="4" style="color:red;">Error</td></tr>`);
+		})
+		.then(function() {
+			// always executed
+		});
+}
+
+function downloadPayhistory(id) {
+	let company_id = localStorage.getItem('company_id');
+	// let employee_id = window.location.search.split('=')[1];
+
+	axios
+		.get(`${api_path}hrm/download_payrun`, {
+			params: {
+				pay_run_id: id,
+			},
+			headers: {
+				Authorization: localStorage.getItem('token'),
+			},
+		})
+		.then(function(response) {
+			if (response.data.status === 200) {
+				window.open(response.data.download_link, '_blank');
+			} else {
+				Swal.fire({
+					title: 'Error!',
+					text: `${response.data.msg}`,
+					icon: 'error',
+					confirmButtonText: 'Close',
+				});
+			}
+		})
+		.catch(function(error) {
+			console.log(error);
+			Swal.fire({
+				title: 'Error!',
+				text: `Error downloading file`,
+				icon: 'error',
+				confirmButtonText: 'Close',
+			});
 		})
 		.then(function() {
 			// always executed

@@ -22,8 +22,25 @@ include_once("../gen/_common/header.php"); // header contents
     text-align: center;
 }
 </style>
+
+<!-- loader page -->
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
+
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /loader page content -->
 <!-- page content -->
-<div class="right_col" role="main">
+<div class="right_col" role="main" id="main_display" style="display: none;">
     <div class="">
         <div class="page-title">
             <div class="title_left">

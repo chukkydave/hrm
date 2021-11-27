@@ -1,5 +1,6 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css" rel="stylesheet">
@@ -100,9 +101,25 @@ input:checked+.slider:before {
     </div>
 </div>
 
+<!-- loader page -->
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
+
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /loader page content -->
 <!-- page content -->
-<div id="employee_details_display" style="display: none;">
-    <div class="right_col" role="main">
+<div class="right_col" role="main" id="main_display" style="display: none;">
+    <div id="employee_details_display" style="display: none;">
         <div class="">
             <div class="page-title">
                 <div class="title_left">
@@ -412,7 +429,8 @@ input:checked+.slider:before {
                                                     <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                 </li>
 
-                                                <li data-toggle="tooltip" id="add_appv" title="Add Approver">
+                                                <li data-toggle="tooltip" id="add_appv" title="Add Approver"
+                                                    style="display:none;">
                                                     <a class=""><i class="fa fa-plus"></i></a>
                                                 </li>
 
@@ -562,7 +580,7 @@ input:checked+.slider:before {
 
                                         <div class="form-row" id="approve_decline_buttons" style="display: none">
                                             <div class="col-md-2 col-sm-2 col-xs-6">
-                                                <button type="submit" class="btn btn-success"
+                                                <button style="display:none;" type="submit" class="btn btn-success"
                                                     id="approve">Approve</button>
                                                 <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                                     id="approve_loader"></i>
@@ -570,7 +588,7 @@ input:checked+.slider:before {
                                             </div>
 
                                             <div class="col-md-2 col-sm-2 col-xs-6">
-                                                <button type="submit" class="btn btn-danger"
+                                                <button style="display:none;" type="submit" class="btn btn-danger"
                                                     id="decline">Decline</button>
                                                 <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                                     id="decline_loader"></i>
@@ -740,9 +758,6 @@ input:checked+.slider:before {
     </div>
 </div>
 
-
-
-
 <div class="modal fade" id="modal_error_pop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -832,5 +847,5 @@ input:checked+.slider:before {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.js"></script>
 <script src="js-files/view_employee_leave_details.js"></script>
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>

@@ -1,5 +1,21 @@
 $(document).ready(() => {
-	listPaySchedules();
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
 
 	// list_of_companies_employees('', '');
 	// load_position();
@@ -8,6 +24,28 @@ $(document).ready(() => {
 	// // $('.allEmp').select2();
 	// $('#saveEmp').on('click', handleSelect);
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		listPaySchedules();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+
+	if (
+		role_list.indexOf('-83-') >= 0 ||
+		role_list.indexOf('-69-') >= 0 ||
+		role_list.indexOf('-68-') >= 0
+	) {
+		$('#create_pay_schedule').show();
+	}
+}
 
 function list_of_companies_employees(page, serial, order_by) {
 	var company_id = localStorage.getItem('company_id');
@@ -397,8 +435,10 @@ function listPaySchedules() {
                                                                 <p id="recurring_status" class="ml1">${status}</p>
                                                         </div>
                                                     </span>`;
-					if (v.is_pay_schedule_active === 'inactive') {
-						sche_list += `<div class="">
+					let role_list = $('#does_user_have_roles').html();
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-69-') >= 0) {
+						if (v.is_pay_schedule_active === 'inactive') {
+							sche_list += `<div class="">
                                                         <div>
                                                             <a href="edit_pay_schedule?id=${v.pay_schedule_id}"><i class="fa fa-pencil" style="color:blue;" id=""></i></a>
                                                             <i class="fa fa-trash ml1" style="color:red;" id="del_icon${v.pay_schedule_id}" onClick="deletePaySchedule(${v.pay_schedule_id})"></i>
@@ -415,8 +455,8 @@ function listPaySchedules() {
                                         </div>
                                     </div>
                                 </div>`;
-					} else if (v.is_pay_schedule_active === 'active') {
-						sche_list += `<div class="">
+						} else if (v.is_pay_schedule_active === 'active') {
+							sche_list += `<div class="">
                                                         <div>
                                                             <a href="edit_pay_schedule?id=${v.pay_schedule_id}"><i class="fa fa-pencil" style="color:blue;" id=""></i></a>
                                                             <!--<i class="fa fa-trash ml1" style="color:red;" id="del_icon${v.pay_schedule_id}" onClick="deletePaySchedule(${v.pay_schedule_id})"></i>-->
@@ -432,6 +472,37 @@ function listPaySchedules() {
                                         </div>
                                     </div>
                                 </div>`;
+						}
+					} else {
+						if (v.is_pay_schedule_active === 'inactive') {
+							sche_list += `<div class="">
+                                                        <div>
+                                                            
+                                                        </div>
+                                                       
+                                                        
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+						} else if (v.is_pay_schedule_active === 'active') {
+							sche_list += `<div class="">
+                                                        <div>
+                                                            
+                                                        </div>
+                                                       
+                                                        
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+						}
 					}
 				});
 				$('#list_sche_body').html(sche_list);

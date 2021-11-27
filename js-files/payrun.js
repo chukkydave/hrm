@@ -1,5 +1,22 @@
 $(document).ready(function() {
-	listPayRunHistory(1);
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('#smartwizard').smartWizard({
 		selected: 0, // Initial selected step, 0 = first step
 		theme: 'dots', // theme for the wizard, related css need to include for other than default theme
@@ -50,8 +67,6 @@ $(document).ready(function() {
 	$('input#date_range').daterangepicker({
 		autoUpdateInput: false,
 	});
-
-	load_employee();
 
 	$('input#date_range').on('apply.daterangepicker', function(ev, picker) {
 		$(this).val(
@@ -129,8 +144,36 @@ $(document).ready(function() {
 		});
 	}
 	$('.js-example-basic-single').select2();
-	listApprovers();
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-68-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		listPayRunHistory(1);
+		load_employee();
+		listApprovers();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-70-') >= 0) {
+		$('#payrun_name').attr('disabled', false);
+		$('#date_range').attr('disabled', false);
+		$('#pay_date').attr('disabled', false);
+		$('#pay_dates_btn').show();
+	}
+
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-72-') >= 0) {
+		$('#add_appv').show();
+		$('#approve_btnn').show();
+		$('#decline_btnn').show();
+		// $('#pay_dates_btn').show();
+	}
+}
 
 function listPayRunHistory(page) {
 	let company_id = localStorage.getItem('company_id');
@@ -170,6 +213,10 @@ function listPayRunHistory(page) {
 				pay_period_end,
 				pay_schedule_id,
 				pay_run_name,
+				sum_credit,
+				sum_debit,
+				sum_net_pay,
+				sum_taxed,
 			} = response.data.data;
 			$('#secret_sche_id').html(pay_schedule_id);
 			if (!pay_run_name && !pay_period_start && !pay_period_end && !pay_date) {
@@ -201,6 +248,59 @@ function listPayRunHistory(page) {
 				$('#whole_loader').hide();
 				$('#second_part').show();
 			}
+
+			let sum_credits;
+			let sum_debits;
+			let sum_net_pays;
+			let sum_taxeds;
+
+			if (
+				sum_credit == '0' ||
+				sum_credit == '' ||
+				sum_credit == null ||
+				sum_credit == NaN ||
+				sum_credit == '0.00'
+			) {
+				sum_credits = 0;
+			} else {
+				sum_credits = parseFloat(sum_credit);
+			}
+
+			if (
+				sum_debit == '0' ||
+				sum_debit == '' ||
+				sum_debit == null ||
+				sum_debit == NaN ||
+				sum_debit == '0.00'
+			) {
+				sum_debits = 0;
+			} else {
+				sum_debits = parseFloat(sum_debit);
+			}
+
+			if (
+				sum_net_pay == '0' ||
+				sum_net_pay == '' ||
+				sum_net_pay == null ||
+				sum_net_pay == NaN ||
+				sum_net_pay == '0.00'
+			) {
+				sum_net_pays = 0;
+			} else {
+				sum_net_pays = parseFloat(sum_net_pay);
+			}
+
+			if (
+				sum_taxed == '0' ||
+				sum_taxed == '' ||
+				sum_taxed == null ||
+				sum_taxed == NaN ||
+				sum_taxed == '0.00'
+			) {
+				sum_taxeds = 0;
+			} else {
+				sum_taxeds = parseFloat(sum_taxed);
+			}
 			if (employee.length > 0) {
 				let grossArr = [];
 				let netArr = [];
@@ -212,6 +312,7 @@ function listPayRunHistory(page) {
 					let tax;
 					let deduc;
 					let gross;
+
 					if (
 						v.net_pay == '0' ||
 						v.net_pay == '' ||
@@ -256,6 +357,7 @@ function listPayRunHistory(page) {
 					} else {
 						tax = parseFloat(v.tax);
 					}
+
 					payrun_list += `<tr class="even pointer" id="spay_row${v.employee_id}">`;
 					payrun_list += `<td>${v.fullname}<br>${v.workshift}</td>`;
 					payrun_list += `<td>${v.department}<p style="font-size:0.9em;font-style:italics;color:blue;">${v.job_title}</p></td>`;
@@ -309,10 +411,15 @@ function listPayRunHistory(page) {
 				$('#list_payrun_body2').html(payrun_list2);
 				$('#list_payrun_body3').html(payrun_list3);
 				$('#list_payrun_body4').html(payrun_list4);
-				let totalNet = getArraySum(netArr);
-				let totalGross = getArraySum(grossArr);
-				let totalDeduc = getArraySum(deducArr);
-				let totalTax = getArraySum(taxArr);
+				// let totalNet = getArraySum(netArr);
+				// let totalGross = getArraySum(grossArr);
+				// let totalDeduc = getArraySum(deducArr);
+				// let totalTax = getArraySum(taxArr);
+
+				let totalNet = sum_net_pays;
+				let totalGross = sum_credits;
+				let totalDeduc = sum_debits;
+				let totalTax = sum_taxeds;
 				$('#list_payrun_body').append(
 					`<tr style="border-top:3px solid; border-bottom:3px solid;">
                     <td></td>
@@ -424,7 +531,7 @@ function listPayRunHistory(page) {
 			});
 		})
 		.catch(function(error) {
-			console.log(error, 'eeeeeeeerrrrrrrrrooooottt');
+			console.log(error);
 			$('#list_payrun_loader').hide();
 			$('#list_payrun_table').show();
 			$('#list_payrun_body').html(`<tr><td colspan="7" style="color:red;">Error</td></tr>`);
@@ -478,7 +585,6 @@ function addPayDates() {
 		pay_run_id: id,
 		pay_run_name: pay_run_name,
 	};
-	console.log(data);
 	$.ajax({
 		type: 'Put',
 		dataType: 'json',
@@ -555,8 +661,6 @@ function getPaySlipDetails(emp_id) {
 		timeout: 60000,
 
 		success: function(response) {
-			console.log(response);
-
 			if (response.status == '200') {
 				// $('#loading').hide();
 				let credit_checker = '';
@@ -686,8 +790,6 @@ function getPaySlipDetails2(emp_id) {
 		timeout: 60000,
 
 		success: function(response) {
-			console.log(response);
-
 			if (response.status == '200') {
 				let debit_table = '';
 				let credit_table = '';
@@ -874,9 +976,6 @@ function addCreditInput() {
 	let totalDedit = getArraySum(dArr);
 	let net_pay = totalCredit - totalDedit;
 
-	// console.log(arr, dArr, 'hhfhfhfhfhhfhfhfhffhfhhf');
-	// console.log(totalCredit, totalDedit);
-
 	$('#total_debit').val(`₦${numberWithCommas(totalDedit)}`);
 	$('#total_credit').val(`₦${numberWithCommas(totalCredit)}`);
 	$('#salary_amt').html(`₦${numberWithCommas(totalCredit)}`);
@@ -940,7 +1039,6 @@ function addDebitComponent() {
 				$('#add_debitComponent_btn').show();
 				getPaySlipDetails(employee_id);
 			} else {
-				console.log(response);
 				$('#add_debitComponent_loader').hide();
 				$('#add_debitComponent_btn').show();
 				Swal.fire({
@@ -1010,7 +1108,6 @@ function addCreditComponent() {
 				$('#add_creditComponent_btn').show();
 				getPaySlipDetails(employee_id);
 			} else {
-				console.log(response);
 				$('#add_creditComponent_loader').hide();
 				$('#add_creditComponent_btn').show();
 				Swal.fire({
@@ -1163,7 +1260,6 @@ function saveSalaryBreakdown() {
 		pay_run_id: pay_run_id,
 		earning_type: earn,
 	};
-	console.log(data);
 	$.ajax({
 		type: 'Put',
 		dataType: 'json',
@@ -1220,8 +1316,6 @@ function load_employee() {
 		dataType: 'json',
 
 		success: function(response) {
-			// console.log(response);
-
 			var options = '';
 
 			$(response.data).each((i, v) => {
@@ -1276,13 +1370,13 @@ function listApprovers() {
 					appv_list += `<tr id="appv_div${v.approval_id}">`;
 					appv_list += `<td><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="${site_url}/files/images/employee_images/sml_${v.picture}" " alt="..." width="50"></div></td>`;
 					appv_list += `<td><b>${v.fullname} (${v.job_title})</b><br>Date Received: ${received} <br>Date Of Action: ${action}</td>`;
-					if (v.pay_run_approval_status == 'not_approved') {
+					if (v.pay_run_approval_status == 'decline') {
 						appv_list += `<td><i class="fa fa-times-circle" style="color: red; font-size: 15px;"></i></td>`;
-						appv_list += `<td onClick="deleteAppvrover(${v.approval_id})"><i  class="fa fa-trash-o"  data-toggle="tooltip" data-placement="top" title="Delete Approver"></i></td>`;
 					} else if (v.pay_run_approval_status == 'approve') {
 						appv_list += `<td><i class="fa fa-check-circle" style="color: green; font-size: 15px;"></i></td>`;
 					} else if (v.pay_run_approval_status.toLowerCase() == 'pending') {
 						appv_list += `<td><i class="fa fa-exclamation-triangle" style="color: orange; font-size: 15px;"></i></td>`;
+						appv_list += `<td onClick="deleteAppvrover(${v.approval_id})"><i  class="fa fa-trash-o"  data-toggle="tooltip" data-placement="top" title="Delete Approver"></i></td>`;
 					}
 					appv_list += `</tr>`;
 					appv_list += `<tr id="appv_del_loader${v.approval_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw fa-2x"></i></td></tr>`;
@@ -1290,7 +1384,7 @@ function listApprovers() {
 					appv_list2 += `<tr id="appv_div${v.approval_id}">`;
 					appv_list2 += `<td><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="${site_url}/files/images/employee_images/sml_${v.picture}" " alt="..." width="50"></div></td>`;
 					appv_list2 += `<td><b>${v.fullname} (${v.job_title})</b><br>Date Received: ${received} <br>Date Of Action: ${action}</td>`;
-					if (v.pay_run_approval_status == 'not_approved') {
+					if (v.pay_run_approval_status == 'decline') {
 						appv_list2 += `<td><i class="fa fa-times-circle" style="color: red; font-size: 15px;"></i></td>`;
 					} else if (v.pay_run_approval_status == 'approve') {
 						appv_list2 += `<td><i class="fa fa-check-circle" style="color: green; font-size: 15px;"></i></td>`;
@@ -1329,7 +1423,6 @@ function addApprovals() {
 	let pay_run_id = window.location.search.split('=')[1];
 	let approvals = $('#empo_name').val();
 	let arr = [];
-	console.log(approvals);
 	approvals.map((id) => {
 		arr.push({ approval_id: id });
 	});

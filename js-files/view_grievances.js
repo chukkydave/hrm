@@ -1,6 +1,21 @@
 $(document).ready(function() {
-	fetch_grievance_info();
-	viewProceedings();
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
 
 	var goTimeout;
 
@@ -35,6 +50,29 @@ $(document).ready(function() {
 	$('#add_header_btn').on('click', addHeader);
 	$('#add_desc_btn').on('click', addDESC);
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-73-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		fetch_grievance_info();
+		viewProceedings();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-74-') >= 0) {
+		$('#add_header_details').show();
+
+		$('#desc_text').attr('disabled', false);
+		$('#add_desc_btn').attr('disabled', false);
+	}
+}
+
 function fetch_grievance_info() {
 	let grievance_id = window.location.search.split('=')[1];
 	var company_id = localStorage.getItem('company_id');

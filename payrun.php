@@ -8,9 +8,23 @@ include_once("../gen/_common/header.php"); // header contents
 <link href="https://unpkg.com/smartwizard@5/dist/css/smart_wizard_all.min.css" rel="stylesheet" type="text/css" />
 <link type="text/css" rel="stylesheet" href="assets/css/style.css" />
 
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
 
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
 
-<div class="right_col" role="main">
+</div>
+<!-- /loader page content -->
+<!-- page content -->
+<div class="right_col" role="main" id="main_display" style="display: none;">
     <div class="">
         <div class="page-title">
             <div class="title_left">
@@ -97,8 +111,8 @@ include_once("../gen/_common/header.php"); // header contents
                                                 <div class="form-inline" style="margin-bottom:2em;">
                                                     <div class="form-group" style="margin-right:2em;">
                                                         <label for="ex3" class="col-form-label">Name: </label>
-                                                        <input type="text" id="payrun_name" class="form-control"
-                                                            placeholder=" ">
+                                                        <input disabled type="text" id="payrun_name"
+                                                            class="form-control" placeholder=" ">
                                                     </div>
                                                     <!-- <div class="form-group" style="margin-right:2em;">
                                                         <label for="ex4" class="col-form-label">Status: </label>
@@ -107,19 +121,19 @@ include_once("../gen/_common/header.php"); // header contents
                                                     </div> -->
                                                     <div class="form-group" style="margin-right:2em;">
                                                         <label for="ex3" class="col-form-label">Pay Period: </label>
-                                                        <input type="text" id="date_range" class="form-control"
+                                                        <input disabled type="text" id="date_range" class="form-control"
                                                             placeholder=" ">
                                                     </div>
                                                     <div class="form-group" style="margin-right:2em;">
                                                         <label for="ex3" class="col-form-label">Pay Date: </label>
-                                                        <input type="date" id="pay_date" class="form-control"
+                                                        <input disabled type="date" id="pay_date" class="form-control"
                                                             placeholder=" ">
                                                     </div>
                                                     <p id="secret_sche_id" style="display:none;"></p>
                                                     <br>
                                                     <div class="form-group" style="margin-top:10px;">
-                                                        <button class="btn btn-sm btn-primary"
-                                                            id="pay_dates_btn">Save</button>
+                                                        <button class="btn btn-sm btn-primary" id="pay_dates_btn"
+                                                            style="display:none;">Save</button>
                                                         <i class="fa fa-spinner fa-spin fa-fw fa-2x"
                                                             style="display: none;" id="pay_dates_loader"></i>
                                                         <p style="margin-top:10px; color:red; display:none;"
@@ -284,8 +298,8 @@ include_once("../gen/_common/header.php"); // header contents
                                                                             class="fa fa-chevron-up"></i></a>
                                                                 </li>
 
-                                                                <li data-toggle="tooltip" id="add_appv"
-                                                                    title="Add Approver">
+                                                                <li style="display:none;" data-toggle="tooltip"
+                                                                    id="add_appv" title="Add Approver">
                                                                     <a class=""><i class="fa fa-plus"></i></a>
                                                                 </li>
 
@@ -387,7 +401,7 @@ include_once("../gen/_common/header.php"); // header contents
 
                                                                     <div class="form-row" id="approve_decline_buttons">
                                                                         <div class="col-md-2 col-sm-2 col-xs-6">
-                                                                            <button type="submit"
+                                                                            <button style="display:none;" type="submit"
                                                                                 class="btn btn-success"
                                                                                 id="approve_btnn">Approve</button>
                                                                             <i class="fa fa-spinner fa-spin fa-fw fa-3x"
@@ -397,7 +411,8 @@ include_once("../gen/_common/header.php"); // header contents
                                                                         </div>
 
                                                                         <div class="col-md-2 col-sm-2 col-xs-6">
-                                                                            <button type="submit" class="btn btn-danger"
+                                                                            <button style="display:none;" type="submit"
+                                                                                class="btn btn-danger"
                                                                                 id="decline_btnn">Decline</button>
                                                                             <i class="fa fa-spinner fa-spin fa-fw fa-3x"
                                                                                 style="display: none;"

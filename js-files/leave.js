@@ -1,5 +1,21 @@
 $(document).ready(function() {
-	list_of_leaves_applicant('');
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
 
 	$(document).on('click', '.delete_leave', function() {
 		var leave_id = $(this).attr('id').replace(/lev_/, ''); // table row ID
@@ -13,8 +29,6 @@ $(document).ready(function() {
 	});
 
 	$('#filter_leave').on('click', show_leave_filter_form);
-	load_employee();
-	load_leave_type();
 
 	$('input#date_range').daterangepicker({
 		autoUpdateInput: false,
@@ -26,6 +40,26 @@ $(document).ready(function() {
 		);
 	});
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		list_of_leaves_applicant('');
+		load_employee();
+		load_leave_type();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-65-') >= 0) {
+		$('#add_position').show();
+	}
+}
 
 function show_leave_filter_form() {
 	$('#filter_leave_display').toggle();
@@ -201,9 +235,16 @@ function list_of_leaves_applicant(page) {
 							base_url +
 							'view_employee_leave_details?id=' +
 							response['data'][i]['leave_id'] +
-							'"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style=" color: gray; font-size: 20px;" title="View Employee Leave Details"></i></a> &nbsp;&nbsp;<a style="cursor: pointer;" class="delete_leave" id="lev_' +
-							response['data'][i]['leave_id'] +
-							'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Leave Info"></i></a></td>';
+							'"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style=" color: gray; font-size: 20px;" title="View Employee Leave Details"></i></a> &nbsp;&nbsp;';
+
+						let role_list = $('#does_user_have_roles').html();
+						if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-66-') >= 0) {
+							strTable +=
+								'<a style="cursor: pointer;" class="delete_leave" id="lev_' +
+								response['data'][i]['leave_id'] +
+								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Leave Info"></i></a>';
+						}
+						strTable += '</td>';
 						strTable += '</tr>';
 
 						// <a href="'+base_url+'/erp/hrm//'+response['data'][i]['employee_id']+'"><i  class="fa fa-list"  data-toggle="tooltip" data-placement="top" font-size: 20px;" title="View Employee info"></i></a> &nbsp;&nbsp;

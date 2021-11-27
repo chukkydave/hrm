@@ -26,8 +26,23 @@ blockquote p {
 }
 </style>
 
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
+
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /loader page content -->
 <!-- page content -->
-<div class="right_col" role="main">
+<div class="right_col" role="main" id="main_display" style="display: none;">
     <div class="">
         <div class="page-title">
             <div class="title_left">
@@ -183,8 +198,8 @@ blockquote p {
                                 <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
 
-                            <li id="add_header_details" data-toggle="collapse" data-target="#collapseExample"
-                                aria-expanded="false" aria-controls="collapseExample">
+                            <li style="display:none;" id="add_header_details" data-toggle="collapse"
+                                data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                 <a class=""><span data-toggle="tooltip" title="Add Proceeding Header"><i
                                             class="fa fa-plus"></i><span></a>
                             </li>
@@ -238,7 +253,7 @@ blockquote p {
 
                             <input type="text" id="desc_text"
                                 style="border:none; background:#f9f9f9; padding:10px; width:100%;"
-                                placeholder="Type in the description for this proceeding here...">
+                                placeholder="Type in the description for this proceeding here..." disabled>
                         </div>
                         <div style="background:#f9f9f9; padding:10px; display:none; letter-spacing:1px;"
                             id="desc_text_div">
@@ -250,7 +265,7 @@ blockquote p {
                         </div>
                         <div style="margin-top:10px; display:none;" id="save_desc_div">
 
-                            <button class="btn btn-sm btn-primary" id="add_desc_btn">Save</button>
+                            <button class="btn btn-sm btn-primary" disabled id="add_desc_btn">Save</button>
                             <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                 id="add_desc_loader"></i>
                         </div>

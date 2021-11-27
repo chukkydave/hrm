@@ -1,9 +1,22 @@
 $(document).ready(function() {
-	total_no_of_employees();
-	list_of_companies_employees('', '');
-	load_position();
-	load_department();
-	load_employmentType();
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('input#dob_start').datepicker({
 		dateFormat: 'yy-mm-dd',
 	});
@@ -31,6 +44,32 @@ $(document).ready(function() {
 		list_of_companies_employees('', '', order);
 	});
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (
+		role_list.indexOf('-83-') >= 0 ||
+		role_list.indexOf('-56-') >= 0 ||
+		role_list.indexOf('-59-') >= 0
+	) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		total_no_of_employees();
+		list_of_companies_employees('', '');
+		load_position();
+		load_department();
+		load_employmentType();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-57-') >= 0) {
+		$('#add_employee').show();
+	}
+}
 
 function total_no_of_employees() {
 	// alert('success');
@@ -189,19 +228,40 @@ function list_of_companies_employees(page, serial, order_by) {
 						strTable += `<td valign="top">${
 							v.status.toLowerCase() === 'terminated' ? 'Exited' :
 							status(v.status)}</td>`;
-						strTable +=
-							'<td valign="top"><a href="' +
-							base_url +
-							'employee_info?id=' +
-							v.employee_id +
-							'"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #add8e6; font-size: 20px;" title="View Employee info"></i></a> &nbsp;&nbsp;<!--<a href="' +
-							base_url +
-							'edit_employee?id=' +
-							v.employee_id +
-							'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee"></i></a>-->&nbsp;&nbsp; <a class="delete_employee" style="cursor: pointer;" id="emp_' +
-							v.employee_id +
-							'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee info"></i></a></td>';
+						strTable += '<td valign="top">';
+						let role_list = $('#does_user_have_roles').html();
+						if (role_list.indexOf('-83-') >= 0) {
+							strTable +=
+								'<a href="' +
+								base_url +
+								'employee_info?id=' +
+								v.employee_id +
+								'"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #add8e6; font-size: 20px;" title="View Employee info"></i></a> &nbsp;&nbsp;<!--<a href="' +
+								base_url +
+								'edit_employee?id=' +
+								v.employee_id +
+								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee"></i></a>-->&nbsp;&nbsp; <a class="delete_employee" style="cursor: pointer;" id="emp_' +
+								v.employee_id +
+								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee info"></i></a>';
+						}
 
+						if (role_list.indexOf('-56-') >= 0 || role_list.indexOf('-58-') >= 0) {
+							strTable +=
+								'<a href="' +
+								base_url +
+								'employee_info?id=' +
+								v.employee_id +
+								'"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #add8e6; font-size: 20px;" title="View Employee info"></i></a> &nbsp;&nbsp;';
+						}
+
+						if (role_list.indexOf('-59-') >= 0) {
+							strTable +=
+								'<a class="delete_employee" style="cursor: pointer;" id="emp_' +
+								v.employee_id +
+								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee info"></i></a>';
+						}
+
+						strTable += '</td>';
 						strTable += '</tr>';
 
 						strTable +=
@@ -330,7 +390,7 @@ function load_department() {
 
 		success: function(response) {
 			// console.log(response);
-			$('#employee_details_display').show();
+			// $('#employee_details_display').show();
 
 			var options = '';
 

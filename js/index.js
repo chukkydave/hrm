@@ -1,13 +1,43 @@
 $(document).ready(function() {
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('#logout').on('click', logout);
-	setTimeout(() => {
-		wait_to_load();
-	}, 2000);
-	fetch_notice_board();
-	listUpcomingEvents();
-	fetch_total_salary();
 });
 
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		setTimeout(() => {
+			wait_to_load();
+		}, 2000);
+		fetch_notice_board();
+		listUpcomingEvents();
+		fetch_total_salary();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 // 0: {title: "All Day Event", start: "2021-07-01"}
 // 1: {title: "Long Event", start: "2021-07-07", end: "2021-07-10"}
 // 2: {groupId: "999", title: "Repeating Event", start: "2021-07-09T16:00:00+00:00"}
@@ -65,8 +95,6 @@ function total_employees_not_terminated() {
 		},
 
 		success: function(response) {
-			// console.log(response);
-
 			if (response.status == '200') {
 				$('#load_employees').hide();
 
@@ -101,7 +129,6 @@ function no_of_leaves() {
 		},
 
 		success: function(response) {
-			console.log(response);
 			if (response.status == '200') {
 				$('#load_leaves').hide();
 
@@ -136,7 +163,6 @@ function no_of_terminations() {
 		},
 
 		success: function(response) {
-			// console.log(response);
 			// alert(response);
 
 			if (response.status == '200') {
@@ -352,9 +378,16 @@ function fetch_notice_board() {
 	$(`#notice_board_loading`).show();
 
 	let company_id = localStorage.getItem('company_id');
+	let year = new Date().getFullYear();
+	let month = new Date().getMonth() + 1;
+	let day = new Date().getDate();
+	let current_date = `${year}-${month}-${day}`;
+
 	axios
 		.get(`${api_path}hrm/get_notice_board`, {
-			params: {},
+			params: {
+				check_date: current_date,
+			},
 			headers: {
 				Authorization: localStorage.getItem('token'),
 			},
@@ -477,8 +510,6 @@ function get_employee_cat() {
 		timeout: 60000,
 
 		success: function(response) {
-			console.log(response);
-
 			if (response.status == '200') {
 				if (response.data.length != 0) {
 					$('#ddsh_loading').hide();
@@ -576,11 +607,11 @@ function get_employee_cat() {
 			} else if (response.status == '400') {
 				$('#ddsh_loading').hide();
 				$('#echart_pie').show();
-				$('#echart_pie').html(response.msg);
+				$('#echart_pie').html('No record Currently');
 			} else if (response.status == '401') {
 				$('#ddsh_loading').hide();
 				$('#echart_pie').show();
-				$('#echart_pie').html(response.msg);
+				$('#echart_pie').html('No record Currently');
 			}
 		},
 		// objAJAXRequest, strError
@@ -588,7 +619,7 @@ function get_employee_cat() {
 			// alert('connection error');
 			$('#ddsh_loading').hide();
 			$('#echart_pie').show();
-			$('#echart_pie').html(response.statusText);
+			$('#echart_pie').html('No record Currently');
 			// $('#employee_details_display').hide();
 			// $('#employee_error_display').show();
 		},
@@ -613,7 +644,6 @@ function fetch_employee_view_details() {
 		timeout: 60000,
 
 		success: function(response) {
-			// console.log(response);
 			$('#page_loader').hide();
 			$('#employee_details_display').show();
 
@@ -751,7 +781,6 @@ function fetch_employee_details() {
 		timeout: 60000,
 
 		success: function(response) {
-			// console.log(response);
 			$('#page_loader').hide();
 			$('#employee_details_display').show();
 			var str = '';
@@ -1144,7 +1173,6 @@ function listUpcomingEvents() {
 					let timer = moment(item.date, 'YYYY-MM-DD HH:mm:ss').format('LL');
 					let firstSplit = timer.split(',');
 					let finalSplit = firstSplit[0].split(' ');
-					console.log('timer', timer);
 					allNotice += `<article class="media event">
 										<a class="pull-left date">
 											<p class="month">${finalSplit[0]}</p>

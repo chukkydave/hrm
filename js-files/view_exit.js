@@ -1,8 +1,23 @@
 $(document).ready(() => {
-	fetchSingleExit();
-	fetch_employee_details();
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('.js-example-basic-single').select2();
-	load_employee();
 
 	$('#approve_btn').on('click', () => {
 		$('#exit_date_modal').modal('show');
@@ -11,8 +26,32 @@ $(document).ready(() => {
 	$('#decline_btnn').on('click', HRDecline);
 
 	$('#add_apprvoer').on('click', addApprovals);
-	listApprovers();
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-77-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+
+		fetchSingleExit();
+		fetch_employee_details();
+		load_employee();
+		listApprovers();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-81-') >= 0) {
+		$('#add_header_details').show();
+		$('#approve_btn').show();
+		$('#decline_btnn').show();
+	}
+}
+
 const url = window.location.href;
 const params = new URL(url).searchParams;
 const exit_id = params.get('ex');
@@ -39,8 +78,8 @@ function fetchSingleExit() {
 		.get(`${api_path}ess/single_staff_exit`, {
 			params: {
 				exited_id: exit_id,
-				user_id: user_id,
-				// company_id: company_id,
+				// user_id: user_id,
+				employee_id: employee_id,
 			},
 			headers: {
 				Authorization: localStorage.getItem('token'),
@@ -91,7 +130,7 @@ function fetchSingleExit() {
 			$('#single_view_JT').html(job_title);
 			$('#single_view_DOJ').html(DOJ);
 			$('#single_view_supervisor').html(supervisor_name);
-			$('#single_view_exitType').html(exit_type_name);
+			$('#single_view_exitType').html(capitalizeFirstLetter(exit_type_name));
 			$('#single_view_comment').html(comment);
 			$('#single_view_doc').html(
 

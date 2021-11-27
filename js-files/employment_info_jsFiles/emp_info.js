@@ -62,15 +62,6 @@ $(document).ready(() => {
 		}
 	});
 
-	// $('#emp_email').on('keyup', () => {
-	// 	let input = $('#emp_email').val();
-	// 	if (input.length >= 2) {
-	// 		getEmployeeEmail(input);
-	// 	} else {
-	// 		$('#emp_connect').attr('disabled', true);
-	// 	}
-	// });
-
 	$('#emp_connect').on('click', () => {
 		if (isEmptyInput('.emp_connect_field')) {
 			getEmployeeEmail();
@@ -82,52 +73,6 @@ $(document).ready(() => {
 	$('#view_ess_link_btn').on('click', () => {
 		sendLink();
 	});
-});
-
-$('#dept_from').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('#dept_to').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-$('#edit_dept_from').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('#edit_dept_to').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('#workShift_from').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('#workShift_to').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-$('#edit_workShift_from').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('#edit_workShift_to').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('input#edit_jobTitle_from').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('input#edit_jobTitle_to').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('input#jobTitle_from').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-
-$('input#jobTitle_to').datepicker({
-	dateFormat: 'yy-mm-dd',
 });
 
 //department starts
@@ -235,7 +180,10 @@ function listDepartment() {
 					dept_list += `<td>${start}</td>`;
 					dept_list += `<td>${end}</td>`;
 
-					dept_list += `<td>
+					let role_list = $('#does_user_have_roles').html();
+
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+						dept_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -258,6 +206,8 @@ function listDepartment() {
 								</li>
 							</ul>
 						</div></td>`;
+					}
+
 					dept_list += `</tr>`;
 					dept_list += `<tr id="dept_loader${v.id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 				});
@@ -305,8 +255,6 @@ function viewDepartment(id) {
 			},
 		})
 		.then(function(response) {
-			console.log(response.data);
-
 			$('#edit_dept_loader').hide();
 			$('#edit_dept_btn').show();
 
@@ -472,7 +420,6 @@ function getEmployeeList(param) {
 			},
 		})
 		.then(function(response) {
-			// console.log('res', response);
 			let emList = '';
 			$(response.data.data).map((i, v) => {
 				emList += `<li><a class="dropdown-item" onClick="pickOption('${v.lastname} ${v.firstname} ${v.middlename}',${v.employee_id})">${v.lastname} ${v.firstname} ${v.middlename}</a></li>`;
@@ -595,7 +542,10 @@ function listWorkShift() {
 					workShift_list += `<td>${start}</td>`;
 					workShift_list += `<td>${end}</td>`;
 
-					workShift_list += `<td>
+					let role_list = $('#does_user_have_roles').html();
+
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+						workShift_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -618,6 +568,8 @@ function listWorkShift() {
 								</li>
 							</ul>
 						</div></td>`;
+					}
+
 					workShift_list += `</tr>`;
 					workShift_list += `<tr id="workShift_loader${v.id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 				});
@@ -667,8 +619,6 @@ function viewWorkShift(id) {
 			},
 		})
 		.then(function(response) {
-			console.log(response.data);
-
 			$('#edit_workShift_loader').hide();
 			$('#edit_workShift_btn').show();
 
@@ -820,8 +770,6 @@ function fetch_workList() {
 		},
 
 		success: function(response) {
-			console.log(response);
-
 			if (response.status == '200') {
 				var the_list = '';
 				$(response.data).each(function(index, value) {
@@ -1147,8 +1095,6 @@ function listJobTitle() {
 		},
 
 		success: function(response) {
-			console.log(response);
-
 			if (response.status == '200') {
 				let jobTitle_list;
 				// const { jobTitle_data } = response.data.data;
@@ -1174,7 +1120,10 @@ function listJobTitle() {
 						jobTitle_list += `<td>${start}</td>`;
 						jobTitle_list += `<td>${end}</td>`;
 
-						jobTitle_list += `<td>
+						let role_list = $('#does_user_have_roles').html();
+
+						if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+							jobTitle_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -1197,6 +1146,8 @@ function listJobTitle() {
 								</li>
 							</ul>
 						</div></td>`;
+						}
+
 						jobTitle_list += `</tr>`;
 						jobTitle_list += `<tr id="jobTitle_loader${v.id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 					});
@@ -1255,8 +1206,6 @@ function viewJobTitle(id) {
 			},
 		})
 		.then(function(response) {
-			console.log(response.data);
-
 			$('#edit_jobTitle_loader').hide();
 			$('#edit_jobTitle_btn').show();
 
@@ -1421,8 +1370,6 @@ function fetch_jobTitle() {
 		},
 
 		success: function(response) {
-			console.log(response);
-
 			if (response.status == '200') {
 				let the_list = '';
 				$(response.data).each(function(index, value) {
@@ -1603,8 +1550,6 @@ function getEmployeeEmail() {
 			},
 		})
 		.then(function(response) {
-			// console.log('res', response);
-
 			if (response.data.data && response.data.data.length !== 0) {
 				let { firstname, lastname, othernames, email, user_id } = response.data.data;
 				$('#view_ess_name').html(`${firstname} ${othernames} ${lastname}`);
@@ -1662,7 +1607,6 @@ function sendLink() {
 			},
 		})
 		.then(function(response) {
-			console.log('res', response);
 			if (response.data.status === '200') {
 				$('#view_ess_connect_loader').hide();
 				$('#view_ess_link_btn').show();
@@ -1741,7 +1685,7 @@ function connectEmployee() {
 			$('#view_ess_connect_btn').show();
 			Swal.fire({
 				title: 'Error!',
-				text: `${error.statusText}`,
+				text: `${error.msg}`,
 				icon: 'error',
 				confirmButtonText: 'Close',
 			});
@@ -1767,9 +1711,10 @@ function connectEmployee() {
 			} else {
 				$('#view_ess_connect_loader').hide();
 				$('#view_ess_connect_btn').show();
+				console.log(response);
 				Swal.fire({
 					title: 'Error!',
-					text: `${response.statusText}`,
+					text: `${response.msg}`,
 					icon: 'error',
 					confirmButtonText: 'Close',
 				});
@@ -1804,11 +1749,13 @@ function showConnectedInfo() {
 				let ess_list = '';
 				const { email, firstname, lastname, image_path, pics } = response.data.data;
 				ess_list += `<div class="profile_img">
-                                            <div id="crop-avatar">
+				                            <div class="" id="crop-avatar">
 
-                                                <img class="img-responsive avatar-view" id="ess_list_img" src="${image_path}${pics}"  alt="Avatar" title="Change the avatar">
-                                            </div>
-                                        </div>`;
+				                                <img class="img-responsive avatar-view pfl_ctna" style="object-fit:cover;width:150px;" id="ess_list_img" src="${image_path}${pics}"  alt="Avatar" title="Change the avatar">
+				                            </div>
+				                        </div>`;
+
+				// ess_list += `<div style="height:250px; background:transparent no-repeat center;background-size: cover;background-image: url('${image_path}${pics}')">`;
 				ess_list += `<h3 id="ess_list_name">${firstname} ${lastname}</h3>`;
 				ess_list += `<ul class="list-unstyled user_data">
                                             <li id="ess_list_email"><i class="fa fa-envelope user-profile-icon"></i>   ${email}

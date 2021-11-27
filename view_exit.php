@@ -5,8 +5,24 @@ include_once("../gen/_common/header.php"); // header contents
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
+
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /loader page content -->
 <!-- page content -->
-<div class="right_col" role="main">
+<div class="right_col" role="main" id="main_display" style="display: none;">
     <div class="">
         <div class="page-title">
             <div class="title_left">
@@ -294,8 +310,10 @@ include_once("../gen/_common/header.php"); // header contents
                                 </div>
                             </div>
                             <div style="display:none;" id="btnGroup">
-                                <button class="btn btn-sm btn-success" id="approve_btn">Approve</button>
-                                <button class="btn btn-sm btn-danger" id="decline_btnn">Decline</button>
+                                <button class="btn btn-sm btn-success" id="approve_btn"
+                                    style="display:none">Approve</button>
+                                <button class="btn btn-sm btn-danger" id="decline_btnn"
+                                    style="display:none">Decline</button>
                                 <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                     id="decline_loader"></i>
                             </div>
@@ -320,7 +338,7 @@ include_once("../gen/_common/header.php"); // header contents
                             </li>
 
                             <li id="add_header_details" data-toggle="collapse" data-target="#collapseExample"
-                                aria-expanded="false" aria-controls="collapseExample">
+                                aria-expanded="false" aria-controls="collapseExample" style="display:none">
                                 <a class=""><span data-toggle="tooltip" title="Add Exit Approvers"><i
                                             class="fa fa-plus"></i><span></a>
                             </li>

@@ -1,6 +1,4 @@
 $(document).ready(function() {
-	fetch_employee_details();
-
 	$('#payslip-tab').on('click', () => {
 		if ($('#payslip-tab').hasClass('no')) {
 			listPayslip(1);
@@ -78,6 +76,40 @@ $(document).ready(function() {
 	});
 });
 
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		setTimeout(() => {
+			wait_to_load();
+		}, 2000);
+		fetch_employee_details();
+		listQC();
+		listWorkExp();
+		listNOK();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+	}
+
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+		$('#add_QC').show();
+		$('#add_work-exp').show();
+		$('#add_NOK').show();
+		$('#edit_emp_info').show();
+		$('#edit_bank_details').show();
+		$('#add_credit').show();
+		$('#add_debit').show();
+		$('#inc-btn').show();
+		$('#dec-btn').show();
+		$('#add_docx').show();
+		$('#extra-allot-inp').attr('disabled', false);
+		$('#emp_connect').attr('disabled', false);
+	}
+}
+
 $('#edit_emp_date').datepicker({
 	dateFormat: 'yy-mm-dd',
 });
@@ -131,7 +163,7 @@ function fetch_employee_view_details_salary_info() {
 					site_url +
 					'/files/images/employee_images/mid_' +
 					response.data.profile_picture +
-					'" alt="...">';
+					'" alt="..." >';
 				str3 += '</div>';
 
 				str += '<li><i class="fa fa-map-marker user-profile-icon"></i>&nbsp;&nbsp;';

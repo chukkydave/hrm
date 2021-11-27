@@ -1,11 +1,47 @@
 $(document).ready(() => {
-	getCorrespondence('');
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('#add_corres_btn').on('click', () => {
 		if (isEmptyInput('.add_corres_fields')) {
 			sendMessage();
 		}
 	});
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-77-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		getCorrespondence('');
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-79-') >= 0) {
+		$('#corres_msg').attr('disabled', false);
+		// $('#emp_connect').attr('disabled', false);
+	}
+}
 
 const url_here = window.location.href;
 const params_here = new URL(url_here).searchParams;
@@ -64,7 +100,7 @@ function getCorrespondence(page) {
 				$('#list_corres_loader').hide();
 				$('#list_corres_table').show();
 			} else {
-				$('#list_corres_body').html(`<h3>No correspondence message yet!</h3>`);
+				$('#list_corres_body').html(`<h5>No message</h5>`);
 				$('#list_corres_loader').hide();
 				$('#list_corres_table').show();
 			}

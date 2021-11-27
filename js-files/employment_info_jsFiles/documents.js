@@ -120,13 +120,18 @@ function list_employee_documents() {
 									<a class="dropdown-item">
 										<i class="fa fa-eye" /> View
 									</a>
-								</li>
-								<li onClick="deleteDocument(${v.document_id})">
+								</li>`;
+
+					let role_list = $('#does_user_have_roles').html();
+
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+						docx_list += `<li onClick="deleteDocument(${v.document_id})">
 									<a class="dropdown-item">
 										<i class="fa fa-trash" /> Delete
 									</a>
-								</li>
-							</ul>
+								</li>`;
+					}
+					docx_list += `</ul>
 						</div></td>`;
 					docx_list += `</tr>`;
 					docx_list += `<tr id="docx_loader${v.document_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
@@ -187,8 +192,6 @@ function viewDocument(id) {
 			},
 		})
 		.then(function(response) {
-			console.log(response.data);
-
 			$('#edit_docx_loader').hide();
 			// $('#edit_docx_btn').show();
 
@@ -291,8 +294,6 @@ function list_doctype() {
 		timeout: 60000,
 
 		success: function(response) {
-			// console.log(response);
-
 			let options = '';
 
 			if (response.status == '200') {

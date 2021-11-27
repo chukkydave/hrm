@@ -1,4 +1,22 @@
 $(document).ready(() => {
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	var $select = $('#no_of_days');
 	for (i = 1; i <= 30; i++) {
 		$select.append($('<option></option>').val(i).html(i));
@@ -20,12 +38,7 @@ $(document).ready(() => {
 		$('#pagination').twbsPagination('destroy');
 		list_of_companies_employees('');
 	});
-	list_of_companies_employees('', '');
-	load_position();
-	load_department();
-	load_employee();
-	listPaymentType();
-	listPayrollType();
+
 	// $('.allEmp').select2();
 	$('#saveEmp').on('click', handleSelect);
 	// $('#add_schedule_btn').on('click', () => {
@@ -46,6 +59,25 @@ $(document).ready(() => {
 	$('#refresh_schedule_btn').on('click', refresh);
 	// load_employmentType();
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-69-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		list_of_companies_employees('', '');
+		load_position();
+		load_department();
+		load_employee();
+		listPaymentType();
+		listPayrollType();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 
 function list_of_companies_employees(page, serial, order_by) {
 	var company_id = localStorage.getItem('company_id');

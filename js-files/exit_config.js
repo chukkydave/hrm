@@ -1,14 +1,45 @@
 $(document).ready(() => {
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('#summernote').summernote();
-	listExitType();
 	$('#add_exitType_btn').on('click', addExitType);
 	$('#add_interview_btn').on('click', addInterviewQuestion);
 	$('#add_policy_btn').on('click', addPolicy);
 	$('#edit_exitType_btn').on('click', editExitType);
 	$('#edit_interview_btn').on('click', editInterviewQuestion);
-	listInterviewQuestion();
-	listPolicy();
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		listExitType();
+		listInterviewQuestion();
+		listPolicy();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 
 //Exit Type start
 function addExitType() {

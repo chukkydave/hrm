@@ -40,7 +40,6 @@ function list_employee_attendance() {
 		timeout: 60000,
 
 		success: function(response) {
-			console.log(response);
 			$('#loading_atten').hide();
 			var strTable = '';
 

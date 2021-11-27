@@ -11,10 +11,6 @@ $(document).ready(() => {
 		$('#NOK_display').toggle();
 	});
 
-	listQC();
-	listWorkExp();
-	listNOK();
-
 	$('#add_QC_btn').on('click', () => {
 		if (isEmptyInput('.add_qc_fields')) {
 			addQC();
@@ -45,20 +41,20 @@ $(document).ready(() => {
 	});
 });
 
-$('#workExp_start').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
+// $('#workExp_start').datepicker({
+// 	dateFormat: 'yy-mm-dd',
+// });
 
-$('#workExp_end').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
-$('#edit_workExp_start').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
+// $('#workExp_end').datepicker({
+// 	dateFormat: 'yy-mm-dd',
+// });
+// $('#edit_workExp_start').datepicker({
+// 	dateFormat: 'yy-mm-dd',
+// });
 
-$('#edit_workExp_end').datepicker({
-	dateFormat: 'yy-mm-dd',
-});
+// $('#edit_workExp_end').datepicker({
+// 	dateFormat: 'yy-mm-dd',
+// });
 
 //QC starts
 function addQC() {
@@ -152,7 +148,10 @@ function listQC() {
 					qc_list += `<td>${v.school_name}</td>`;
 					qc_list += `<td>${v.qualification}</td>`;
 					qc_list += `<td>${v.year_concluded}</td>`;
-					qc_list += `<td>
+					let role_list = $('#does_user_have_roles').html();
+
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+						qc_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -175,6 +174,8 @@ function listQC() {
 								</li>
 							</ul>
 						</div></td>`;
+					}
+
 					qc_list += `</tr>`;
 					qc_list += `<tr id="qc_loader${v.id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 				});
@@ -221,8 +222,6 @@ function viewQC(id) {
 			},
 		})
 		.then(function(response) {
-			console.log(response.data);
-
 			$('#edit_QC_loader').hide();
 			$('#edit_QC_btn').show();
 
@@ -456,7 +455,10 @@ function listWorkExp() {
 					workExp_list += `<td>${v.position}</td>`;
 					workExp_list += `<td>${start}</td>`;
 					workExp_list += `<td>${end}</td>`;
-					workExp_list += `<td>
+					let role_list = $('#does_user_have_roles').html();
+
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+						workExp_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -479,6 +481,8 @@ function listWorkExp() {
 								</li>
 							</ul>
 						</div></td>`;
+					}
+
 					workExp_list += `</tr>`;
 					workExp_list += `<tr id="workExp_loader${v.id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 				});
@@ -525,8 +529,6 @@ function viewWorkExp(id) {
 			},
 		})
 		.then(function(response) {
-			console.log(response.data);
-
 			$('#edit_workExp_loader').hide();
 			$('#edit_workExp_btn').show();
 
@@ -766,7 +768,11 @@ function listNOK() {
 					nok_list += `<td>${v.nxt_kin_phone}</td>`;
 					nok_list += `<td>${v.nxt_kin_address}</td>`;
 					nok_list += `<td>${v.nxt_kin_email}</td>`;
-					nok_list += `<td>
+
+					let role_list = $('#does_user_have_roles').html();
+
+					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+						nok_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -789,6 +795,8 @@ function listNOK() {
 								</li>
 							</ul>
 						</div></td>`;
+					}
+
 					nok_list += `</tr>`;
 					nok_list += `<tr id="nok_loader${v.id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
 				});
@@ -836,8 +844,6 @@ function viewNOK(id) {
 			},
 		})
 		.then(function(response) {
-			console.log(response.data);
-
 			$('#edit_nok_loader').hide();
 			$('#edit_nok_btn').show();
 

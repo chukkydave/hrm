@@ -198,8 +198,17 @@ function list_employment_payment_type() {
 								credit_table += ` <tr>
                                                 <td>${v.breakdown_name}</td>
                                                 <td><input type="number" value="${v.amount}" class="credit_input all_input" data="${v.breakdown_id}"  data-toggle="tooltip" title="${v.formula}"></td>
-                                                <td id="delCredDeb_${v.insert_id}" data="${v.breakdown_id}" onClick="deleteBreakdown2(${v.insert_id})"><i class="fa fa-trash"></i></td>
-                                            <tr>`;
+                                            `;
+								let role_list = $('#does_user_have_roles').html();
+
+								if (
+									role_list.indexOf('-83-') >= 0 ||
+									role_list.indexOf('-58-') >= 0
+								) {
+									credit_table += ` <td id="delCredDeb_${v.insert_id}" data="${v.breakdown_id}" onClick="deleteBreakdown2(${v.insert_id})"><i class="fa fa-trash"></i></td>
+                                            `;
+								}
+								credit_table += `</tr>`;
 							} else {
 								credit_checker += `<div class="col-md-3 col-sm-3 col-xs-6">
                                             <input type="checkbox" onClick="deleteBreakdown(${v.insert_id})" data="${v.breakdown_id}" id="creddeb_${v.insert_id}" value="${v.insert_id}" class="crediter">
@@ -219,8 +228,17 @@ function list_employment_payment_type() {
 								debit_table += `<tr>
                                                 <td>${v.breakdown_name}</td>
                                                 <td><input type="number" value="${v.amount}" class="debit_input all_input" data="${v.breakdown_id}" data-toggle="tooltip" title="${v.formula}"></td>
-                                                <td id="delCredDeb_${v.insert_id}" data="${v.breakdown_id}" onClick="deleteBreakdown2(${v.insert_id})"><i class="fa fa-trash"></i></td>
-                                            <tr>`;
+                                            `;
+								let role_list = $('#does_user_have_roles').html();
+
+								if (
+									role_list.indexOf('-83-') >= 0 ||
+									role_list.indexOf('-58-') >= 0
+								) {
+									debit_table += `<td id="delCredDeb_${v.insert_id}" data="${v.breakdown_id}" onClick="deleteBreakdown2(${v.insert_id})"><i class="fa fa-trash"></i></td>
+                                            `;
+								}
+								debit_table += `</tr>`;
 							} else {
 								debit_checker += `<div class="col-md-3 col-sm-3 col-xs-6">
                                             <input type="checkbox" onClick="deleteBreakdown(${v.insert_id})" data="${v.breakdown_id}" id="creddeb_${v.insert_id}" value="${v.insert_id}" class="debiter">

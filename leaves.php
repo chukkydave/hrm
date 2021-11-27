@@ -3,9 +3,26 @@ include_once("_common/menu.php"); // menu list
 include_once("../gen/_common/header.php"); // header contents
 ?>
 
+<!-- loader page -->
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
+
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /loader page content -->
 <!-- page content -->
-<div id="employee_details_display" style="display: ;">
-    <div class="right_col" role="main">
+<div class="right_col" role="main" id="main_display" style="display: none;">
+
+    <div id="employee_details_display" style="display: ;">
         <div class="">
             <div class="page-title">
                 <div class="title_left">
@@ -28,7 +45,8 @@ include_once("../gen/_common/header.php"); // header contents
                         <div class="input-group" style="float: right">
 
                             <button type="button" class="btn btn-primary" id="filter_leave">Filter</button>
-                            <a href="add_leave"><button type="button" class="btn btn-success" id="add_position">Add
+                            <a style="display:none;" href="add_leave" id="add_position"><button type="button"
+                                    class="btn btn-success">Add
                                     Leave</button></a>
 
 

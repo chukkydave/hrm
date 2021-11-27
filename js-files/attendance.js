@@ -1,9 +1,24 @@
 $(document).ready(function() {
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	// var socket = io.connect('https://api.empl-dev.site', { forceNew: true });
-	load_employee();
-	attendance('');
-	load_department();
-	fetch_list();
+
 	// list_of_positions();
 	$('#add_attendence').on('click', show_add);
 	$('#filter_attendence').on('click', show_filter);
@@ -36,6 +51,11 @@ $(document).ready(function() {
 	// });
 
 	$('#add').on('click', add_company_attendance);
+	$('#add_csv_btn').on('click', () => {
+		if (isEmptyInput('.dotty')) {
+			addCSVFile();
+		}
+	});
 	$('#filter').on('click', () => {
 		attendance('');
 	});
@@ -57,14 +77,27 @@ $(document).ready(function() {
 	});
 	$('.js-example-basic-single').select2();
 });
-document.getElementById('dot').addEventListener('change', function() {
-	var fr = new FileReader();
-	fr.onload = function() {
-		document.getElementById('output').textContent = fr.result;
-	};
 
-	fr.readAsText(this.files[0]);
-});
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-60-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		load_employee();
+		attendance('');
+		load_department();
+		fetch_list();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-61-') >= 0) {
+		$('#add_attendence').show();
+		$('#add_position').show();
+	}
+}
 
 function add_company_attendance() {
 	var employee_id = $('#employee_id').val();
@@ -238,15 +271,40 @@ function attendance(page) {
 						strTable += '<td>' + response['data'][i]['workshift'] + '</td>';
 						// strTable += '<td>' + response['data'][i]['attendance_type'] + '</td>';
 						strTable += '<td>' + response['data'][i]['status'] + '</td>';
+						strTable += '<td valign="top">';
+						let role_list = $('#does_user_have_roles').html();
+						if (role_list.indexOf('-83-') >= 0) {
+							strTable +=
+								'<a href="' +
+								base_url +
+								'edit_employee_attendance?id=' +
+								response['data'][i]['attendance_id'] +
+								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp; <a class="delete_attendance" style="cursor: pointer;" id="att_' +
+								response['data'][i]['attendance_id'] +
+								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Attendance"></i></a>';
+						}
 
-						strTable +=
-							'<td valign="top"><a href="' +
-							base_url +
-							'edit_employee_attendance?id=' +
-							response['data'][i]['attendance_id'] +
-							'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp; <a class="delete_attendance" style="cursor: pointer;" id="att_' +
-							response['data'][i]['attendance_id'] +
-							'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Attendance"></i></a></td>';
+						if (role_list.indexOf('-62-') >= 0) {
+							strTable +=
+								'<a href="' +
+								base_url +
+								'edit_employee_attendance?id=' +
+								response['data'][i]['attendance_id'] +
+								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp;';
+						}
+
+						if (role_list.indexOf('-63-') >= 0) {
+							strTable +=
+								'<a href="' +
+								base_url +
+								'edit_employee_attendance?id=' +
+								response['data'][i]['attendance_id'] +
+								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp; <a class="delete_attendance" style="cursor: pointer;" id="att_' +
+								response['data'][i]['attendance_id'] +
+								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Attendance"></i></a>';
+						}
+
+						strTable += '</td>';
 
 						strTable += '</tr>';
 
@@ -499,6 +557,75 @@ function fetch_list() {
 	});
 }
 
-// function readDat(){
+function addCSVFile() {
+	$('#add_csv_error').html('');
+	let company_id = localStorage.getItem('company_id');
 
-// }
+	$('#add_csv_btn').hide();
+	$('#add_csv_loader').show();
+
+	// let note = $('#summernote').summernote('code');
+	let upImage = document.querySelector(`#dot`).files[0];
+	// let policy_id = $('#add_csv_btn').attr('data');
+
+	let data = new FormData();
+	data.append('file', upImage);
+
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		cache: false,
+		url: `${api_path}hrm/usb_attendance_upload`,
+		processData: false,
+		contentType: false,
+		headers: {
+			enctype: 'multipart/form-data',
+			Authorization: localStorage.getItem('token'),
+		},
+		data: data,
+
+		error: function(error) {
+			console.log(error);
+			$('#add_csv_loader').hide();
+			$('#add_csv_btn').show();
+			$('#add_csv_error').html(error.responseJSON.msg);
+			// alert('error');
+		},
+		success: function(response) {
+			if (response.status == 200 || response.status == 201) {
+				$('#add_csv_loader').hide();
+				$('#add_csv_btn').show();
+
+				$(`#collapseExample4`).removeClass('in');
+				document.getElementById('dot').value = null;
+
+				Swal.fire({
+					title: 'Success',
+					text: `Success`,
+					icon: 'success',
+					confirmButtonText: 'Okay',
+					onClose: addCSVFile(),
+				});
+			}
+		},
+	});
+}
+
+function isEmptyInput(first) {
+	let isEmpty = false;
+	$(first).each(function() {
+		var input = $.trim($(this).val());
+		if (input.length === 0 || input === '0') {
+			$(this).addClass('has-error');
+			isEmpty = true;
+		} else {
+			$(this).removeClass('has-error');
+			// isEmpty = false;
+		}
+	});
+	if (isEmpty === true) {
+		return false;
+	} else {
+		return true;
+	}
+}

@@ -1,5 +1,22 @@
 $(document).ready(function() {
-	fetch_department_details();
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$('#edit_dept').on('click', edit_company_department);
 
 	$('#hod_name').on('keyup', () => {
@@ -28,9 +45,22 @@ $(document).ready(function() {
 	$('#edit_HOD_btn').on('click', () => {
 		editHOD();
 	});
-
-	list_Hods();
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-82-') >= 0) {
+		//Settings
+		$('#main_display_loader_page').hide();
+		$('#main_display').show();
+		list_Hods();
+		fetch_department_details();
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 
 $('#hod_from').datepicker({
 	dateFormat: 'yy-mm-dd',

@@ -62,10 +62,12 @@ $menu = '<ul class="nav side-menu" style="display: ;" id="main_menu">
                                     
 
 
-                                    <li id="dropMe"><a><i class="fa fa-user"></i> HR Settings <span
+                                    <li  id="settings" style="display: none;" ><a><i class="fa fa-user"></i> HR Settings <span
                                                 class="fa fa-chevron-down"></span></a>
 
                                         <ul class="nav child_menu">
+                                            <li><a href="users">Users</a></li>
+                                            <li><a href="profilesandroles">Permissions</a></li>
                                             <li><a href="company_positions">Job Titles</a></li>
                                             <li><a href="departments">Departments</a></li>
                                             <!-- <li><a href="set_work_days">Set Work Days</a></li> -->
@@ -77,7 +79,7 @@ $menu = '<ul class="nav side-menu" style="display: ;" id="main_menu">
                                             <li><a href="emp_doc_type">Employee Doc Types</a></li>
                                             <li><a href="company_holidays">Company Holidays</a></li>
                                             <li><a href="work_shift">Work Shifts</a></li>
-                                            <li><a href="notice_board">Notifications</a></li>
+                                            <li><a href="notice_board">Notice Board</a></li>
                                         </ul>
 
                                     </li>
@@ -95,5 +97,5 @@ $menu = '<ul class="nav side-menu" style="display: ;" id="main_menu">
 
                 
 
-        </ul>';
+        </ul></ul><script src="js/menu.js?v=4313203"></script>';
 ?>

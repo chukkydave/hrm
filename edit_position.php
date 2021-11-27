@@ -1,9 +1,25 @@
 <?php
-include("_common/header.php");
+include_once("_common/menu.php"); // menu list
+include_once("../gen/_common/header.php"); // header contents
 ?>
+<!-- loader page -->
+<div class="right_col" role="main" id="main_display_loader_page" style="display: ;">
 
+    <div class="page-title">
+        <div class="title_left">
+            <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: ; margin-top: 20px;" id="ldnuy"></i>
+            <div id="loader_mssg" style="color: red; font-size: 14px; margin-top: 30px; background-color: ;"></div>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /loader page content -->
 <!-- page content -->
-<div class="right_col" role="main">
+<div class="right_col" role="main" id="main_display" style="display: none;">
     <div class="">
         <div class="page-title">
             <div class="title_left">
@@ -133,178 +149,7 @@ include("_common/header.php");
     </div>
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-    fetch_employee_position();
-    $('#edit_pos').on('click', edit_company_position);
-
-})
-
-function fetch_employee_position() {
-    // var pathArray = window.location.pathname.split( '/' );
-    var position_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
-    var company_id = localStorage.getItem('company_id');
-
-
-    $.ajax({
-
-        type: "POST",
-        dataType: "json",
-        cache: false,
-        url: api_path + "hrm/fetch_company_position_byID",
-        data: {
-            "position_id": position_id,
-            "company_id": company_id
-        },
-
-        success: function(response) {
-
-            console.log(response);
-
-            if (response.status == '200') {
-
-                $.each(response['data'], function(i, v) {
-
-                    $('#position_name').val(response['data'][i]['position_name']);
-                    $('#position_description').val(response['data'][i]['position_description']);
-                    $('#eligibility').val(v.leave_is_eligible)
-                    $('#alloted_days').val(v.alloted_leave_days)
-
-                });
-
-
-            }
-
-
-        },
-
-        error: function(response) {
-
-            alert("Connection Error.");
-
-        }
-
-    });
-}
-
-function edit_company_position() {
-    var position_name = $('#position_name').val();
-    var position_description = $('#position_description').val();
-    let alloted = $('#alloted_days').val()
-    let eligibility = $('#eligibility').val()
-    var company_id = localStorage.getItem('company_id');
-    // var pathArray = window.location.pathname.split( '/' );
-    var position_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
-
-    var blank;
-
-
-
-
-    $(".required").each(function() {
-
-        var the_val = $.trim($(this).val());
-
-        if (the_val == "" || the_val == "0") {
-
-            $(this).addClass('has-error');
-
-            blank = "yes";
-
-        } else {
-
-            $(this).removeClass("has-error");
-
-        }
-
-    });
-
-    if (blank == "yes") {
-
-        $('#error_edit_position').html("You have a blank field");
-
-        return;
-
-    }
-
-
-
-    $('#edit_pos').hide();
-    $('#edit_pos_loader').show();
-
-
-
-    $.ajax({
-
-        type: "POST",
-        dataType: "json",
-        cache: false,
-        url: api_path + "hrm/edit_company_position",
-        data: {
-            "position_name": position_name,
-            "position_description": position_description,
-            "company_id": company_id,
-            "position_id": position_id,
-            leave_eligible: eligibility,
-            alloted_leave: alloted,
-        },
-
-        success: function(response) {
-
-            console.log(response);
-
-            if (response.status == '200') {
-                Swal.fire({
-                    title: 'Success',
-                    text: `Success`,
-                    icon: 'success',
-                    confirmButtonText: 'Okay',
-                    onClose: window.location.href = base_url + "company_positions",
-                });
-
-                // $('#modal_position_edit').modal('show');
-
-                // $('#modal_position_edit').on('hidden.bs.modal', function() {
-                //     $('#position_name').val();
-                //     $('#position_description').val();
-                //     // window.location.reload();
-                //     window.location.href = base_url + "company_positions";
-                // })
-
-
-            } else if (response.status == '400') { // coder error message
-
-
-                $('#error_edit_position').html('Technical Error. Please try again later.');
-
-            } else if (response.status == '401') { //user error message
-
-
-                $('#error_edit_position').html(response.msg);
-
-            }
-
-
-
-            $('#edit_pos').show();
-            $('#edit_pos_loader').hide();
-
-
-        },
-
-        error: function(response) {
-            $('#edit_pos').show();
-            $('#edit_pos_loader').hide();
-            $('#error_edit_position').html("Connection Error.");
-
-        }
-
-    });
-
-}
-</script>
-
+<script src="js-files/edit_position.js"></script>
 <?php
-include("_common/footer.php");
+include_once("../gen/_common/footer.php");
 ?>
