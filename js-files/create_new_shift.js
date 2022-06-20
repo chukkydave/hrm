@@ -106,7 +106,7 @@ function add_work_shift() {
 					text: `Success`,
 					icon: 'success',
 					confirmButtonText: 'Okay',
-					// onClose: (window.location.href = 'work_shift'),
+					onClose: (window.location.href = 'work_shift'),
 				});
 			} else if (response.status == '400') {
 				// coder error message

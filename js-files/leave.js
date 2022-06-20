@@ -43,21 +43,34 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		list_of_leaves_applicant('');
-		load_employee();
-		load_leave_type();
+	let pack_list = $('#user_features').html();
+
+	if (pack_list.indexOf('-2-') >= 0) {
+		if (
+			role_list.indexOf('-64-') >= 0 ||
+			role_list.indexOf('-65-') >= 0 ||
+			role_list.indexOf('-66-') >= 0 ||
+			role_list.indexOf('-67-') >= 0
+		) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			list_of_leaves_applicant('');
+			load_employee();
+			load_leave_type();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
+
+		if (role_list.indexOf('-65-') >= 0) {
+			$('#add_position').show();
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
 		// $("#modal_no_access").modal('show');
-	}
-
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-65-') >= 0) {
-		$('#add_position').show();
 	}
 }
 
@@ -230,19 +243,28 @@ function list_of_leaves_applicant(page) {
 
 						strTable += '<td valign="top">' + aprvv_status + '</td>';
 
-						strTable +=
-							'<td valign="top"><a href="' +
-							base_url +
-							'view_employee_leave_details?id=' +
-							response['data'][i]['leave_id'] +
-							'"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style=" color: gray; font-size: 20px;" title="View Employee Leave Details"></i></a> &nbsp;&nbsp;';
+						strTable += '<td valign="top">';
 
 						let role_list = $('#does_user_have_roles').html();
-						if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-66-') >= 0) {
+						if (role_list.indexOf('-67-') >= 0 || role_list.indexOf('-64-') >= 0) {
+							strTable +=
+								'<a href="' +
+								base_url +
+								'view_employee_leave_details?id=' +
+								response['data'][i]['leave_id'] +
+								'"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style=" color: gray; font-size: 20px;" title="View Employee Leave Details"></i></a> &nbsp;&nbsp;';
+						} else {
+							strTable +=
+								'<a class="disabledC" onClick="denied()"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style=" color: gray; font-size: 20px;" title="View Employee Leave Details"></i></a> &nbsp;&nbsp;';
+						}
+						if (role_list.indexOf('-66-') >= 0) {
 							strTable +=
 								'<a style="cursor: pointer;" class="delete_leave" id="lev_' +
 								response['data'][i]['leave_id'] +
 								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Leave Info"></i></a>';
+						} else {
+							strTable +=
+								'<a style="cursor: pointer;" class="disabledC" onClick="denied()"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Leave Info"></i></a>';
 						}
 						strTable += '</td>';
 						strTable += '</tr>';
@@ -263,20 +285,21 @@ function list_of_leaves_applicant(page) {
 				} else {
 					strTable = '<tr><td colspan="9">No record found</td></tr>';
 				}
-
-				$('#pagination').twbsPagination({
-					totalPages: Math.ceil(response.total_rows / limit),
-					visiblePages: 10,
-					onPageClick: function(event, page) {
-						list_of_leaves_applicant(page);
-						$('html, body').animate(
-							{
-								scrollTop: 0,
-							},
-							'slow',
-						);
-					},
-				});
+				if (response.total_rows) {
+					$('#pagination').twbsPagination({
+						totalPages: Math.ceil(response.total_rows / limit),
+						visiblePages: 10,
+						onPageClick: function(event, page) {
+							list_of_leaves_applicant(page);
+							$('html, body').animate(
+								{
+									scrollTop: 0,
+								},
+								'slow',
+							);
+						},
+					});
+				}
 
 				$('#leavesData').html(strTable);
 				$('#leavesData').show();
@@ -316,6 +339,10 @@ function list_of_leaves_applicant(page) {
 			$('#leavesData').show();
 		},
 	});
+}
+
+function denied() {
+	toastr.error('Access Denied');
 }
 
 function load_employee() {

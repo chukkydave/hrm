@@ -50,9 +50,6 @@ include_once("../gen/_common/header.php"); // header contents
                             style="display:none;">Upload
                             file</button>
 
-                        <!-- <button type="button" class="btn btn-success" id="upload_attendence">Upload</button> -->
-
-
                     </div>
                 </div>
             </div>
@@ -72,8 +69,10 @@ include_once("../gen/_common/header.php"); // header contents
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="dot">
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <p class="col-md-7 col-xs-12"><span>*</span>Upload a CSV file</p>
-                                        <!-- <input type="file" id="dot" required="required" class="form-control col-md-7 col-xs-12 required"> -->
+                                        <p class="col-md-12 col-xs-12"><span>*</span>Upload a CSV file, Click <a
+                                                style="color:blue; text-decoration:underline;"
+                                                href=" _common/attendance_template.csv" download>here</a>
+                                            to download a sample template</p>
                                     </div>
                                 </div>
 
@@ -98,8 +97,6 @@ include_once("../gen/_common/header.php"); // header contents
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                        <!-- <button class="btn btn-primary" type="button">Cancel</button>
-                          <button class="btn btn-primary" type="reset">Reset</button> -->
                                         <button type="button" class="btn btn-success" id="add_csv_btn">Upload</button>
                                         <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                             id="add_csv_loader"></i>
@@ -121,8 +118,6 @@ include_once("../gen/_common/header.php"); // header contents
                         <div class="x_content">
                             <br />
                             <span id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12"
                                         for="notification_text">File<span>*</span>
@@ -132,36 +127,25 @@ include_once("../gen/_common/header.php"); // header contents
 
                                     </div>
                                 </div>
-
-
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12 text-danger" id="error_dat">
-                                        <!--  <div class="text-danger form-control col-md-7 col-xs-12" style="display: none;" > -->
-
                                     </div>
                                 </div>
                         </div>
-
-
                         <div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <!-- <button class="btn btn-primary" type="button">Cancel</button>
-                          <button class="btn btn-primary" type="reset">Reset</button> -->
                                 <button type="button" class="btn btn-success" id="add_dat">Upload</button>
                                 <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;" id="dat_loader"></i>
                             </div>
                         </div>
-
                         </span>
                     </div>
                 </div>
             </div>
         </div>
-
-
         <div id="add_attendence_display" style="display: none;">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -181,9 +165,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <option value="">-- Select --</option>
 
                                         </select>
-                                        <!-- <select class="form-control js-example-basic-single" id="employee_id"
-                                            name="employee_id" multiple="multiple"
-                                            style="width:100% !important;max-width:800px !important; border-radius:30px !important; "></select> -->
+
                                     </div>
                                 </div>
 
@@ -224,33 +206,9 @@ include_once("../gen/_common/header.php"); // header contents
                                             <option value="Present">Present</option>
                                             <option value="Leave">Leave</option>
                                             <option value="Absent">Absent</option>
-                                            <option value="Late">Late</option>
-                                            <option value="Overclocked">Overclocked</option>
-
                                         </select>
                                     </div>
                                 </div>
-                                <!-- <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="shift">Shift
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <select class="form-control col-sm-2 col-xs-4 required" id="shift">
-                                            <option value="">-- Select status --</option>
-
-                                        </select>
-                                    </div>
-                                </div> -->
-
-                                <!-- <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                        for="attendance_type">Attendance Type
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input class="form-control col-sm-2 col-xs-4 required" id="attendance_type" />
-
-                                    </div>
-                                </div> -->
-
 
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
@@ -259,13 +217,9 @@ include_once("../gen/_common/header.php"); // header contents
 
                                     </div>
                                 </div>
-
-
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                        <!-- <button class="btn btn-primary" type="button">Cancel</button>
-                          <button class="btn btn-primary" type="reset">Reset</button> -->
                                         <button type="button" class="btn btn-success" id="add">Add</button>
                                         <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                             id="attendance_loader"></i>
@@ -286,41 +240,22 @@ include_once("../gen/_common/header.php"); // header contents
 
                         <div class="x_content">
                             <br />
-
-
                             <div class="form-row">
-
-                                <!-- <div class="col-sm-4 col-xs-4">
-                                    <select class="form-control col-md-7 col-xs-12 required" id="employee_name">
-                                        <option value="">-- Select Employee--</option>
-
-                                    </select>
-                                </div> -->
-
                                 <div class="col-sm-4 col-xs-4">
                                     <select class="form-control col-sm-7 col-xs-12" id="employee_department">
                                         <option value="">-- All Employees --</option>
 
                                     </select>
                                 </div>
-
-
                                 <div class="col-sm-4 col-xs-4">
                                     <input type="date" class="form-control" placeholder="Date Range" id="date_range">
                                 </div>
-
-
-
                             </div>
                             <div class="form-row">
                                 <div class="col-sm-2 col-xs-4">
                                     <button type="button" class="btn btn-success" id="filter">Search</button>
-
                                 </div>
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>
@@ -331,23 +266,15 @@ include_once("../gen/_common/header.php"); // header contents
         <div class="clearfix"></div>
 
         <div class="row">
-
-
             <div class="clearfix"></div>
-
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
-
                     <br>
 
                     <div class="x_content">
-
-
-
                         <div class="table-responsive">
                             <select class="form-select no-border" id="order_by" aria-label="Default select example">
                                 <option value="latest">Order by Latest</option>
-                                <!-- <option value="alphabetical">Order from A-Z </option> -->
                             </select>
                             <table class="table table-striped jambo_table bulk_action">
                                 <thead>
@@ -357,11 +284,8 @@ include_once("../gen/_common/header.php"); // header contents
                                         <th class="column-title">Employee</th>
                                         <th class="column-title">Clock In Time</th>
                                         <th class="column-title">Clock Out Time</th>
-                                        <!-- <th class="column-title">Work Hours</th> -->
                                         <th class="column-title">Shift</th>
                                         <th class="column-title">Status</th>
-                                        <!-- <th class="column-title">Over Time/Late By</th> -->
-
                                         <th class="column-title no-link last"><span class="nobr">Actions</span>
                                         </th>
                                         <th class="bulk-actions" colspan="7">
@@ -376,11 +300,6 @@ include_once("../gen/_common/header.php"); // header contents
                                     </td>
                                 </tr>
                                 <tbody id="attendanceData">
-
-
-                                    <!-- <tr>
-                            <td colspan="7">No record.</td>
-                          </tr> -->
                                 </tbody>
                             </table>
                             <div class="container">
@@ -389,8 +308,6 @@ include_once("../gen/_common/header.php"); // header contents
                                 </nav>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -414,14 +331,13 @@ include_once("../gen/_common/header.php"); // header contents
             <div class="modal-body">
                 <h4>Employee Attendance Added Successfully!</h4>
             </div>
-            <!-- <div class="modal-footer"> -->
-            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-            <!-- </div> -->
         </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+    integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="js-files/attendance.js"></script>
 
 <?php

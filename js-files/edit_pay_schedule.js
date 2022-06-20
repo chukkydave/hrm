@@ -16,19 +16,39 @@ $(document).ready(() => {
 		}
 	});
 
+	//this time interval check if the user roles have been fetched before running anything on this page
+	var myVar2 = setInterval(function() {
+		if ($('#does_user_have_roles').html() != '') {
+			//stop the loop
+			myStopFunction();
+
+			//does user have access to this module
+			user_page_access();
+		} else {
+			console.log('No profile');
+		}
+	}, 1000);
+
+	function myStopFunction() {
+		clearInterval(myVar2);
+	}
+	//end of interval set
+
 	$(document).on('click', '#filter', function() {
 		$('#pagination').twbsPagination('destroy');
 		list_of_companies_employees('');
 	});
-	list_of_companies_employees('', '');
-	load_position();
-	load_department();
-	load_employee();
+
 	// listPayrollType();
 	$('#saveEmp').on('click', handleSelect);
 
 	$('#add_schedule_btn').on('click', () => {
-		if (isEmptyInput('.schedule_fields') && $('#empListTable tr').length > 1) {
+		if (
+			isEmptyInput('.schedule_fields') &&
+			$('#empListTable tr').length >= 1 &&
+			$('#empListTable tr td').attr('colspan') !== '4'
+		) {
+			// alert($('#empListTable tr').length);
 			addPaySchedule();
 		} else {
 			alert('No Employee Selected');
@@ -37,6 +57,30 @@ $(document).ready(() => {
 	$('#refresh_schedule_btn').on('click', refresh);
 	$('#selectBultEmp').on('click', checkAlreadySelectedIDs);
 });
+
+function user_page_access() {
+	var role_list = $('#does_user_have_roles').html();
+	let pack_list = $('#user_features').html();
+	if (pack_list.indexOf('-5-') >= 0) {
+		if (role_list.indexOf('-70-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			list_of_companies_employees('', '');
+			load_position();
+			load_department();
+			load_employee();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
+	} else {
+		$('#loader_mssg').html('You do not have access to this page');
+		$('#ldnuy').hide();
+		// $("#modal_no_access").modal('show');
+	}
+}
 
 async function list_of_companies_employees(page, serial, order_by) {
 	var company_id = localStorage.getItem('company_id');
@@ -448,6 +492,13 @@ function addPaySchedule() {
 	// let payType = $('#list_payment_option').val();
 	let payrollType = $('#list_payroll_option').val();
 	let idtee = window.location.search.split('=')[1];
+
+	if (employee.length <= 0) {
+		alert('No Employee Selected');
+		$('#add_schedule_loader').hide();
+		$('#add_schedule_btn').show();
+		return;
+	}
 
 	let data = {
 		employees: employee,

@@ -27,13 +27,21 @@ $(document).ready(() => {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		listExitType();
-		listInterviewQuestion();
-		listPolicy();
+	let pack_list = $('#user_features').html();
+
+	if (pack_list.indexOf('-38-') >= 0) {
+		if (role_list.indexOf('-78-') >= 0 || role_list.indexOf('-79-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			listExitType();
+			listInterviewQuestion();
+			listPolicy();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
@@ -140,13 +148,14 @@ function addDefaultExitType() {
 				// $('#exitType_name').val('');
 
 				// $(`#collapseExample`).removeClass('in');
-				Swal.fire({
-					title: 'Success',
-					text: `Success`,
-					icon: 'success',
-					confirmButtonText: 'Okay',
-					onClose: listExitType(),
-				});
+				listExitType();
+				// Swal.fire({
+				// 	title: 'Success',
+				// 	text: `Success`,
+				// 	icon: 'success',
+				// 	confirmButtonText: 'Okay',
+				// 	onClose: listExitType(),
+				// });
 			}
 		},
 	});
@@ -236,7 +245,7 @@ function listExitType() {
 				$('#list_exitType_loader').hide();
 				$('#list_exitType_table').show();
 			} else {
-				$('#list_exitType_body').html(`<li>No record</li>`);
+				$('#list_exitType_body').html(`<li>No record found</li>`);
 				$('#list_exitType_loader').hide();
 				$('#list_exitType_table').show();
 				addDefaultExitType();
@@ -500,7 +509,7 @@ function listInterviewQuestion() {
 				$('#list_interview_loader').hide();
 				$('#list_interview_table').show();
 			} else {
-				$('#interview_list').html(`<li>No record</li>`);
+				$('#interview_list').html(`<li>No record found</li>`);
 				$('#list_interview_loader').hide();
 				$('#list_interview_table').show();
 			}

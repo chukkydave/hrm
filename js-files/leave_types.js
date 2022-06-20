@@ -35,7 +35,12 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-82-') >= 0) {
+	let pack_list = $('#user_features').html();
+
+	if (
+		(pack_list.indexOf('-2-') >= 0 && role_list.indexOf('-83-') >= 0) ||
+		role_list.indexOf('-82-') >= 0
+	) {
 		//Settings
 		$('#main_display_loader_page').hide();
 		$('#main_display').show();
@@ -116,17 +121,17 @@ function leave_types(page) {
 							response['data'][i]['leave_id'] +
 							'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Leave Type"></i></a>&nbsp;&nbsp;';
 
-						if (response['data'][i]['active_status'] == 'no') {
-							strTable +=
-								'<i class="lev_activate fa fa-toggle-off fa-2x gray" style="cursor: pointer; " id="lv2_' +
-								response['data'][i]['leave_id'] +
-								'" ></i>';
-						} else if (response['data'][i]['active_status'] == 'yes') {
-							strTable +=
-								'<i class="lev_deactivate fa fa-toggle-on fa-2x green" id="lv_' +
-								response['data'][i]['leave_id'] +
-								'" style=" cursor: pointer; "></i>';
-						}
+						// if (response['data'][i]['active_status'] == 'no') {
+						// 	strTable +=
+						// 		'<i class="lev_activate fa fa-toggle-off fa-2x gray" style="cursor: pointer; " id="lv2_' +
+						// 		response['data'][i]['leave_id'] +
+						// 		'" ></i>';
+						// } else if (response['data'][i]['active_status'] == 'yes') {
+						// 	strTable +=
+						// 		'<i class="lev_deactivate fa fa-toggle-on fa-2x green" id="lv_' +
+						// 		response['data'][i]['leave_id'] +
+						// 		'" style=" cursor: pointer; "></i>';
+						// }
 
 						strTable +=
 							'<i class="fa fa-cog fa-spin fa-1x fa-fw" aria-hidden="true" id="loading_' +

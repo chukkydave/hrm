@@ -6,7 +6,7 @@ $(document).ready(function() {
 			//stop the loop
 			myStopFunction();
 
-			//does user have access to this module
+			//does user have access to this modul
 			user_page_access();
 		} else {
 			console.log('No profile');
@@ -90,7 +90,7 @@ function edit_employee_attendance() {
 	var user_id = localStorage.getItem('user_id');
 	// var pathArray = window.location.pathname.split( '/' );
 	var attendance_id = $.urlParam('id'); //pathArray[4].replace(/%20/g,' ');
-	var employee_id = $('#employee_id').val();
+	var employee_id = $('#employee_id').attr('data');
 	// var employment_position = $('#employment_position').val();
 	var date = $('#date').val();
 	var clock_out = $('#clock_out').val();
@@ -219,7 +219,8 @@ function fetch_employee_attendance() {
 			console.log(response);
 			var str3 = '';
 			if (response.status == '200') {
-				$('#employee_id').val(response.data.employee_id);
+				$('#employee_id').val(response.data.employee_name);
+				$('#employee_id').attr('data', response.data.employee_id);
 				$('#date').val(response.data.insert_date);
 				$('#clock_out').val(response.data.clock_out);
 				$('#clock_in').val(response.data.clock_in);

@@ -66,12 +66,20 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-60-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		load_department();
-		attendance_report('');
+
+	let pack_list = $('#user_features').html();
+	if (pack_list.indexOf('-4-') >= 0) {
+		if (role_list.indexOf('-60-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			load_department();
+			attendance_report('');
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
@@ -146,7 +154,7 @@ function attendance_report(page) {
 
 			if (response.status == '200') {
 				$('#loading').hide();
-				if (response.data) {
+				if (response.data.length > 0) {
 					var k = 1;
 
 					$(response.data).map((i, v) => {
@@ -180,7 +188,7 @@ function attendance_report(page) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="34">' + response.msg + '</td></tr>';
+					strTable = '<tr><td colspan="34">No record found</td></tr>';
 				}
 
 				$('#attendanceData').html(strTable);

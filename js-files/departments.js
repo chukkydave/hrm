@@ -216,13 +216,13 @@ function list_of_departments(page) {
 
 			if (response.status == '200') {
 				$('#loading').hide();
-				if (response.data && response.data.length > 0) {
+				if (response.data.length > 0) {
 					var k = 1;
 					$.each(response['data'], function(i, v) {
 						strTable += '<tr id="row_' + response['data'][i]['department_id'] + '">';
 						// strTable += '<td>'+response['data'][i]['department_code']+'</td>';
 						strTable += '<td>' + response['data'][i]['department_name'] + '</td>';
-						strTable += `<td>${v.hod}</td>`;
+						// strTable += `<td>${v.hod}</td>`;
 						// strTable += '<td>Pending</td>';
 						strTable +=
 							'<td><a href="' +
@@ -247,24 +247,17 @@ function list_of_departments(page) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="4">No record</td></tr>';
+					strTable = '<tr><td colspan="4">No record found</td></tr>';
 				}
-
-				$('#pagination').twbsPagination({
-					totalPages: Math.ceil(response.total_rows / limit),
-					visiblePages: 10,
-					onPageClick: function(event, page) {
-						list_of_departments(page);
-					},
-				});
-
-				$('#departmentData').html(strTable);
-				$('#departmentData').show();
-			} else if (response.data <= 0) {
-				$('#loading').hide();
-
-				strTable = '<tr><td colspan="4">' + response.msg + '</td></tr>';
-
+				if (response.total_rows) {
+					$('#pagination').twbsPagination({
+						totalPages: Math.ceil(response.total_rows / limit),
+						visiblePages: 10,
+						onPageClick: function(event, page) {
+							list_of_departments(page);
+						},
+					});
+				}
 				$('#departmentData').html(strTable);
 				$('#departmentData').show();
 			} else if (response.status == '400') {

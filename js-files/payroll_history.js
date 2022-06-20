@@ -34,19 +34,27 @@ $(document).ready(() => {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (
-		role_list.indexOf('-83-') >= 0 ||
-		role_list.indexOf('-69-') >= 0 ||
-		role_list.indexOf('-68-') >= 0
-	) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		listPayHistory(1);
+	let pack_list = $('#user_features').html();
+	if (pack_list.indexOf('-5-') >= 0) {
+		if (
+			role_list.indexOf('-69-') >= 0 ||
+			role_list.indexOf('-68-') >= 0 ||
+			role_list.indexOf('-70-') >= 0 ||
+			role_list.indexOf('-72-') >= 0 ||
+			role_list.indexOf('-71-') >= 0
+		) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			listPayHistory(1);
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
-		// $("#modal_no_access").modal('show');
 	}
 }
 
@@ -104,9 +112,8 @@ function listPayHistory(page) {
 					sche_list += `<td>${start} - ${end}</td>`;
 					sche_list += `<td>${status}</td>`;
 					let role_list = $('#does_user_have_roles').html();
-					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-71-') >= 0) {
-						if (v.is_pay_run_active === 'approve') {
-							sche_list += `<td>
+					if (v.is_pay_run_active === 'approve') {
+						sche_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -116,52 +123,38 @@ function listPayHistory(page) {
 								aria-expanded="false">
 								Actions
 							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-								<!--<li onClick="listSPayrun(${v.pay_run_id})">
-									<a class="dropdown-item">
-										<i class="fa fa-pencil" /> Edit
-									</a>
-								</li>-->
-								<li onClick="deletePayRun(${v.pay_run_id})">
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">`;
+						if (role_list.indexOf('-71-') >= 0) {
+							sche_list += `<li onClick="deletePayRun(${v.pay_run_id})">
 									<a class="dropdown-item">
 										<i class="fa fa-trash" /> Delete
 									</a>
-								</li>
-								<li onClick="downloadPayhistory(${v.pay_run_id})">
+								</li>`;
+						} else {
+							sche_list += `<li class="disabledC" onClick="denied()">
+									<a class="dropdown-item">
+										<i class="fa fa-trash" /> Delete
+									</a>
+								</li>`;
+						}
+
+						if (role_list.indexOf('-68-') >= 0 || role_list.indexOf('-72-') >= 0) {
+							sche_list += `<li onClick="downloadPayhistory(${v.pay_run_id})">
 									<a class="dropdown-item">
 										<i class="fa fa-download"></i> Download
 									</a>
-								</li>
-							</ul>
-						</div></td>`;
+								</li>`;
 						} else {
-							sche_list += `<td>
-						<div class="dropdown">
-							<button
-								class="btn btn-secondary dropdown-toggle"
-								type="button"
-								id="dropdownMenuButton1"
-								data-toggle="dropdown"
-								aria-expanded="false">
-								Actions
-							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-								<!--<li onClick="listSPayrun(${v.pay_run_id})">
+							sche_list += `<li class="disabledC" onClick="denied()">
 									<a class="dropdown-item">
-										<i class="fa fa-pencil" /> Edit
+										<i class="fa fa-download"></i> Download
 									</a>
-								</li>-->
-								<li onClick="deletePayRun(${v.pay_run_id})">
-									<a class="dropdown-item">
-										<i class="fa fa-trash" /> Delete
-									</a>
-								</li>
-							</ul>
-						</div></td>`;
+								</li>`;
 						}
+
+						sche_list += `</ul></div></td>`;
 					} else {
-						if (v.is_pay_run_active === 'approve') {
-							sche_list += `<td>
+						sche_list += `<td>
 						<div class="dropdown">
 							<button
 								class="btn btn-secondary dropdown-toggle"
@@ -171,42 +164,126 @@ function listPayHistory(page) {
 								aria-expanded="false">
 								Actions
 							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-								<!--<li onClick="listSPayrun(${v.pay_run_id})">
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">`;
+						if (role_list.indexOf('-71-') >= 0) {
+							sche_list += `<li onClick="deletePayRun(${v.pay_run_id})">
 									<a class="dropdown-item">
-										<i class="fa fa-pencil" /> Edit
+										<i class="fa fa-trash" /> Delete
 									</a>
-								</li>-->
-								
-								<li onClick="downloadPayhistory(${v.pay_run_id})">
-									<a class="dropdown-item">
-										<i class="fa fa-download"></i> Download
-									</a>
-								</li>
-							</ul>
-						</div></td>`;
+								</li>`;
 						} else {
-							sche_list += `<td>
-						<div class="dropdown">
-							<button
-								class="btn btn-secondary dropdown-toggle"
-								type="button"
-								id="dropdownMenuButton1"
-								data-toggle="dropdown"
-								aria-expanded="false">
-								Actions
-							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-								<!--<li onClick="listSPayrun(${v.pay_run_id})">
+							sche_list += `<li onClick="denied()">
 									<a class="dropdown-item">
-										<i class="fa fa-pencil" /> Edit
+										<i class="fa fa-trash" /> Delete
 									</a>
-								</li>-->
-								
-							</ul>
-						</div></td>`;
+								</li>`;
 						}
+
+						sche_list += `</ul></div></td>`;
 					}
+					// if (role_list.indexOf('-71-') >= 0) {
+					// 	if (v.is_pay_run_active === 'approve') {
+					// 		sche_list += `<td>
+					// 	<div class="dropdown">
+					// 		<button
+					// 			class="btn btn-secondary dropdown-toggle"
+					// 			type="button"
+					// 			id="dropdownMenuButton1"
+					// 			data-toggle="dropdown"
+					// 			aria-expanded="false">
+					// 			Actions
+					// 		</button>
+					// 		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					// 			<!--<li onClick="listSPayrun(${v.pay_run_id})">
+					// 				<a class="dropdown-item">
+					// 					<i class="fa fa-pencil" /> Edit
+					// 				</a>
+					// 			</li>-->
+					// 			<li onClick="deletePayRun(${v.pay_run_id})">
+					// 				<a class="dropdown-item">
+					// 					<i class="fa fa-trash" /> Delete
+					// 				</a>
+					// 			</li>
+					// 			<li onClick="downloadPayhistory(${v.pay_run_id})">
+					// 				<a class="dropdown-item">
+					// 					<i class="fa fa-download"></i> Download
+					// 				</a>
+					// 			</li>
+					// 		</ul>
+					// 	</div></td>`;
+					// 	} else {
+					// 		sche_list += `<td>
+					// 	<div class="dropdown">
+					// 		<button
+					// 			class="btn btn-secondary dropdown-toggle"
+					// 			type="button"
+					// 			id="dropdownMenuButton1"
+					// 			data-toggle="dropdown"
+					// 			aria-expanded="false">
+					// 			Actions
+					// 		</button>
+					// 		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					// 			<!--<li onClick="listSPayrun(${v.pay_run_id})">
+					// 				<a class="dropdown-item">
+					// 					<i class="fa fa-pencil" /> Edit
+					// 				</a>
+					// 			</li>-->
+					// 			<li onClick="deletePayRun(${v.pay_run_id})">
+					// 				<a class="dropdown-item">
+					// 					<i class="fa fa-trash" /> Delete
+					// 				</a>
+					// 			</li>
+					// 		</ul>
+					// 	</div></td>`;
+					// 	}
+					// } else {
+					// 	if (v.is_pay_run_active === 'approve') {
+					// 		sche_list += `<td>
+					// 	<div class="dropdown">
+					// 		<button
+					// 			class="btn btn-secondary dropdown-toggle"
+					// 			type="button"
+					// 			id="dropdownMenuButton1"
+					// 			data-toggle="dropdown"
+					// 			aria-expanded="false">
+					// 			Actions
+					// 		</button>
+					// 		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					// 			<!--<li onClick="listSPayrun(${v.pay_run_id})">
+					// 				<a class="dropdown-item">
+					// 					<i class="fa fa-pencil" /> Edit
+					// 				</a>
+					// 			</li>-->
+
+					// 			<li onClick="downloadPayhistory(${v.pay_run_id})">
+					// 				<a class="dropdown-item">
+					// 					<i class="fa fa-download"></i> Download
+					// 				</a>
+					// 			</li>
+					// 		</ul>
+					// 	</div></td>`;
+					// 	} else {
+					// 		sche_list += `<td>
+					// 	<div class="dropdown">
+					// 		<button
+					// 			class="btn btn-secondary dropdown-toggle"
+					// 			type="button"
+					// 			id="dropdownMenuButton1"
+					// 			data-toggle="dropdown"
+					// 			aria-expanded="false">
+					// 			Actions
+					// 		</button>
+					// 		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					// 			<!--<li onClick="listSPayrun(${v.pay_run_id})">
+					// 				<a class="dropdown-item">
+					// 					<i class="fa fa-pencil" /> Edit
+					// 				</a>
+					// 			</li>-->
+
+					// 		</ul>
+					// 	</div></td>`;
+					// 	}
+					// }
 
 					sche_list += `</tr>`;
 					sche_list += `<tr id="pay_loader${v.pay_run_id}" style="display:none;"><td colspan="4"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
@@ -215,7 +292,7 @@ function listPayHistory(page) {
 				$('#list_sche_loader').hide();
 				$('#list_sche_table').show();
 			} else {
-				$('#list_sche_body').html(`<tr><td colspan="4">No record</td></tr>`);
+				$('#list_sche_body').html(`<tr><td colspan="4">No record found</td></tr>`);
 				$('#list_sche_loader').hide();
 				$('#list_sche_table').show();
 			}
@@ -242,6 +319,10 @@ function listPayHistory(page) {
 		.then(function() {
 			// always executed
 		});
+}
+
+function denied() {
+	toastr.error('Access Denied');
 }
 
 function deletePayRun(id) {
@@ -329,7 +410,7 @@ function listSPayrun(id) {
 				$('#list_sPayrun_loader').hide();
 				$('#list_sPayrun_table').show();
 			} else {
-				$('#list_sPayrun_body').html(`<tr><td colspan="4">No record</td></tr>`);
+				$('#list_sPayrun_body').html(`<tr><td colspan="4">No record found</td></tr>`);
 				$('#list_sPayrun_loader').hide();
 				$('#list_sPayrun_table').show();
 			}

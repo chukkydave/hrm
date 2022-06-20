@@ -266,6 +266,7 @@ function list_employment_payment_type() {
 
 				$('#debit_body').html(debit_checker);
 				$('#credit_body').html(credit_checker);
+				console.log(credit_table, debit_table);
 				if (credit_table !== '') {
 					$('#credit_table').html(credit_table);
 				}
@@ -826,6 +827,9 @@ function formatNumber(n) {
 }
 
 function formatToCurrency(amount) {
+	if (amount === null) {
+		amount = '0';
+	}
 	if (amount === '0' || amount === '0.0') {
 		return '₦' + '0.00';
 	} else {

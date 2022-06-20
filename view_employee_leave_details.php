@@ -145,19 +145,7 @@ input:checked+.slider:before {
                         <div class="x_title">
                             <h2>Leave Details </h2>
                             <ul class="nav navbar-right panel_toolbox">
-                                <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li> -->
-                                <!-- <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li> -->
-                                <!-- <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li> -->
+
                             </ul>
                             <div class="clearfix"></div>
                         </div>
@@ -166,13 +154,11 @@ input:checked+.slider:before {
                                 <div class="profile_img" id="picture">
 
                                 </div>
-                                <!-- <h3>Samuel Doe</h3> -->
                                 <br>
                                 <ul class="list-unstyled user_data" id="profile_links">
 
                                 </ul>
 
-                                <!-- <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a> -->
                                 <br />
 
 
@@ -214,24 +200,12 @@ input:checked+.slider:before {
 
 
 
-                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12" style="display:none;" id="leave_info_div">
                                     <div class="x_panel">
                                         <div class="x_title">
                                             <h2>Leave Details</h2>
                                             <ul class="nav navbar-right panel_toolbox">
-                                                <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                </li>
-                                <li class="dropdown">
-                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                  <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
-                                    </li>
-                                    <li><a href="#">Settings 2</a>
-                                    </li>
-                                  </ul>
-                                </li>
-                                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                </li> -->
+
                                             </ul>
                                             <div class="clearfix"></div>
                                         </div>
@@ -350,7 +324,7 @@ input:checked+.slider:before {
                                                     </div>
                                                 </div>
 
-                                                <div class="row">
+                                                <!-- <div class="row">
                                                     <div class="col-md-6 col-sm-6 col-xs-6">
                                                         <p><strong>Head Of Department:</strong></p>
                                                     </div>
@@ -358,7 +332,7 @@ input:checked+.slider:before {
                                                     <div class="col-md-6 col-sm-6 col-xs-6">
                                                         <p id="hod_name"></p>
                                                     </div>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-6 col-xs-6">
@@ -387,38 +361,8 @@ input:checked+.slider:before {
                                 </div>
 
 
-                                <!-- <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
 
-
-
-                                        <div class="x_content">
-
-                                            <div>
-
-                                                <div class="form-row" id="turnbturn" style="display: none">
-                                                    <input class="form-check-input" type="radio" name="RadioOptions"
-                                                        id="turn" value="chronological">
-                                                    <label class="form-check-label" for="turn">Turn by Turn
-                                                        Approval</label>
-                                                    &nbsp;
-                                                    <input class="form-check-input" type="radio" name="RadioOptions"
-                                                        id="random" value="random">
-                                                    <label class="form-check-label" for="random">Random Approval</label>
-                                                </div>
-
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div> -->
-
-
-                                <!-- Start -->
-
-
-                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12" id="approver_list_div" style="display:none;">
                                     <div class="x_panel">
                                         <div class="x_title" style="border:none;">
                                             <h2>
@@ -572,7 +516,8 @@ input:checked+.slider:before {
 
 
 
-                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12" id="approve_n_decline_btns"
+                                    style="display:none;">
 
                                     <br><br>
                                     <div>

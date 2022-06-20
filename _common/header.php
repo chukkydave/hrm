@@ -2525,7 +2525,7 @@
                                                 class="fa fa-chevron-down"></span></a>
 
                                         <ul class="nav child_menu">
-                                            <li><a href="terminations">All Exit</a></li>
+                                            <li><a href="exits">All Exit</a></li>
                                             <li><a href="exit_config">Exit Configuration</a></li>
                                         </ul>
 
@@ -2542,13 +2542,13 @@
                                                 class="fa fa-chevron-down"></span></a>
 
                                         <ul class="nav child_menu">
-                                            <li><a href="company_positions">Job Titles</a></li>
+                                            <li><a href="job_title">Job Titles</a></li>
                                             <li><a href="departments">Departments</a></li>
                                             <!-- <li><a href="set_work_days">Set Work Days</a></li> -->
                                             <li><a href="leave_types">Leave Types</a></li>
-                                            <li><a href="branches">Company Branches</a></li>
+                                            <li><a href="company_branches">Company Branches</a></li>
                                             <li><a href="employement_type">Employment Types</a></li>
-                                            <li><a href="employment_payment_types">Salary Component</a></li>
+                                            <li><a href="salary_component">Salary Component</a></li>
                                             <!-- <li><a href="#">Company Profile Settings</a></li> -->
                                             <li><a href="emp_doc_type">Employee Doc Types</a></li>
                                             <li><a href="company_holidays">Company Holidays</a></li>

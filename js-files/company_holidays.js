@@ -251,7 +251,7 @@ function list_of_company_holidays(page) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="3">' + response.msg + '</td></tr>';
+					strTable = '<tr><td colspan="3">No record found</td></tr>';
 				}
 
 				$('#holidayData').html(strTable);

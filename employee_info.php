@@ -92,6 +92,15 @@ include_once("../gen/_common/header.php"); // header contents
                             <div class="col-md-6 col-sm-6 col-xs-12 profile_left">
                                 <div class="row">
                                     <div class="col-md-4 col-sm-4 col-xs-6">
+                                        <p><strong>Employee Code</strong></p>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <p id="employee_code"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4 col-xs-6">
                                         <p><strong>Firstname</strong></p>
                                     </div>
 
@@ -223,7 +232,7 @@ include_once("../gen/_common/header.php"); // header contents
                             <a class="nav-link no" id="salary-tabss" data-toggle="tab" href="#salary_info_blockss"
                                 role="tab" aria-controls="salary" aria-selected="false">Salary Info</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item feat_5">
                             <a class="nav-link no" id="payslip-tab" data-toggle="tab" href="#payslip_block" role="tab"
                                 aria-controls="payslip" aria-selected="false">Payslips</a>
                         </li>
@@ -236,7 +245,7 @@ include_once("../gen/_common/header.php"); // header contents
                                 href="#job_title_history_block" role="tab" aria-controls="job_title_history"
                                 aria-selected="false">Job Title History</a>
                         </li> -->
-                        <li class="nav-item">
+                        <li class="nav-item feat_4">
                             <a class="nav-link no" id="attendance-tab" data-toggle="tab" href="#attendance_block"
                                 role="tab" aria-controls="attendance" aria-selected="false">Attendance</a>
                         </li>
@@ -1074,7 +1083,7 @@ include_once("../gen/_common/header.php"); // header contents
                                             <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
 
-                                        <li style="display:none;" data-toggle="modal" id="edit_additional_info"
+                                        <li data-toggle="modal" id="edit_additional_info"
                                             data-target="#edit_additional_info_modal" title="Edit Additional Info">
                                             <a class=""><i class="fa fa-pencil"></i></a>
                                         </li>
@@ -1544,7 +1553,7 @@ include_once("../gen/_common/header.php"); // header contents
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Salary Payment History</h2>
+                                    <h2>Payslip Record</h2>
                                     <ul class="nav navbar-right panel_toolbox">
 
                                         <li><button type="button" class="btn btn-sm btn-primary" data-toggle="collapse"
@@ -1632,18 +1641,7 @@ include_once("../gen/_common/header.php"); // header contents
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                                aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                            <ul class="dropdown-menu" role="menu">
-                                                <li><a href="#">Settings 1</a>
-                                                </li>
-                                                <li><a href="#">Settings 2</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
+
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
@@ -2303,6 +2301,15 @@ include_once("../gen/_common/header.php"); // header contents
                     <span id="" class="form-horizontal form-label-left">
 
 
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                for="edit_basic_employee_code">Employee Code <span>*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="edit_basic_employee_code" required="required"
+                                    class="form-control col-md-7 col-xs-12 required">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12"
                                 for="edit_basic_firstname">Firstname <span>*</span>

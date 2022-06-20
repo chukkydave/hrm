@@ -469,6 +469,7 @@ function fetch_employee_details() {
 				} else {
 					dobs = moment(response.data.employee_data.dob, 'YYYY-MM-DD').format('LL');
 				}
+				$('#employee_code').html(response.data.employee_data.employee_code);
 				$('#firstname').html(response.data.employee_data.firstname);
 				$('#lastname').html(response.data.employee_data.lastname);
 				$('#gender').html(response.data.employee_data.gender);
@@ -506,7 +507,8 @@ function fetch_employee_details() {
 						'<a onClick="viewBasicInfo()"><button id="editBasicInfo" data-toggle="modal" data-target="#edit_basic_modal" class="btn btn-primary">Edit</button></a>';
 				}
 
-				str3 += '<div  class="profile_pic pfl_ctna" id="crop-avatar">';
+				str3 +=
+					'<div  class="profile_pic pfl_ctna" style="box-shadow:none;" id="crop-avatar">';
 
 				str3 +=
 					'<img class="pfl_ctna" src="' +

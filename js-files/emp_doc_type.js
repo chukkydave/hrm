@@ -232,9 +232,9 @@ function list_doctype(page) {
 							base_url +
 							'edit_doctype?id=' +
 							response['data'][i]['doctype_id'] +
-							'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Company Holiday"></i></a>&nbsp;&nbsp; <a class="delete_doctype" style="cursor: pointer;" id="doc_' +
+							'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Document Type"></i></a>&nbsp;&nbsp; <a class="delete_doctype" style="cursor: pointer;" id="doc_' +
 							response['data'][i]['doctype_id'] +
-							'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Company Holiday"></i></a></td>';
+							'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Document Type"></i></a></td>';
 
 						strTable += '</tr>';
 
@@ -250,7 +250,7 @@ function list_doctype(page) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="3">' + response.msg + '</td></tr>';
+					strTable = '<tr><td colspan="3">No record found</td></tr>';
 				}
 
 				$('#doctypeData').html(strTable);

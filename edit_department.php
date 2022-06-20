@@ -60,11 +60,10 @@ include_once("../gen/_common/header.php"); // header contents
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                    for="">Description<span>*</span>
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Description
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <textarea cols="3" class="form-control col-md-7 col-xs-12 required"
+                                    <textarea cols="3" class="form-control col-md-7 col-xs-12"
                                         id="department_description">
 
                           </textarea>
@@ -105,13 +104,12 @@ include_once("../gen/_common/header.php"); // header contents
             </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>
                             Head Of Department History
-                            <!-- <small>Activity report</small> -->
                         </h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
@@ -169,7 +167,6 @@ include_once("../gen/_common/header.php"); // header contents
                                             </div>
 
 
-                                            <!-- <button type="button" class="btn btn-success" id="add_dept">Add</button> -->
                                             <div class="form-group">
                                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 
@@ -213,7 +210,7 @@ include_once("../gen/_common/header.php"); // header contents
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 </div>

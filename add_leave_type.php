@@ -32,8 +32,6 @@ include_once("../gen/_common/header.php"); // header contents
 
                         <a href="leave_types"><button type="button" class="btn btn-success"
                                 id="add_employee">Back</button></a>
-
-
                     </div>
                 </div>
             </div>
@@ -47,9 +45,6 @@ include_once("../gen/_common/header.php"); // header contents
                     <div class="x_content">
                         <br />
                         <span id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-
-
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="leave_type">Leave Type
                                     <span>*</span>
@@ -61,8 +56,8 @@ include_once("../gen/_common/header.php"); // header contents
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="leave_description">Type
-                                    Description
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                    for="leave_description">Description
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <textarea cols="3" class="form-control col-md-7 col-xs-12" id="leave_description">
@@ -84,17 +79,6 @@ include_once("../gen/_common/header.php"); // header contents
                                     </select>
                                 </div>
                             </div>
-
-                            <!-- <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="allowable_days">Allowable
-                                    Days Per Year<span>*</span>
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <input type="number" id="allowable_days" required="required"
-                                        class="form-control col-md-7 col-xs-12 required">
-                                </div>
-                            </div> -->
-
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="lastname">Exclude Holidays
                                     While Calculating Days?
@@ -130,7 +114,6 @@ include_once("../gen/_common/header.php"); // header contents
                                     <button type="submit" class="btn btn-success" id="add_leave">Add</button>
                                     <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                         id="add_leave_loader"></i>
-                                    <!-- <div id="add_user_loading" style="display:  none">Loading...</div> -->
                                 </div>
                             </div>
 
@@ -143,7 +126,6 @@ include_once("../gen/_common/header.php"); // header contents
     </div>
 </div>
 <!-- /page content -->
-
 <div class="modal fade" id="modal_leave_type" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -159,10 +141,6 @@ include_once("../gen/_common/header.php"); // header contents
             <div class="modal-body">
                 <h4>Leave Type Added Successfully!</h4>
             </div>
-            <!-- <div class="modal-footer"> -->
-            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
-            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-            <!-- </div> -->
         </div>
     </div>
 </div>

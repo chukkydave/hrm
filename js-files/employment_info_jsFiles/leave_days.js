@@ -88,6 +88,8 @@ function addAllotDays() {
 					confirmButtonText: 'Okay',
 					onClose: listAllotDays(),
 				});
+
+				listLeaveGraph();
 			}
 		},
 	});

@@ -246,13 +246,12 @@ blockquote p {
             </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>
                             Exit Policy/Info
-                            <!-- <small>Activity report</small> -->
                         </h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
@@ -277,20 +276,7 @@ blockquote p {
                                     <div class="x_panel">
 
                                         <div class="x_content">
-                                            <!-- <br />
-                                            <div class="col-sm-8 col-md-8 col-xs-8">
-                                                <div id="summernote">Hello Summernote</div>
-                                            </div>
-
-                                            <div class="form-row">
-                                                <div class="col-sm-2 col-xs-4" style="">
-                                                    <button type="button" class="btn btn-success"
-                                                        id="add_policy_btn">Add</button>
-                                                    <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
-                                                        id="add_policy_loader"></i>
-
-                                                </div>
-                                            </div> -->
+                                           
 
                                             <span id="demo-form2" data-parsley-validate
                                                 class="form-horizontal form-label-left">
@@ -302,16 +288,7 @@ blockquote p {
                                                 <div class="col-sm-8 col-md-8 col-xs-8">
                                                     <input id="policy_file" type="file">
                                                 </div>
-                                                <!-- <div class="form-group">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                        for="edit_exitType_name">Exit Type
-                                                    </label>
-                                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <input id="edit_exitType_name"
-                                                            class="form-control col-md-7 col-xs-12">
-                                                    </div>
-                                                </div> -->
-
+                                                
                                                 <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">
                                                     </label>
@@ -358,7 +335,7 @@ blockquote p {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
     <!-- /page content -->
 </div>
@@ -452,7 +429,7 @@ blockquote p {
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header ">
-                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Exit Type
+                <h3 class="modal-title" id="exampleModalLabel" style="color: #fff;">Edit Interview Question
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

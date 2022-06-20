@@ -8,7 +8,9 @@ $(document).ready(function() {
 			//does user have access to this module
 			user_page_access();
 		} else {
-			console.log('No profile');
+			$('.hi_user_name').html(localStorage.getItem('firstname'));
+			$('#loader_mssg').show();
+			$('#ldnuy').hide();
 		}
 	}, 1000);
 
@@ -22,9 +24,22 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0) {
-		//Settings
+	if (
+		role_list.indexOf('-152-') >= 0 &&
+		role_list.indexOf('-83-') < 0 &&
+		role_list.indexOf('-151-') < 0
+	) {
+		$('.hi_user_name').html(localStorage.getItem('firstname'));
+		// $('#loader_mssg').show();
+		// $('#ldnuy').hide();
 		$('#main_display_loader_page').hide();
+		$('#main_display_loader_page2').show();
+	} else {
+		// $("#modal_no_access").modal('show');
+		//Settings
+		// $('#ldnuy').hide();
+		$('#main_display_loader_page').hide();
+		$('#main_display_loader_page2').hide();
 		$('#main_display').show();
 		setTimeout(() => {
 			wait_to_load();
@@ -32,21 +47,8 @@ function user_page_access() {
 		fetch_notice_board();
 		listUpcomingEvents();
 		fetch_total_salary();
-	} else {
-		$('#loader_mssg').html('You do not have access to this page');
-		$('#ldnuy').hide();
-		// $("#modal_no_access").modal('show');
 	}
 }
-// 0: {title: "All Day Event", start: "2021-07-01"}
-// 1: {title: "Long Event", start: "2021-07-07", end: "2021-07-10"}
-// 2: {groupId: "999", title: "Repeating Event", start: "2021-07-09T16:00:00+00:00"}
-// 3: {groupId: "999", title: "Repeating Event", start: "2021-07-16T16:00:00+00:00"}
-// 4: {title: "Conference", start: "2021-07-12", end: "2021-07-14"}
-// 5: {title: "Meeting", start: "2021-07-13T10:30:00+00:00", end: "2021-07-13T12:30:00+00:00"}
-// 6: {title: "Lunch", start: "2021-07-13T12:00:00+00:00"}
-// 7: {title: "Birthday Party", start: "2021-07-14T07:00:00+00:00"}
-// 8: {url: "http://google.com/", title: "Click for Google", start: "2021-07-28"}
 
 function wait_to_load(warehouse_id) {
 	var def = $.Deferred();
@@ -74,6 +76,7 @@ $.urlParam = function(name) {
 	}
 };
 
+//fetch data for "total number of employee card"
 function total_employees_not_terminated() {
 	// alert('success');
 	var company_id = localStorage.getItem('company_id');
@@ -108,6 +111,7 @@ function total_employees_not_terminated() {
 	});
 }
 
+//fetch data for "pending leaves card"
 function no_of_leaves() {
 	// alert('success');
 	var company_id = localStorage.getItem('company_id');
@@ -142,6 +146,7 @@ function no_of_leaves() {
 	});
 }
 
+//fetch data for "exits till date card"
 function no_of_terminations() {
 	// alert('success');
 	var company_id = localStorage.getItem('company_id');
@@ -178,6 +183,7 @@ function no_of_terminations() {
 	});
 }
 
+//fetch data for "total number of employees" card
 function fetch_total_emp_by_month() {
 	// $('#sche_msg_error').html('');
 	$(`#total_employees_by_months`).hide();
@@ -262,6 +268,8 @@ function formatToCurrency(amount) {
 function numberWithCommas(x) {
 	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+//fetch data for "employee cost" card
 function fetch_employee_cost_graph() {
 	// $('#sche_msg_error').html('');
 	$(`#yearly_sales_report`).hide();
@@ -363,7 +371,7 @@ function fetch_employee_cost_graph() {
 			$('#yearly_sales_report_loading').hide();
 			$('#yearly_sales_report').show();
 
-			$('#yearly_sales_report').html(error.responseJSON.msg);
+			$('#yearly_sales_report').html('Error');
 		})
 		.then(function() {
 			// always executed
@@ -372,6 +380,7 @@ function fetch_employee_cost_graph() {
 	// var echartDonut = echarts.init(document.getElementById("yearly_sales_report"));
 }
 
+//fetch data for "notice board" card
 function fetch_notice_board() {
 	// $('#sche_msg_error').html('');
 	$(`#notice_board`).hide();
@@ -395,7 +404,7 @@ function fetch_notice_board() {
 		.then(function(response) {
 			$('#notice_board_loading').hide();
 			$('#notice_board').show();
-			if (response.data.data !== '') {
+			if (response.data.data.length !== 0) {
 				let allNotice = '';
 				const { board_notice, schedule_notification } = response.data.data;
 				if (board_notice && board_notice.length > 0) {
@@ -447,12 +456,12 @@ function fetch_notice_board() {
 				}
 
 				if (board_notice.length <= 0 && schedule_notification <= 0) {
-					allNotice += `<p>No Notification currently</p>`;
+					allNotice += `<li>No Notice currently</li>`;
 				}
 
 				$('#notice_board').html(allNotice);
 			} else {
-				$('#notice_board').html('No Notification currently');
+				$('#notice_board').html('<li>No Notice currently</li>');
 			}
 
 			$('#notice_board_loading').hide();
@@ -464,7 +473,7 @@ function fetch_notice_board() {
 			$('#notice_board_loading').hide();
 			$('#notice_board').show();
 
-			$('#notice_board').html(error.statusText);
+			$('#notice_board').html(`<li>Error</li>`);
 		})
 		.then(function() {
 			// always executed
@@ -493,6 +502,7 @@ function update_notice_schedule(id, date) {
 		});
 }
 
+//fetch data for "employment type" card
 function get_employee_cat() {
 	// if ($('#echart_pie').length) {
 	var company_id = localStorage.getItem('company_id');
@@ -1066,6 +1076,7 @@ function logout() {
 	localStorage.clear();
 }
 
+//fetch data for the "calendar" card
 document.addEventListener('DOMContentLoaded', function() {
 	let company_id = localStorage.getItem('company_id');
 	// $('#list_QC_table').hide();
@@ -1115,6 +1126,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				calendar.render();
 				setTimeout(() => {
 					calendar.updateSize();
+					$('#calendarly_loader').hide();
+					$('#calendarly').show();
 				}, 2000);
 				// calendar.setOption('height', 700);
 			} else {
@@ -1132,16 +1145,21 @@ document.addEventListener('DOMContentLoaded', function() {
 				calendar.render();
 				setTimeout(() => {
 					calendar.updateSize();
+					$('#calendarly_loader').hide();
+					$('#calendarly').show();
 				}, 2000);
 			}
 		})
 		.catch(function(error) {
 			console.log(error);
 			$('#calendarly').html('<p>Error loading data</p>');
+			$('#calendarly_loader').hide();
+			$('#calendarly').show();
 		})
 		.then(function() {});
 });
 
+//fetch data for "upcoming event" card
 function listUpcomingEvents() {
 	// $('#list_QC_table').hide();
 	// $('#list_QC_loader').show();
@@ -1170,7 +1188,7 @@ function listUpcomingEvents() {
 				let allNotice = '';
 				// const { board_notice, schedule_notification } = response.data.data;
 				response.data.data.map((item) => {
-					let timer = moment(item.date, 'YYYY-MM-DD HH:mm:ss').format('LL');
+					let timer = moment(item.date, 'YYYY-MM-DD HH:mm:ss').format('ll');
 					let firstSplit = timer.split(',');
 					let finalSplit = firstSplit[0].split(' ');
 					allNotice += `<article class="media event">
@@ -1186,7 +1204,7 @@ function listUpcomingEvents() {
 
 				$('#upcoming_event').html(allNotice);
 			} else {
-				$('#upcoming_event').html('No Upcoming Event for now');
+				$('#upcoming_event').html('No events currently');
 			}
 
 			$('#upcoming_event_loading').hide();
@@ -1205,6 +1223,7 @@ function listUpcomingEvents() {
 		});
 }
 
+//fetch data for "exit chart" card
 function fetch_exits_graph() {
 	// $('#sche_msg_error').html('');
 	$(`#exit_chartert`).hide();
@@ -1316,6 +1335,7 @@ function fetch_exits_graph() {
 	// var echartDonut = echarts.init(document.getElementById("yearly_sales_report"));
 }
 
+//fetch data for "total salary" card
 function fetch_total_salary() {
 	var company_id = localStorage.getItem('company_id');
 	let year = new Date().getFullYear();

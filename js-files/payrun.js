@@ -148,30 +148,41 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-68-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		listPayRunHistory(1);
-		load_employee();
-		listApprovers();
+	let pack_list = $('#user_features').html();
+	if (pack_list.indexOf('-5-') >= 0) {
+		if (
+			role_list.indexOf('-68-') >= 0 ||
+			role_list.indexOf('-69-') >= 0 ||
+			role_list.indexOf('-70-') >= 0 ||
+			role_list.indexOf('-72-') >= 0
+		) {
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			listPayRunHistory(1);
+			load_employee();
+			listApprovers();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
+		if (role_list.indexOf('-70-') >= 0) {
+			$('#payrun_name').attr('disabled', false);
+			$('#date_range').attr('disabled', false);
+			$('#pay_date').attr('disabled', false);
+			$('#pay_dates_btn').show();
+		}
+
+		if (role_list.indexOf('-72-') >= 0) {
+			$('#add_appv').show();
+			$('#approve_btnn').show();
+			$('#decline_btnn').show();
+			// $('#pay_dates_btn').show();
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
 		// $("#modal_no_access").modal('show');
-	}
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-70-') >= 0) {
-		$('#payrun_name').attr('disabled', false);
-		$('#date_range').attr('disabled', false);
-		$('#pay_date').attr('disabled', false);
-		$('#pay_dates_btn').show();
-	}
-
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-72-') >= 0) {
-		$('#add_appv').show();
-		$('#approve_btnn').show();
-		$('#decline_btnn').show();
-		// $('#pay_dates_btn').show();
 	}
 }
 
@@ -811,13 +822,20 @@ function getPaySlipDetails2(emp_id) {
 							}
 						}
 					});
+					let paytee;
+					if (response.data.pay_period) {
+						let one = response.data.pay_period.split(' ');
+						paytee = `${one[0]} - ${one[1]}`;
+					} else {
+						paytee = response.data.pay_period;
+					}
 					$('#com_name').html(response.data.company_name);
 					$('#emy_name').html(response.data.fullname);
 					$('#depy_name').html(response.data.department);
 					$('#joby_name').html(response.data.job_title);
 					$('#banky_name').html(response.data.bank_name);
 					$('#banky_no').html(response.data.account_no);
-					$('#pay_period_datey').html(response.data.pay_period);
+					$('#pay_period_datey').html(paytee);
 					$('#pay_datey').html(response.data.payment_date);
 					$('#gpay').html(`₦${numberWithCommas(response.data.salary)}`);
 					$('#npay').html(`${formatToCurrency(response.net_pay)}`);
@@ -1370,7 +1388,10 @@ function listApprovers() {
 					appv_list += `<tr id="appv_div${v.approval_id}">`;
 					appv_list += `<td><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="${site_url}/files/images/employee_images/sml_${v.picture}" " alt="..." width="50"></div></td>`;
 					appv_list += `<td><b>${v.fullname} (${v.job_title})</b><br>Date Received: ${received} <br>Date Of Action: ${action}</td>`;
-					if (v.pay_run_approval_status == 'decline') {
+					if (
+						v.pay_run_approval_status.toLowerCase() == 'decline' ||
+						v.pay_run_approval_status.toLowerCase() == 'declined'
+					) {
 						appv_list += `<td><i class="fa fa-times-circle" style="color: red; font-size: 15px;"></i></td>`;
 					} else if (v.pay_run_approval_status == 'approve') {
 						appv_list += `<td><i class="fa fa-check-circle" style="color: green; font-size: 15px;"></i></td>`;
@@ -1384,7 +1405,10 @@ function listApprovers() {
 					appv_list2 += `<tr id="appv_div${v.approval_id}">`;
 					appv_list2 += `<td><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="${site_url}/files/images/employee_images/sml_${v.picture}" " alt="..." width="50"></div></td>`;
 					appv_list2 += `<td><b>${v.fullname} (${v.job_title})</b><br>Date Received: ${received} <br>Date Of Action: ${action}</td>`;
-					if (v.pay_run_approval_status == 'decline') {
+					if (
+						v.pay_run_approval_status == 'decline' ||
+						v.pay_run_approval_status.toLowerCase() == 'declined'
+					) {
 						appv_list2 += `<td><i class="fa fa-times-circle" style="color: red; font-size: 15px;"></i></td>`;
 					} else if (v.pay_run_approval_status == 'approve') {
 						appv_list2 += `<td><i class="fa fa-check-circle" style="color: green; font-size: 15px;"></i></td>`;

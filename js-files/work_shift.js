@@ -253,28 +253,32 @@ function fetch_list() {
 
 			if (response.status == '200') {
 				var the_list = '';
-				$(response.data).each(function(index, value) {
-					the_list +=
-						'<tr id="data_tr_' +
-						value.id +
-						'">  <td valign="top" id="s_name_' +
-						value.id +
-						'">' +
-						value.name +
-						'</td>  <td valign="top">' +
-						value.employee_count +
-						'</td>    <td valign="top"><i  class="fa fa-info-circle view_shift_info" id="id_' +
-						value.id +
-						'"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #add8e6; font-size: 20px;" ></i> &nbsp;&nbsp;<a href="' +
-						base_url +
-						'edit_work_shift?id=' +
-						value.id +
-						'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit"></i></a>&nbsp;&nbsp; <i  class="fa fa-trash do_connections_exist"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee info" id="id_' +
-						value.id +
-						'"></i></td>     </tr>  <tr id="loadin_tr_' +
-						value.id +
-						'" style="display: none"><td colspan="3"><i class="fa fa-spinner fa-spin fa-fw fa-1x" style="display: ;"></i></td></tr>';
-				});
+				if (response.data.length > 0) {
+					$(response.data).each(function(index, value) {
+						the_list +=
+							'<tr id="data_tr_' +
+							value.id +
+							'">  <td valign="top" id="s_name_' +
+							value.id +
+							'">' +
+							value.name +
+							'</td>  <td valign="top">' +
+							value.employee_count +
+							'</td>    <td valign="top"><i  class="fa fa-info-circle view_shift_info" id="id_' +
+							value.id +
+							'"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #add8e6; font-size: 20px;" ></i> &nbsp;&nbsp;<a href="' +
+							base_url +
+							'edit_work_shift?id=' +
+							value.id +
+							'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit"></i></a>&nbsp;&nbsp; <i  class="fa fa-trash do_connections_exist"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee info" id="id_' +
+							value.id +
+							'"></i></td>     </tr>  <tr id="loadin_tr_' +
+							value.id +
+							'" style="display: none"><td colspan="3"><i class="fa fa-spinner fa-spin fa-fw fa-1x" style="display: ;"></i></td></tr>';
+					});
+				} else {
+					the_list = '<tr><td colspan="3">No record found</td></tr>';
+				}
 
 				$('#workshift_list').html(the_list);
 			} else if (response.status == '400') {

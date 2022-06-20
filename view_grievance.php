@@ -269,7 +269,7 @@ blockquote p {
                             <i class="fa fa-spinner fa-spin fa-fw fa-3x" style="display: none;"
                                 id="add_desc_loader"></i>
                         </div>
-                        <div class="col-md-9 col-sm-9 " id="proceeding_section">
+                        <div class="col-lg-12 col-md-12 col-sm-12 " id="proceeding_section">
                             <!-- <div class="dropdown" style="float:right;" id="menuOptions">
 								<i class="fa fa-ellipsis-v hide-me hide_us" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:inherit;"></i>
 								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">

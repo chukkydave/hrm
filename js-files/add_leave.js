@@ -30,12 +30,20 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-65-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		load_employee();
-		load_leave_type();
+	let pack_list = $('#user_features').html();
+
+	if (pack_list.indexOf('-2-') >= 0) {
+		if (role_list.indexOf('-65-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			load_employee();
+			load_leave_type();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();

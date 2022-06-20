@@ -68,7 +68,12 @@ $(document).ready(() => {
 		}
 	});
 	$('#view_ess_connect_btn').on('click', () => {
-		connectEmployee();
+		let confam = confirm(
+			'Connecting an Employee changes their Status from Inactive to Active.',
+		);
+		if (confam) {
+			connectEmployee();
+		}
 	});
 	$('#view_ess_link_btn').on('click', () => {
 		sendLink();
@@ -1700,7 +1705,7 @@ function connectEmployee() {
 					text: `Success`,
 					icon: 'success',
 					confirmButtonText: 'Okay',
-					onClose: showConnectedInfo(),
+					onClose: dosmallstuff(),
 				});
 
 				// $('#jobTitle_name').val('');
@@ -1721,6 +1726,11 @@ function connectEmployee() {
 			}
 		},
 	});
+}
+
+function dosmallstuff() {
+	showConnectedInfo();
+	fetch_employee_details();
 }
 
 function showConnectedInfo() {

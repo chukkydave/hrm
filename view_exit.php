@@ -33,7 +33,7 @@ include_once("../gen/_common/header.php"); // header contents
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                     <div class="input-group" style="float: right">
                         <!-- <button type="button" class="btn btn-default" id="incoming_filter">Add</button> -->
-                        <a href="terminations"><button type="button" class="btn btn-danger">Back</button></a>
+                        <a href="exits"><button type="button" class="btn btn-danger">Back</button></a>
                     </div>
                 </div>
             </div>

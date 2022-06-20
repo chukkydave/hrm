@@ -120,6 +120,9 @@ $(document).ready(function() {
 				url: api_path + 'hrm/hr_set_approval_leave_order',
 				data: { company_id: company_id, leave_id: leave_id, order_type: order_type },
 				timeout: 60000,
+				headers: {
+					Authorization: localStorage.getItem('token'),
+				},
 
 				success: function(response) {
 					// $('#page_loader').hide();
@@ -136,8 +139,9 @@ $(document).ready(function() {
 							text: 'Success',
 							icon: 'success',
 							confirmButtonText: 'Okay',
-							// onClose: leave_types(''),
+							onClose: window.location.reload(),
 						});
+						list_of_forward_leaves_applicant();
 
 						// $('#modal_order').on('hidden.bs.modal', function () {
 						//     // do something…
@@ -183,6 +187,9 @@ $(document).ready(function() {
 				url: api_path + 'hrm/hr_set_approval_leave_order',
 				data: { company_id: company_id, leave_id: leave_id, order_type: order_type },
 				timeout: 60000,
+				headers: {
+					Authorization: localStorage.getItem('token'),
+				},
 
 				success: function(response) {
 					// $('#page_loader').hide();
@@ -196,10 +203,11 @@ $(document).ready(function() {
 							text: 'Success',
 							icon: 'success',
 							confirmButtonText: 'Okay',
-							// onClose: leave_types(''),
+							onClose: window.location.reload(),
 						});
 						$('#turn_loader').hide();
 						$('#turn').show();
+						list_of_forward_leaves_applicant();
 
 						// $('#modal_order').on('hidden.bs.modal', function () {
 						//     // do something…
@@ -259,22 +267,36 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		fetch_leave_info();
-		list_of_forward_leaves_applicant();
+	let pack_list = $('#user_features').html();
+
+	if (pack_list.indexOf('-2-') >= 0) {
+		if (role_list.indexOf('-67-') >= 0 || role_list.indexOf('-64-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			fetch_leave_info();
+			list_of_forward_leaves_applicant();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
+
+		if (role_list.indexOf('-67-') >= 0) {
+			$('#approve').show();
+			$('#decline').show();
+			$('#add_appv').show();
+			$('#approver_list_div').show();
+			$('#approve_n_decline_btns').show();
+		}
+
+		if (role_list.indexOf('-64-') >= 0) {
+			$('#leave_info_div').show();
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
 		// $("#modal_no_access").modal('show');
-	}
-
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-67-') >= 0) {
-		$('#approve').show();
-		$('#decline').show();
-		$('#add_appv').show();
 	}
 }
 
@@ -713,7 +735,7 @@ function fetch_leave_info() {
 				let resume = moment(response.data.resumption_date, 'YYYY-MM-DD').format('LL');
 				let start = moment(response.data.leave_start, 'YYYY-MM-DD').format('LL');
 
-				$('#leave_id').html('LV' + response.data.leave_id);
+				$('#leave_id').html(response.data.leave_code);
 				$('#leave_type').html(response.data.leave_type);
 				$('#firstname').html(response.data.firstname);
 				$('#lastname').html(response.data.lastname);
@@ -729,7 +751,7 @@ function fetch_leave_info() {
 				$('#emp_id').val(response.data.employee_id);
 				$('#dept_namey').html(response.data.department_name);
 				$('#supervsor').html(response.data.supervisor);
-				$('#hod_name').html(response.data.hod_name);
+				// $('#hod_name').html(response.data.hod_name);
 				$('#commenter').html(comments);
 				// alert(response.data.department_name);
 
@@ -744,6 +766,12 @@ function fetch_leave_info() {
 					$('#send_for_appv').hide();
 
 					// $('#monday').val('no');
+				}
+
+				if (response.data.is_leave_sent_for_approval.toLowerCase() === 'no') {
+					$('#send_for_appv').show();
+				} else {
+					$('#send_for_appv').hide();
 				}
 
 				$('#picture').html(str);
@@ -890,12 +918,9 @@ function list_of_forward_leaves_applicant() {
 								response['data'][i]['approval_id'] +
 								'" class="sortMe sortAll">';
 
-							strTable +=
-								'<td width="8%" valign="top"><div class="profile_pic"><img src="' +
-								site_url +
-								'/files/images/employee_images/sml_' +
-								response['data'][i]['approval_picture'] +
-								'" alt="..." width="50"></div></td>';
+							strTable += `<td width="8%" valign="top"><div class="profile_pic"><img src="${site_url}/files/images/employee_images/sml_${response[
+								'data'
+							][i]['approval_picture']}" alt="..." width="50"></div></td>`;
 
 							strTable +=
 								'<td width="35%" valign="top"><b>' +
@@ -945,7 +970,7 @@ function list_of_forward_leaves_applicant() {
 
 							strTable +=
 								'<td width="8%" valign="top"><div class="profile_pic"><img src="' +
-								base_url +
+								site_url +
 								'/files/images/employee_images/sml_' +
 								response['data'][i]['approval_picture'] +
 								'" alt="..." width="50"></div></td>';
@@ -990,6 +1015,7 @@ function list_of_forward_leaves_applicant() {
 					} else {
 						$('#send_for_appv').show();
 					}
+					fetch_leave_info();
 				} else {
 					strTable = '<tr><td colspan="5">No record.</td></tr>';
 				}

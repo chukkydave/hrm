@@ -27,23 +27,32 @@ $(document).ready(() => {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		listPaySchedules();
+	let pack_list = $('#user_features').html();
+	if (pack_list.indexOf('-5-') >= 0) {
+		if (
+			role_list.indexOf('-68-') >= 0 ||
+			role_list.indexOf('-69-') >= 0 ||
+			role_list.indexOf('-70-') >= 0 ||
+			role_list.indexOf('-71-') >= 0 ||
+			role_list.indexOf('-72-')
+		) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			listPaySchedules();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
+
+		if (role_list.indexOf('-69-') >= 0 || role_list.indexOf('-68-') >= 0) {
+			$('#create_pay_schedule').show();
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
 		// $("#modal_no_access").modal('show');
-	}
-
-	if (
-		role_list.indexOf('-83-') >= 0 ||
-		role_list.indexOf('-69-') >= 0 ||
-		role_list.indexOf('-68-') >= 0
-	) {
-		$('#create_pay_schedule').show();
 	}
 }
 
@@ -436,74 +445,119 @@ function listPaySchedules() {
                                                         </div>
                                                     </span>`;
 					let role_list = $('#does_user_have_roles').html();
-					if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-69-') >= 0) {
-						if (v.is_pay_schedule_active === 'inactive') {
-							sche_list += `<div class="">
-                                                        <div>
-                                                            <a href="edit_pay_schedule?id=${v.pay_schedule_id}"><i class="fa fa-pencil" style="color:blue;" id=""></i></a>
-                                                            <i class="fa fa-trash ml1" style="color:red;" id="del_icon${v.pay_schedule_id}" onClick="deletePaySchedule(${v.pay_schedule_id})"></i>
-                                                            <button type="button" class="btn btn-sm btn-success" id="start_btn${v.pay_schedule_id}" onClick="startPayRun(${v.pay_schedule_id})" style="float:right;">Start Payroll</button>
-                                                            <button type="button" data-toggle="tooltip" data-placement="top" title="Active Payrun for this Schedule in Payment History" class="btn btn-sm greyed-out" id="not_btn${v.pay_schedule_id}" style="float:right; display:none;">Start Payroll</button>
-                                                            <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none; float:right;" id="start_loader${v.pay_schedule_id}"></i>
-                                                        </div>
-                                                       
-                                                        
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>`;
-						} else if (v.is_pay_schedule_active === 'active') {
-							sche_list += `<div class="">
-                                                        <div>
-                                                            <a href="edit_pay_schedule?id=${v.pay_schedule_id}"><i class="fa fa-pencil" style="color:blue;" id=""></i></a>
-                                                            <!--<i class="fa fa-trash ml1" style="color:red;" id="del_icon${v.pay_schedule_id}" onClick="deletePaySchedule(${v.pay_schedule_id})"></i>-->
-                                                            <button type="button" data-toggle="tooltip" data-placement="top" title="Active Payrun for this Schedule in Payment History" class="btn btn-sm greyed-out" id="not_btn${v.pay_schedule_id}" style="float:right;">Start Payroll</button>
-                                                            <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none; float:right;" id="start_loader${v.pay_schedule_id}"></i>
-                                                        </div>
-                                                       
-                                                        
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>`;
+					if (v.is_pay_schedule_active === 'inactive') {
+						sche_list += `<div class=""><div>`;
+						if (role_list.indexOf('-70-') >= 0) {
+							sche_list += `<a href="edit_pay_schedule?id=${v.pay_schedule_id}"><i class="fa fa-pencil" style="color:blue;" id=""></i></a>`;
+						} else {
+							sche_list += `<a class="disabledC" onClick="denied()"><i class="fa fa-pencil" style="color:blue;" id=""></i></a>`;
 						}
-					} else {
-						if (v.is_pay_schedule_active === 'inactive') {
-							sche_list += `<div class="">
-                                                        <div>
-                                                            
-                                                        </div>
-                                                       
-                                                        
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>`;
-						} else if (v.is_pay_schedule_active === 'active') {
-							sche_list += `<div class="">
-                                                        <div>
-                                                            
-                                                        </div>
-                                                       
-                                                        
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>`;
+
+						if (role_list.indexOf('-71-') >= 0) {
+							sche_list += `<i class="fa fa-trash ml1" style="color:red;" id="del_icon${v.pay_schedule_id}" onClick="deletePaySchedule(${v.pay_schedule_id})"></i>`;
+						} else {
+							sche_list += `<i class="fa fa-trash ml1" style="color:red;" onClick="denied()"></i>`;
 						}
+
+						if (role_list.indexOf('-69-') >= 0) {
+							sche_list += `<button type="button" class="btn btn-sm btn-success" id="start_btn${v.pay_schedule_id}" onClick="startPayRun(${v.pay_schedule_id})" style="float:right;">Start Payroll</button>
+                                            <button type="button" data-toggle="tooltip" data-placement="top" title="Active Payrun for this Schedule in Payment History" class="btn btn-sm greyed-out" id="not_btn${v.pay_schedule_id}" style="float:right; display:none;">Start Payroll</button>
+                                            <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none; float:right;" id="start_loader${v.pay_schedule_id}"></i>`;
+						} else {
+							sche_list += `<button type="button" class="btn btn-sm greyed-out" onClick="denied()" style="float:right;">Start Payroll</button>`;
+						}
+
+						sche_list += `</div>
+										</div>
+                                                    
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>`;
+					} else if (v.is_pay_schedule_active === 'active') {
+						sche_list += `<div class=""><div>`;
+						if (role_list.indexOf('-69-') >= 0) {
+							sche_list += `<button type="button" data-toggle="tooltip" data-placement="top" title="Active Payrun for this Schedule in Payment History" class="btn btn-sm greyed-out" id="not_btn${v.pay_schedule_id}" style="float:right;">Start Payroll</button>
+                                                            <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none; float:right;" id="start_loader${v.pay_schedule_id}"></i>`;
+						} else {
+							sche_list += `<button type="button" onClick="denied()" class="btn btn-sm greyed-out"  style="float:right;">Start Payroll</button>`;
+						}
+
+						sche_list += `</div>
+                                               </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
 					}
+
+					// if (role_list.indexOf('-69-') >= 0) {
+					// 	if (v.is_pay_schedule_active === 'inactive') {
+					// 		sche_list += `<div class="">
+					//                                     <div>
+					//                                         <a href="edit_pay_schedule?id=${v.pay_schedule_id}"><i class="fa fa-pencil" style="color:blue;" id=""></i></a>
+					//                                         <i class="fa fa-trash ml1" style="color:red;" id="del_icon${v.pay_schedule_id}" onClick="deletePaySchedule(${v.pay_schedule_id})"></i>
+					//                                         <button type="button" class="btn btn-sm btn-success" id="start_btn${v.pay_schedule_id}" onClick="startPayRun(${v.pay_schedule_id})" style="float:right;">Start Payroll</button>
+					//                                         <button type="button" data-toggle="tooltip" data-placement="top" title="Active Payrun for this Schedule in Payment History" class="btn btn-sm greyed-out" id="not_btn${v.pay_schedule_id}" style="float:right; display:none;">Start Payroll</button>
+					//                                         <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none; float:right;" id="start_loader${v.pay_schedule_id}"></i>
+					//                                     </div>
+
+					//                                 </div>
+
+					//                             </div>
+					//                         </div>
+					//                     </div>
+					//                 </div>
+					//             </div>`;
+					// 	} else if (v.is_pay_schedule_active === 'active') {
+					// 		sche_list += `<div class="">
+					//                                     <div>
+					//                                         <!--<a href="edit_pay_schedule?id=${v.pay_schedule_id}"><i class="fa fa-pencil" style="color:blue;" id=""></i></a>-->
+					//                                         <!--<i class="fa fa-trash ml1" style="color:red;" id="del_icon${v.pay_schedule_id}" onClick="deletePaySchedule(${v.pay_schedule_id})"></i>-->
+					//                                         <button type="button" data-toggle="tooltip" data-placement="top" title="Active Payrun for this Schedule in Payment History" class="btn btn-sm greyed-out" id="not_btn${v.pay_schedule_id}" style="float:right;">Start Payroll</button>
+					//                                         <i class="fa fa-spinner fa-spin fa-fw fa-2x" style="display: none; float:right;" id="start_loader${v.pay_schedule_id}"></i>
+					//                                     </div>
+
+					//                                 </div>
+
+					//                             </div>
+					//                         </div>
+					//                     </div>
+					//                 </div>
+					//             </div>`;
+					// 	}
+					// } else {
+					// 	if (v.is_pay_schedule_active === 'inactive') {
+					// 		sche_list += `<div class="">
+					//                                     <div>
+
+					//                                     </div>
+
+					//                                 </div>
+
+					//                             </div>
+					//                         </div>
+					//                     </div>
+					//                 </div>
+					//             </div>`;
+					// 	} else if (v.is_pay_schedule_active === 'active') {
+					// 		sche_list += `<div class="">
+					//                                     <div>
+
+					//                                     </div>
+
+					//                                 </div>
+
+					//                             </div>
+					//                         </div>
+					//                     </div>
+					//                 </div>
+					//             </div>`;
+					// 	}
+					// }
 				});
 				$('#list_sche_body').html(sche_list);
 				$('#list_sche_loader').hide();
@@ -534,6 +588,10 @@ function listPaySchedules() {
 		.then(function() {
 			// always executed
 		});
+}
+
+function denied() {
+	toastr.error('Access Denied');
 }
 
 function deletePaySchedule(id) {
@@ -626,6 +684,7 @@ function startPayRun(id) {
 						text: `Success`,
 						icon: 'success',
 						confirmButtonText: 'Okay',
+						onclose: window.location.reload(),
 					});
 					$(`#start_btn${id}`).removeClass('btn-success');
 					$(`#start_btn${id}`).hide();

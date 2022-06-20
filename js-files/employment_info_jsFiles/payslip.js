@@ -3,6 +3,16 @@ $(document).ready(() => {
 		listPayslip(1);
 	});
 });
+function formatToCurrency(amount) {
+	if (amount === null) {
+		amount = '0';
+	}
+	if (amount === '0' || amount === '0.0') {
+		return '₦' + '0.00';
+	} else {
+		return '₦' + parseFloat(amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+	}
+}
 function listPayslip(page) {
 	let company_id = localStorage.getItem('company_id');
 	let employee_id = window.location.search.split('=')[1];
@@ -25,7 +35,6 @@ function listPayslip(page) {
 		})
 		.then(function(response) {
 			let slip_list;
-
 			if (response.data.data.length > 0) {
 				$(response.data.data).map((i, v) => {
 					let arr = v.pay_period.split(' ');
@@ -172,7 +181,7 @@ function viewslip(id) {
 					$('#pay_period_datey').html(`${start} - ${end}`);
 					$('#pay_datey').html(datm);
 					$('#gpay').html(`₦${numberWithCommas(response.data.salary)}`);
-					$('#npay').html(`₦${numberWithCommas(response.net_pay)}`);
+					$('#npay').html(`${formatToCurrency(response.net_pay)}`);
 					// $('#total_credit').val(response.total_credit);
 					// $('#net_payment').html(`₦${numberWithCommas(response.net_pay)}`);
 					// $('#salary_amt').html(`₦${numberWithCommas(response.data.salary)}`);

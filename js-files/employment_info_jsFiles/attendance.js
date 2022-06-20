@@ -94,7 +94,11 @@ function list_employee_attendance() {
 						}
 					});
 				} else {
-					strTable = '<tr><td colspan="5">No record.</td></tr>';
+					strTable = '<tr><td colspan="5">No record found</td></tr>';
+				}
+
+				if (strTable === '') {
+					strTable = '<tr><td colspan="5">No record found</td></tr>';
 				}
 
 				$('#attData').html(strTable);

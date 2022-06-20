@@ -30,25 +30,33 @@ $(document).ready(() => {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-77-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
+	let pack_list = $('#user_features').html();
 
-		fetchSingleExit();
-		fetch_employee_details();
-		load_employee();
-		listApprovers();
+	if (pack_list.indexOf('-38-') >= 0) {
+		if (role_list.indexOf('-81-') >= 0 || role_list.indexOf('-77-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+
+			fetchSingleExit();
+			fetch_employee_details();
+			load_employee();
+			listApprovers();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
+
+		if (role_list.indexOf('-81-') >= 0) {
+			$('#add_header_details').show();
+			$('#approve_btn').show();
+			$('#decline_btnn').show();
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
 		// $("#modal_no_access").modal('show');
-	}
-
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-81-') >= 0) {
-		$('#add_header_details').show();
-		$('#approve_btn').show();
-		$('#decline_btnn').show();
 	}
 }
 
@@ -565,7 +573,7 @@ function HRApprove() {
 						text: `Approved`,
 						icon: 'success',
 						confirmButtonText: 'Okay',
-						onClose: (window.location.href = 'terminations'),
+						onClose: (window.location.href = 'exits'),
 					});
 				}
 			},
@@ -621,7 +629,7 @@ function HRDecline() {
 						text: `Declined`,
 						icon: 'success',
 						confirmButtonText: 'Okay',
-						onClose: (window.location.href = 'terminations'),
+						onClose: (window.location.href = 'exits'),
 					});
 				}
 			},

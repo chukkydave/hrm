@@ -21,7 +21,12 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-82-') >= 0) {
+	let pack_list = $('#user_features').html();
+
+	if (
+		(pack_list.indexOf('-2-') >= 0 && role_list.indexOf('-83-') >= 0) ||
+		role_list.indexOf('-82-') >= 0
+	) {
 		//Settings
 		$('#main_display_loader_page').hide();
 		$('#main_display').show();

@@ -77,7 +77,7 @@ function list_of_employment_type() {
 
 			if (response.status == '200') {
 				$('#loading').hide();
-				if (response.data && response.data.length > 0) {
+				if (response.data.length > 0) {
 					var k = 1;
 					$.each(response['data'], function(i, v) {
 						strTable += '<tr id="row_' + response['data'][i]['type_id'] + '">';
@@ -108,7 +108,7 @@ function list_of_employment_type() {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="3">No record</td></tr>';
+					strTable = '<tr><td colspan="3">No record found</td></tr>';
 				}
 
 				$('#typeData').html(strTable);

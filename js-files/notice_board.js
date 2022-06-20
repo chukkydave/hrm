@@ -56,15 +56,16 @@ function list_notification() {
 		.then(function(response) {
 			$('#notice_board_loading').hide();
 			$('#notice_board').show();
-			if (response.data.data !== '') {
-				let allNotice = '';
-				const { board_notice, schedule_notification } = response.data.data;
+			if (response.data.data) {
+				if (response.data.data.board_notice.length > 0) {
+					let allNotice = '';
+					const { board_notice, schedule_notification } = response.data.data;
 
-				board_notice.map((item) => {
-					let timer = moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').fromNow();
-					allNotice += `<tr id="row_${item.id}">`;
-					allNotice += `<td>${item.notice_board}</td>`;
-					allNotice += `<td>
+					board_notice.map((item) => {
+						let timer = moment(item.created_at, 'YYYY-MM-DD HH:mm:ss').fromNow();
+						allNotice += `<tr id="row_${item.id}">`;
+						allNotice += `<td>${item.notice_board}</td>`;
+						allNotice += `<td>
                                     <div class="dropdown">
                                         <button
                                             class="btn btn-secondary dropdown-toggle"
@@ -88,15 +89,22 @@ function list_notification() {
                                         </ul>
                                     </div>
                                 </td>`;
-					allNotice += `</tr>`;
-					allNotice += `<tr id="loader_row_${item.id}" style="display:none;"><td colspan="2"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
-				});
+						allNotice += `</tr>`;
+						allNotice += `<tr id="loader_row_${item.id}" style="display:none;"><td colspan="2"><i class="fa fa-spinner fa-spin fa-fw"></i></tr>`;
+					});
 
-				$('#list_notification_body').html(allNotice);
-				$('#list_notification_loader').hide();
-				$('#list_notification_table').show();
+					$('#list_notification_body').html(allNotice);
+					$('#list_notification_loader').hide();
+					$('#list_notification_table').show();
+				} else {
+					$('#list_notification_body').html(
+						`<tr><td colspan="2">No record found</td></tr>`,
+					);
+					$('#list_notification_loader').hide();
+					$('#list_notification_table').show();
+				}
 			} else {
-				$('#list_notification_body').html(`<tr><td colspan="2">No record</td></tr>`);
+				$('#list_notification_body').html(`<tr><td colspan="2">No record found</td></tr>`);
 				$('#list_notification_loader').hide();
 				$('#list_notification_table').show();
 			}

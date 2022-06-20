@@ -53,23 +53,31 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-73-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		fetch_grievance_info();
-		viewProceedings();
+	let pack_list = $('#user_features').html();
+
+	if (pack_list.indexOf('-3-') >= 0) {
+		if (role_list.indexOf('-76-') >= 0 || role_list.indexOf('-73-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			fetch_grievance_info();
+			viewProceedings();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
+
+		if (role_list.indexOf('-76-') >= 0 || role_list.indexOf('-74-') >= 0) {
+			$('#add_header_details').show();
+
+			$('#desc_text').attr('disabled', false);
+			$('#add_desc_btn').attr('disabled', false);
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
 		// $("#modal_no_access").modal('show');
-	}
-
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-74-') >= 0) {
-		$('#add_header_details').show();
-
-		$('#desc_text').attr('disabled', false);
-		$('#add_desc_btn').attr('disabled', false);
 	}
 }
 
@@ -200,7 +208,7 @@ function viewProceedings() {
 					if (v.is_comment_allowed === 'allowed') {
 						comment += `<div>`;
 						comment += `<div style="">
-										<div style="display:flex;" id="header${v.header_id}">
+										<div style="display:flex;"  id="header${v.header_id}">
 											<h2><strong>${v.header}</strong></h2>
 											<i style="padding:12px;" onClick="hideandShow(${v.header_id})" class="fa fa-pencil"></i>
 										</div>
@@ -221,7 +229,7 @@ function viewProceedings() {
 								comment += `<li>
                                             <div class="message_wrapper">
                                                 <h4 class="heading">${v.fullname}</h4>
-                                                <div class="col-md-12 col-sm-12">
+                                                <div class="col-md-12 col-sm-12" style="margin-bottom: 1em;">
                                                     <blockquote>
                                                         <p>${v.comments}</p>
                                                     </blockquote>
@@ -304,7 +312,7 @@ function viewProceedings() {
 								comment += `<li>
                                             <div class="message_wrapper">
                                                 <h4 class="heading">${v.fullname}</h4>
-                                                <div class="col-md-12 col-sm-12">
+                                                <div class="col-md-12 col-sm-12" style="margin-bottom: 1em;">
                                                     <blockquote>
                                                         <p>${v.comments}</p>
                                                     </blockquote>

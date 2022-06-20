@@ -80,22 +80,34 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-60-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		load_employee();
-		attendance('');
-		load_department();
-		fetch_list();
+	let pack_list = $('#user_features').html();
+	if (pack_list.indexOf('-4-') >= 0) {
+		if (
+			role_list.indexOf('-60-') >= 0 ||
+			role_list.indexOf('-61-') >= 0 ||
+			role_list.indexOf('-62-') >= 0 ||
+			role_list.indexOf('-63-') >= 0
+		) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			load_employee();
+			attendance('');
+			load_department();
+			fetch_list();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
+		if (role_list.indexOf('-61-') >= 0) {
+			$('#add_attendence').show();
+			$('#add_position').show();
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
 		// $("#modal_no_access").modal('show');
-	}
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-61-') >= 0) {
-		$('#add_attendence').show();
-		$('#add_position').show();
 	}
 }
 
@@ -273,16 +285,6 @@ function attendance(page) {
 						strTable += '<td>' + response['data'][i]['status'] + '</td>';
 						strTable += '<td valign="top">';
 						let role_list = $('#does_user_have_roles').html();
-						if (role_list.indexOf('-83-') >= 0) {
-							strTable +=
-								'<a href="' +
-								base_url +
-								'edit_employee_attendance?id=' +
-								response['data'][i]['attendance_id'] +
-								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp; <a class="delete_attendance" style="cursor: pointer;" id="att_' +
-								response['data'][i]['attendance_id'] +
-								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Attendance"></i></a>';
-						}
 
 						if (role_list.indexOf('-62-') >= 0) {
 							strTable +=
@@ -291,17 +293,17 @@ function attendance(page) {
 								'edit_employee_attendance?id=' +
 								response['data'][i]['attendance_id'] +
 								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp;';
+						} else {
+							strTable += `<a onClick="denied()" class="disabledC"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp;`;
 						}
 
 						if (role_list.indexOf('-63-') >= 0) {
 							strTable +=
-								'<a href="' +
-								base_url +
-								'edit_employee_attendance?id=' +
-								response['data'][i]['attendance_id'] +
-								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee Attendance"></i></a>&nbsp;&nbsp; <a class="delete_attendance" style="cursor: pointer;" id="att_' +
+								'<a class="delete_attendance" style="cursor: pointer;" id="att_' +
 								response['data'][i]['attendance_id'] +
 								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Attendance"></i></a>';
+						} else {
+							strTable += `<a onClick="denied()" class="disabledC" style="cursor: pointer;"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee Attendance"></i></a>`;
 						}
 
 						strTable += '</td>';
@@ -360,6 +362,10 @@ function attendance(page) {
 			$('#attendanceData').show();
 		},
 	});
+}
+
+function denied() {
+	toastr.error('Access Denied');
 }
 
 function delete_attendance(attendance_id) {
@@ -588,7 +594,7 @@ function addCSVFile() {
 			console.log(error);
 			$('#add_csv_loader').hide();
 			$('#add_csv_btn').show();
-			$('#add_csv_error').html(error.responseJSON.msg);
+			$('#add_csv_error').html(error.responseJSON.error_message);
 			// alert('error');
 		},
 		success: function(response) {
@@ -604,7 +610,7 @@ function addCSVFile() {
 					text: `Success`,
 					icon: 'success',
 					confirmButtonText: 'Okay',
-					onClose: addCSVFile(),
+					onClose: attendance(''),
 				});
 			}
 		},

@@ -48,8 +48,9 @@ $(document).ready(function() {
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
 	if (
-		role_list.indexOf('-83-') >= 0 ||
+		role_list.indexOf('-57-') >= 0 ||
 		role_list.indexOf('-56-') >= 0 ||
+		role_list.indexOf('-58-') >= 0 ||
 		role_list.indexOf('-59-') >= 0
 	) {
 		//Settings
@@ -66,7 +67,7 @@ function user_page_access() {
 		// $("#modal_no_access").modal('show');
 	}
 
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-57-') >= 0) {
+	if (role_list.indexOf('-57-') >= 0) {
 		$('#add_employee').show();
 	}
 }
@@ -200,14 +201,14 @@ function list_of_companies_employees(page, serial, order_by) {
 						}
 						strTable += '<tr id="row_' + v.employee_id + '">';
 						strTable += '<td valign="top">' + k + '</td>';
-						// strTable += `<td valign="top">${v.employee_code}</td>`;
+						strTable += `<td valign="top">${v.employee_code}</td>`;
 						strTable +=
 							'<td  valign="top"><div class="profile_pic pfl_ctna" style="height: 50px; width: 50px; overflow: hidden"><img src="' +
 							window.location.origin +
 							'/files/images/employee_images/' +
 							'mid_' +
 							v.profile_picture +
-							'" alt="..." width="50" class="pfl_ctna"></div></td>';
+							'" alt="..." style="object-fit:cover; width:100%; height:100%;" class="pfl_ctna"></div></td>';
 						// strTable +=
 						// 	'<td width="9%" valign="top">' +
 						// 	response['data'][i]['employee_code'] +
@@ -230,7 +231,7 @@ function list_of_companies_employees(page, serial, order_by) {
 							status(v.status)}</td>`;
 						strTable += '<td valign="top">';
 						let role_list = $('#does_user_have_roles').html();
-						if (role_list.indexOf('-83-') >= 0) {
+						if (role_list.indexOf('-56-') >= 0 || role_list.indexOf('-58-') >= 0) {
 							strTable +=
 								'<a href="' +
 								base_url +
@@ -240,18 +241,10 @@ function list_of_companies_employees(page, serial, order_by) {
 								base_url +
 								'edit_employee?id=' +
 								v.employee_id +
-								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee"></i></a>-->&nbsp;&nbsp; <a class="delete_employee" style="cursor: pointer;" id="emp_' +
-								v.employee_id +
-								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee info"></i></a>';
-						}
-
-						if (role_list.indexOf('-56-') >= 0 || role_list.indexOf('-58-') >= 0) {
+								'"><i  class="fa fa-pencil"  data-toggle="tooltip" data-placement="top" style="font-style: italic; font-size: 20px;" title="Edit Employee"></i></a>-->&nbsp;&nbsp;';
+						} else {
 							strTable +=
-								'<a href="' +
-								base_url +
-								'employee_info?id=' +
-								v.employee_id +
-								'"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #add8e6; font-size: 20px;" title="View Employee info"></i></a> &nbsp;&nbsp;';
+								'<a class="disabledC" onClick="denied()"><i  class="fa fa-info-circle"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #add8e6; font-size: 20px;" title="View Employee info"></i></a> &nbsp;&nbsp';
 						}
 
 						if (role_list.indexOf('-59-') >= 0) {
@@ -259,6 +252,9 @@ function list_of_companies_employees(page, serial, order_by) {
 								'<a class="delete_employee" style="cursor: pointer;" id="emp_' +
 								v.employee_id +
 								'"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee info"></i></a>';
+						} else {
+							strTable +=
+								'<a class="disabledC" onClick="denied()" style="cursor: pointer;"><i  class="fa fa-trash"  data-toggle="tooltip" data-placement="top" style="font-style: italic; color: #f97c7c; font-size: 20px;" title="Delete Employee info"></i></a>';
 						}
 
 						strTable += '</td>';
@@ -274,24 +270,25 @@ function list_of_companies_employees(page, serial, order_by) {
 						k++;
 					});
 				} else {
-					strTable = '<tr><td colspan="6">No record.</td></tr>';
+					strTable = '<tr><td colspan="6">No record found</td></tr>';
 				}
+				if (response.total_rows) {
+					$('#pagination').twbsPagination({
+						totalPages: Math.ceil(response.total_rows / limit),
+						visiblePages: 10,
+						onPageClick: function(event, page) {
+							var serial;
+							if (page == 1) {
+								serial = 1;
+							} else {
+								serial = 1 + (page - 1) * limit;
+							}
 
-				$('#pagination').twbsPagination({
-					totalPages: Math.ceil(response.total_rows / limit),
-					visiblePages: 10,
-					onPageClick: function(event, page) {
-						var serial;
-						if (page == 1) {
-							serial = 1;
-						} else {
-							serial = 1 + (page - 1) * limit;
-						}
-
-						list_of_companies_employees(page, serial);
-						$('html, body').animate({ scrollTop: 0 }, 'slow');
-					},
-				});
+							list_of_companies_employees(page, serial);
+							$('html, body').animate({ scrollTop: 0 }, 'slow');
+						},
+					});
+				}
 
 				$('#employeeData').html(strTable);
 				$('#employeeData').show();
@@ -332,6 +329,10 @@ function list_of_companies_employees(page, serial, order_by) {
 			$('#loading').hide();
 		},
 	});
+}
+
+function denied() {
+	toastr.error('Access Denied');
 }
 
 function delete_employee(employee_id) {

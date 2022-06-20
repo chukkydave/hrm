@@ -50,7 +50,11 @@ $(document).ready(() => {
 	// });
 
 	$('#add_schedule_btn').on('click', () => {
-		if (isEmptyInput('.schedule_fields') && $('#empListTable tr').length > 0) {
+		if (
+			isEmptyInput('.schedule_fields') &&
+			$('#empListTable tr').html() !== '<td colspan="4">No Employee(s) Selected</td>'
+		) {
+			// alert('enter');
 			addPaySchedule();
 		} else {
 			alert('No Employee Selected');
@@ -62,20 +66,27 @@ $(document).ready(() => {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-69-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		list_of_companies_employees('', '');
-		load_position();
-		load_department();
-		load_employee();
-		listPaymentType();
-		listPayrollType();
+	let pack_list = $('#user_features').html();
+
+	if (pack_list.indexOf('-5-') >= 0) {
+		if (role_list.indexOf('-69-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			list_of_companies_employees('', '');
+			load_position();
+			load_department();
+			load_employee();
+			listPaymentType();
+			listPayrollType();
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
-		// $("#modal_no_access").modal('show');
 	}
 }
 
@@ -558,6 +569,13 @@ function addPaySchedule() {
 	}
 	// let payType = $('#list_payment_option').val();
 	let payrollType = $('#list_payroll_option').val();
+
+	if (employee.length === 0) {
+		alert('No employee(s) selected');
+		$('#add_schedule_loader').hide();
+		$('#add_schedule_btn').show();
+		return;
+	}
 
 	let data = {
 		employees: employee,

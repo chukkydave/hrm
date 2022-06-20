@@ -63,10 +63,10 @@ include_once("../gen/_common/header.php"); // header contents
 
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                        for="doctype_description">Description<span>*</span>
+                                        for="doctype_description">Description
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <textarea cols="3" class="form-control col-md-7 col-xs-12 required"
+                                        <textarea cols="3" class="form-control col-md-7 col-xs-12"
                                             id="doctype_description">
 
                           </textarea>

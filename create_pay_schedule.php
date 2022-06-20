@@ -111,13 +111,13 @@ include_once("../gen/_common/header.php"); // header contents
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="recurring">Recurring
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input style="width: 30px; height: 20px;" type="checkbox" id="recurring">
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group" id="date_div" style="display:none;">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="eligibility">

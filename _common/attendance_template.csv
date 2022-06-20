@@ -1,0 +1,79 @@
+Employee Code,First Name,Date,Weekday,First Check In,Last Check Out,Total Time
+124,Olutayo,01-03-22,Tuesday,7:42,17:04,9:22
+124,Olutayo,02-03-22,Wednesday,8:05,17:08,9:03
+124,Olutayo,03-03-22,Thursday,8:59,17:04,8:05
+124,Olutayo,04-03-22,Friday,9:37,17:07,7:30
+124,Olutayo,07-03-22,Monday,,17:04,17:04
+124,Olutayo,08-03-22,Tuesday,9:33,17:00,7:27
+124,Olutayo,09-03-22,Wednesday,10:06,17:05,6:59
+124,Olutayo,10-03-22,Thursday,9:06,17:05,7:59
+124,Olutayo,11-03-22,Friday,9:59,17:00,7:01
+124,Olutayo,14-03-22,Monday ,8:46,17:06,8:20
+124,Olutayo,15-03-22,Tuesday,9:10,17:01,7:51
+124,Olutayo,16-03-22,Wednesday,7:45,17:10,9:25
+124,Olutayo,17-03-22,Thursday,8:50,17:03,8:13
+128,Purity,01-03-22,Tuesday,9:11,17:05,7:54
+128,Purity,02-03-22,Wednesday,9:43,17:10,7:27
+128,Purity,03-03-22,Thursday,9:25,17:20,7:55
+128,Purity,04-03-22,Friday,8:56,17:04,8:08
+128,Purity,07-03-22,Monday,8:40,17:10,8:30
+128,Purity,08-03-22,Tuesday,9:12,17:00,7:48
+128,Purity,09-03-22,Wednesday,9:23,17:30,8:07
+128,Purity,10-03-22,Thursday,9:10,17:05,7:55
+128,Purity,11-03-22,Friday,9:40,17:09,7:29
+128,Purity,14-03-22,Monday ,9:27,17:17,7:50
+128,Purity,15-03-22,Tuesday,8:50,17:15,8:25
+128,Purity,16-03-22,Wednesday,9:02,17:11,8:09
+128,Purity,17-03-22,Thursday,9:36,17:06,7:30
+131,Uzoma,01-03-22,Tuesday,8:28,17:14,8:46
+131,Uzoma,02-03-22,Wednesday,8:41,17:14,8:33
+131,Uzoma,03-03-22,Thursday,8:42,17:09,8:27
+131,Uzoma,04-03-22,Friday,8:40,17:10,8:30
+131,Uzoma,07-03-22,Monday,9:15,17:06,7:51
+131,Uzoma,08-03-22,Tuesday,8:36,17:22,8:46
+131,Uzoma,09-03-22,Wednesday,8:47,17:10,8:23
+131,Uzoma,10-03-22,Thursday,9:02,17:09,8:07
+131,Uzoma,11-03-22,Friday,8:39,17:01,8:22
+131,Uzoma,14-03-22,Monday ,8:45,17:30,8:45
+131,Uzoma,15-03-22,Tuesday,8:55,17:14,8:19
+131,Uzoma,16-03-22,Wednesday,8:43,17:03,8:20
+131,Uzoma,17-03-22,Thursday,9:10,17:24,8:14
+135,Lucia,01-03-22,Tuesday,8:01,17:13,9:12
+135,Lucia,02-03-22,Wednesday,8:50,17:09,8:19
+135,Lucia,03-03-22,Thursday,8:46,17:27,8:41
+135,Lucia,04-03-22,Friday,8:57,17:12,8:15
+135,Lucia,07-03-22,Monday,10:03,17:10,7:07
+135,Lucia,08-03-22,Tuesday,,17:46,17:46
+135,Lucia,09-03-22,Wednesday,8:50,17:22,8:32
+135,Lucia,10-03-22,Thursday,8:21,17:50,9:29
+135,Lucia,11-03-22,Friday,8:44,17:18,8:34
+135,Lucia,14-03-22,Monday ,8:56,17:01,8:05
+135,Lucia,15-03-22,Tuesday,9:15,17:30,8:15
+135,Lucia,16-03-22,Wednesday,9:04,17:54,8:50
+135,Lucia,17-03-22,Thursday,8:36,18:10,9:34
+225,Daniel,01-03-22,Tuesday,9:11,17:05,7:54
+225,Daniel,02-03-22,Wednesday,9:43,17:10,7:27
+225,Daniel,03-03-22,Thursday,9:25,17:20,7:55
+225,Daniel,04-03-22,Friday,8:45,17:30,8:45
+225,Daniel,07-03-22,Monday,8:55,17:14,8:19
+225,Daniel,08-03-22,Tuesday,8:50,17:22,8:32
+225,Daniel,09-03-22,Wednesday,8:21,17:50,9:29
+225,Daniel,10-03-22,Thursday,8:44,17:18,8:34
+225,Daniel,11-03-22,Friday,7:45,17:10,9:25
+225,Daniel,14-03-22,Monday ,8:50,17:03,8:13
+225,Daniel,15-03-22,Tuesday,9:11,17:05,7:54
+225,Daniel,16-03-22,Wednesday,9:43,17:10,7:27
+225,Daniel,17-03-22,Thursday,8:48,17:57,9:09
+226,Adaobi,01-03-22,Tuesday,8:50,17:22,8:32
+226,Adaobi,02-03-22,Wednesday,8:31,17:50,9:19
+226,Adaobi,03-03-22,Thursday,8:44,17:18,8:34
+226,Adaobi,04-03-22,Friday,9:12,17:00,7:48
+226,Adaobi,07-03-22,Monday,10:23,17:30,7:07
+226,Adaobi,08-03-22,Tuesday,9:10,17:05,7:55
+226,Adaobi,09-03-22,Wednesday,8:45,17:30,8:45
+226,Adaobi,10-03-22,Thursday,8:55,17:14,8:19
+226,Adaobi,11-03-22,Friday,8:50,17:22,8:32
+226,Adaobi,14-03-22,Monday ,8:21,17:50,9:29
+226,Adaobi,15-03-22,Tuesday,8:44,17:18,8:34
+226,Adaobi,16-03-22,Wednesday,7:54,17:09,9:15
+226,Adaobi,17-03-22,Thursday,8:56,17:40,8:44

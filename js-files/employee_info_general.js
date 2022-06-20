@@ -78,7 +78,7 @@ $(document).ready(function() {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+	if (role_list.indexOf('-58-') >= 0) {
 		//Settings
 		$('#main_display_loader_page').hide();
 		$('#main_display').show();
@@ -94,7 +94,7 @@ function user_page_access() {
 		$('#ldnuy').hide();
 	}
 
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-58-') >= 0) {
+	if (role_list.indexOf('-58-') >= 0) {
 		$('#add_QC').show();
 		$('#add_work-exp').show();
 		$('#add_NOK').show();
@@ -1605,6 +1605,7 @@ function viewBasicInfo() {
 				$('#edit_basic_phone').val(response.data.employee_data.phone);
 				$('#edit_basic_address').val(response.data.employee_data.residential_address);
 				$('#edit_basic_email').val(response.data.employee_data.email);
+				$('#edit_basic_employee_code').val(response.data.employee_data.employee_code);
 				$('#edit_basic_religion').val(response.data.employee_data.religion);
 				$('#edit_basic_next_of_kin').val(response.data.employee_data.next_of_kin);
 				$('#edit_basic_status').val(response.data.employee_data.active_status);
@@ -1643,6 +1644,7 @@ function edit_employee() {
 	var gender = $('#edit_basic_gender').val();
 	var religion = $('#edit_basic_religion').val();
 	var phone = $('#edit_basic_phone').val();
+	var employee_code = $('#edit_basic_employee_code').val();
 	var marital_status = $('#edit_basic_marital_status').val();
 	var residential_address = $('#edit_basic_address').val();
 	var next_of_kin = $('#edit_basic_next_of_kin').val();
@@ -1670,6 +1672,7 @@ function edit_employee() {
 			next_of_kin: next_of_kin,
 			dob: dob,
 			status: status,
+			empl_code: employee_code,
 			user_id: user_id,
 		},
 		headers: {

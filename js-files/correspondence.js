@@ -26,20 +26,24 @@ $(document).ready(() => {
 
 function user_page_access() {
 	var role_list = $('#does_user_have_roles').html();
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-77-') >= 0) {
-		//Settings
-		$('#main_display_loader_page').hide();
-		$('#main_display').show();
-		getCorrespondence('');
+	let pack_list = $('#user_features').html();
+
+	if (pack_list.indexOf('-38-') >= 0) {
+		if (role_list.indexOf('-81-') >= 0 || role_list.indexOf('-77-') >= 0) {
+			//Settings
+			$('#main_display_loader_page').hide();
+			$('#main_display').show();
+			getCorrespondence('');
+			$('#corres_msg').attr('disabled', false);
+		} else {
+			$('#loader_mssg').html('You do not have access to this page');
+			$('#ldnuy').hide();
+			// $("#modal_no_access").modal('show');
+		}
 	} else {
 		$('#loader_mssg').html('You do not have access to this page');
 		$('#ldnuy').hide();
 		// $("#modal_no_access").modal('show');
-	}
-
-	if (role_list.indexOf('-83-') >= 0 || role_list.indexOf('-79-') >= 0) {
-		$('#corres_msg').attr('disabled', false);
-		// $('#emp_connect').attr('disabled', false);
 	}
 }
 
@@ -74,7 +78,7 @@ function getCorrespondence(page) {
 			if (response.data.data.length > 0) {
 				$(response.data.data).map((i, v) => {
 					let datey = moment(v.created_at, 'YYYY-MM-DD HH:mm:ss').format('LLL');
-					if (v.user_id !== user_idm.toString()) {
+					if (v.sender_user_id !== user_idm.toString()) {
 						corres_list += `<div class="incoming_msg">
                                             <div class="incoming_msg_img"> <img
                                                     src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
@@ -119,7 +123,7 @@ function getCorrespondence(page) {
 
 function sendMessage() {
 	let company_id = localStorage.getItem('company_id');
-	// let employee_id = $('#employee_idr').html();
+	let employee_id = window.location.search.split('&')[1].split('=')[1];
 	$('#add_corres_btn').hide();
 	$('#add_corres_loader').show();
 
@@ -129,6 +133,7 @@ function sendMessage() {
 		user_id: user_idm,
 		correspondence_msg: msg,
 		exit_id: exitId,
+		employee_id: employee_id,
 	};
 	$.ajax({
 		type: 'Post',
